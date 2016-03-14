@@ -1,0 +1,39 @@
+@font-face {
+	font-family: 'VNI-Bendigo';
+	src: url('../fonts/VNI-Bendigo.ttf');
+}
+@font-face {
+	font-family: 'circle';
+	src: url('../fonts/circle.ttf');
+}
+
+.item-profile{
+	border-style: none;
+}
+
+.item-avatar > img:first-child {
+    max-width: 80px;
+    max-height: 80px;
+}
+
+.item-avatar{
+	text-align: center;
+	height: 115px; 
+	padding-left: 120px; 
+	border-style: none;
+}
+
+.label-name{
+	font-family: "VNI-Bendigo"; 
+	text-align: center; 
+	width: 100%; 
+	padding-top: 45px;
+	font-size: 30px;
+}
+
+.level{
+	position: inline;
+	font-family: "circle";
+	font-size: 20px;
+	color: red;
+}

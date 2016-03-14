@@ -1,0 +1,12 @@
+/* Empty. Add your own CSS if you like */
+/*.item-profile {
+  height: 150px;
+  .item-avatar > img:first-child {
+    max-width: 100px;
+    max-height: 100px:
+  }
+}*/
+.item{
+	padding: 0px;
+	border-style: none;
+}
