@@ -17,6 +17,8 @@
 }
 
 .item-avatar{
+	filter:opacity(30%);
+	/*background-color: #4CAF50; */
 	text-align: center;
 	height: 115px; 
 	padding-left: 120px; 
@@ -31,9 +33,23 @@
 	font-size: 30px;
 }
 
+.item-level{
+	margin-top: 3px;
+	margin-left:20px;
+	margin-right: 20px;
+	height: 100%;
+}
+
 .level{
-	position: inline;
+	display: inline-block;
 	font-family: "circle";
 	font-size: 20px;
 	color: red;
+}
+
+.levelName{
+    transform: rotate(-20deg); /* Standard syntax */
+    text-decoration: underline;
+	color: blue;
+	text-shadow: 2px 2px 5px #4CAF50;
 }
