@@ -1,6 +1,6 @@
-angular.module('ionicApp', ['ionic'])
+var app = angular.module('ionicApp', ['ionic']);
 
-.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
   $ionicConfigProvider.tabs.position('bottom');
   $ionicConfigProvider.platform.android.navBar.alignTitle('center');
@@ -80,8 +80,9 @@ angular.module('ionicApp', ['ionic'])
 
    $urlRouterProvider.otherwise("/tab/home");
 
-})
-.controller('NavCtrl', function($scope, $ionicSideMenuDelegate) {
+});
+
+app.controller('NavCtrl', function($scope, $ionicSideMenuDelegate) {
   $scope.showMenu = function () {
     $ionicSideMenuDelegate.toggleLeft();
   };
