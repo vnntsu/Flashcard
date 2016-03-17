@@ -1,0 +1,55 @@
+@font-face {
+	font-family: 'VNI-Bendigo';
+	src: url('../fonts/VNI-Bendigo.ttf');
+}
+@font-face {
+	font-family: 'circle';
+	src: url('../fonts/circle.ttf');
+}
+
+.item-profile{
+	border-style: none;
+}
+
+.item-avatar > img:first-child {
+    max-width: 80px;
+    max-height: 80px;
+}
+
+.item-avatar{
+	filter:opacity(30%);
+	/*background-color: #4CAF50; */
+	text-align: center;
+	height: 115px; 
+	padding-left: 120px; 
+	border-style: none;
+}
+
+.label-name{
+	font-family: "VNI-Bendigo"; 
+	text-align: center; 
+	width: 100%; 
+	padding-top: 45px;
+	font-size: 30px;
+}
+
+.item-level{
+	margin-top: 3px;
+	margin-left:20px;
+	margin-right: 20px;
+	height: 100%;
+}
+
+.level{
+	display: inline-block;
+	font-family: "circle";
+	font-size: 20px;
+	color: red;
+}
+
+.levelName{
+    transform: rotate(-20deg); /* Standard syntax */
+    text-decoration: underline;
+	color: blue;
+	text-shadow: 2px 2px 5px #4CAF50;
+}
