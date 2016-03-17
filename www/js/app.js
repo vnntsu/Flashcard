@@ -1,6 +1,9 @@
 angular.module('ionicApp', ['ionic'])
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+
+  $ionicConfigProvider.tabs.position('bottom');
+  $ionicConfigProvider.platform.android.navBar.alignTitle('center');
 
   $stateProvider
     .state('search', {
