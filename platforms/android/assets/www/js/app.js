@@ -1,6 +1,26 @@
-angular.module('ionicApp', ['ionic'])
+var db = null;
 
-.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+var app = angular.module('ionicApp', ['ionic', 'ngCordova']);
+
+app.run(function($ionicPlatform, $cordovaSQLite){
+  $ionicPlatform.ready(function() {
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // for form inputs)
+    if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+      cordova.plugins.Keyboard.disableScroll(true);
+
+    }
+    if (window.StatusBar) {
+      // org.apache.cordova.statusbar required
+      StatusBar.styleDefault();
+    }
+    window.plugins.sqlDB.copy("flashcard.db");
+    db = $cordovaSQLite.openDB("flashcard.db");
+  });
+});
+
+app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
   $ionicConfigProvider.tabs.position('bottom');
   $ionicConfigProvider.platform.android.navBar.alignTitle('center');
@@ -80,14 +100,28 @@ angular.module('ionicApp', ['ionic'])
 
    $urlRouterProvider.otherwise("/tab/home");
 
-})
-.controller('NavCtrl', function($scope, $ionicSideMenuDelegate) {
+});
+
+app.controller('NavCtrl', function($scope, $ionicSideMenuDelegate) {
   $scope.showMenu = function () {
     $ionicSideMenuDelegate.toggleLeft();
   };
   $scope.showRightMenu = function () {
     $ionicSideMenuDelegate.toggleRight();
   };
-})
-.controller('HomeTabCtrl', function($scope) {
+});
+
+app.controller('HomeTabCtrl', function($scope) {
 }); 
+
+app.controller('profileController', function($scope, $ionicSideMenuDelegate, $cordovaSQLite){
+  $scope.selectName = function() {
+    var query = "select firstname, lastname from profile";
+    $cordovaSQLite.execute(db, query).then(function(result){
+      $scope.firstname = result.rows.item(0).firstname;
+      $scope.lastname = result.rows.item(0).lastname;
+      console.log('SELECT FORM profile: ' + $scope.firstname + " " + $scope.lastname);
+    });
+  };
+  $scope.selectName();
+});

@@ -1,10 +1,10 @@
 <ion-view title="Profile" style="text-align: center">
-  <ion-content>
+  <ion-content ng-controller="profileController">
 		<ion-card >
 		  	<ion-item class="item-profile">
   			<div class="item item-avatar">
     			<img src="img/avatar.png" class="avatar-img">
-			    <ion-label class="label-name">Hi! Sion </ion-label>
+			    <ion-label class="label-name">Hi! {{firstname + " " + lastname}} </ion-label>
   			</div>
 			</ion-item>
 			<hr>

@@ -1,6 +1,6 @@
 var db = null;
 
-var app = angular.module('ionicApp', ['ionic']);
+var app = angular.module('ionicApp', ['ionic', 'ngCordova']);
 
 app.run(function($ionicPlatform, $cordovaSQLite){
   $ionicPlatform.ready(function() {
@@ -109,18 +109,19 @@ app.controller('NavCtrl', function($scope, $ionicSideMenuDelegate) {
   $scope.showRightMenu = function () {
     $ionicSideMenuDelegate.toggleRight();
   };
-})
-.controller('HomeTabCtrl', function($scope) {
+});
+
+app.controller('HomeTabCtrl', function($scope) {
 }); 
 
 app.controller('profileController', function($scope, $ionicSideMenuDelegate, $cordovaSQLite){
   $scope.selectName = function() {
     var query = "select firstname, lastname from profile";
-    $cordovaSQLite.excute(db, query).then(function(result){
+    $cordovaSQLite.execute(db, query).then(function(result){
       $scope.firstname = result.rows.item(0).firstname;
       $scope.lastname = result.rows.item(0).lastname;
+      console.log('SELECT FORM profile: ' + $scope.firstname + " " + $scope.lastname);
     });
   };
   $scope.selectName();
-  //dang o day
 });
