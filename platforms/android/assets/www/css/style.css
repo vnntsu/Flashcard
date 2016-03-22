@@ -10,3 +10,6 @@
 	padding: 0px;
 	border-style: none;
 }
+.previous-title {
+	visibility:hidden;
+}

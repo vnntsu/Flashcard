@@ -1,0 +1,37 @@
+.pronun{
+	background: #62E068;
+}
+
+.vocab{
+	background: #E8CE48;
+}
+
+.testgame{
+	background: #FF895C;
+}
+
+.scroll{
+	height: 100%;
+}
+
+nav{
+	flex-wrap: wrap;
+	 align-items: center;
+	 height: 100%;
+}
+
+ul{
+	height: auto;
+	width: 80%;
+	margin: auto;
+}
+
+ul li{
+	width: 100%;
+	margin: 15% 0;
+}
+
+ul li a{
+	display: inline-block;
+	width: 100%;
+}

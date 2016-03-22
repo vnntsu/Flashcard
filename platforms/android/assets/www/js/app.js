@@ -48,6 +48,22 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         }
       }
     })
+    .state('tabs.pronunciation', {
+      url: '/pronunciation',
+      views: {
+        'home-tab': {
+          templateUrl: "templates/pronunciation.html"
+        }
+      }
+    })
+    .state('tabs.pronuncard', {
+      url: '/pronuncard',
+      views: {
+        'home-tab': {
+          templateUrl: "templates/pronuncard.html"
+        }
+      }
+    })
     .state('tabs.facts', {
       url: "/facts",
       views: {
@@ -120,8 +136,40 @@ app.controller('profileController', function($scope, $ionicSideMenuDelegate, $co
     $cordovaSQLite.execute(db, query).then(function(result){
       $scope.firstname = result.rows.item(0).firstname;
       $scope.lastname = result.rows.item(0).lastname;
-      console.log('SELECT FORM profile: ' + $scope.firstname + " " + $scope.lastname);
     });
   };
-  $scope.selectName();
+  $scope.setAvatar = function(){
+    var query = "select avatar from profile";
+    $cordovaSQLite.execute(db,query).then(function(result){
+      $scope.imageURL = result.rows.item(0).avatar;
+      console.log("SELECT IMAGE: " + $scope.imageURL);
+    });
+  };
+  $scope.loadLevel = function(){
+    var query = "select profile.idlevel, level.exppoint, profile.currentexp, nameoflevel.name from level, profile, nameoflevel where level.idlevel = profile.idlevel and level.idnameoflevel = nameoflevel.idnameoflevel";
+    $cordovaSQLite.execute(db,query).then(function(result){
+      $scope.level = result.rows.item(0).idlevel;
+      $scope.expPoint = result.rows.item(0).exppoint;
+      $scope.currentExp = result.rows.item(0).currentexp;
+      $scope.nameOfLevel = result.rows.item(0).name;
+      console.log($scope.level + " - " + $scope.currentExp + " - " + $scope.nameOfLevel);
+    });
+  };
+
+  $scope.loadWordPerDay = function(){
+    var query = "select wordperday from profile";
+    $cordovaSQLite.execute(db,query).then(function(result){
+      $scope.wordPerDay = result.rows.item(0).wordperday;
+      console.log("WORD PER DAY: " + $scope.wordPerDay);
+    });
+  };
+
+  $scope.init = function() {
+    $scope.setAvatar();
+    $scope.selectName();
+    $scope.loadLevel();
+    $scope.loadWordPerDay();
+  };
+
+  $scope.init();
 });
