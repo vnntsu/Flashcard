@@ -1,13 +1,13 @@
 .pronun{
-	background: #62E068;
+	background: #E54861;
 }
 
 .vocab{
-	background: #E8CE48;
+	background: #F2A379;
 }
 
 .testgame{
-	background: #FF895C;
+	background: #9BDF46;
 }
 
 .scroll{
@@ -16,8 +16,9 @@
 
 nav{
 	flex-wrap: wrap;
-	 align-items: center;
-	 height: 100%;
+	align-items: center;
+	height: 100%;
+	background: #468966;
 }
 
 ul{
@@ -26,12 +27,29 @@ ul{
 	margin: auto;
 }
 
-ul li{
+.firtpronun{
 	width: 100%;
 	margin: 15% 0;
+	font-size: 80px; 
+	text-align: center;
 }
+
+// ul li{
+// 	width: 100%;
+// 	margin: 15% 0;
+// }
 
 ul li a{
 	display: inline-block;
 	width: 100%;
+}
+
+.box-sizing {
+	box-sizing: border-box;
+	padding: 10px;
+}
+
+.pronun{
+	font-size: 30px; 
+	text-align: center;
 }

@@ -6,6 +6,10 @@
     max-height: 100px:
   }
 }*/
+// ion-content{
+// 	background: #ACE7EF;
+// }
+
 .item{
 	padding: 0px;
 	border-style: none;
@@ -13,3 +17,21 @@
 .previous-title {
 	visibility:hidden;
 }
+
+.bar-positive .button{
+	color: #fff;
+}
+
+.bar.bar-positive .title{
+	color: #fff;
+}
+
+.bar.bar-positive {
+	background: #346473;
+	color: #fff;
+}
+
+.tabs-positive > .tabs{
+	background: #346473;
+	color: #fff;
+}	

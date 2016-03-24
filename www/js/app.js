@@ -60,7 +60,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
       url: '/pronuncard',
       views: {
         'home-tab': {
-          templateUrl: "templates/pronuncard.html"
+          templateUrl: "templates/pronuncard.html",
+          controller: 'pronuncardController'
         }
       }
     })
@@ -172,4 +173,15 @@ app.controller('profileController', function($scope, $ionicSideMenuDelegate, $co
   };
 
   $scope.init();
+});
+
+app.controller('pronuncardController', function($scope, $cordovaSQLite){
+  $scope.loadData = function(){
+    var query = "select text, pronunced from vocabulary where idvocab = 1";
+    $cordovaSQLite.execute(db,query).then(function(result){
+      $scope.text = result.rows.item(0).text;
+      $scope.pronunced = result.rows.item(0).pronunced;
+    });
+  };
+  // $scope.loadData();
 });
