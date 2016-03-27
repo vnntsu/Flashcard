@@ -181,8 +181,7 @@ app.controller('pronuncardController', function($scope, $cordovaSQLite){
     $cordovaSQLite.execute(db,query).then(function(result){
       $scope.text = result.rows.item(0).text;
       $scope.pronunced = result.rows.item(0).pronunced;
-      console.log("TEXT: " + $scope.text + "       PRONUN: " + $scope.pronunced);
     });
   };
-  $scope.loadData();
+  // $scope.loadData();
 });
