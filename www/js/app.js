@@ -48,6 +48,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         }
       }
     })
+    //tabs pronunciation
     .state('tabs.pronunciation', {
       url: '/pronunciation',
       views: {
@@ -65,6 +66,28 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         }
       }
     })
+
+    //tabs vocabulary
+    .state('tabs.vocabulary', {
+      url: '/vocabulary',
+      views: {
+        'home-tab': {
+          templateUrl: "templates/vocabulary.html",
+          controller: 'vocabularyController'
+        }
+      }
+    })
+    .state('tabs.vocablevel', {
+      url: '/vocablevel',
+      views: {
+        'home-tab': {
+          templateUrl: "templates/vocablevel.html",
+          controller: 'vocablevelController'
+        }
+      }
+    })
+
+    //
     .state('tabs.facts', {
       url: "/facts",
       views: {
@@ -176,6 +199,17 @@ app.controller('profileController', function($scope, $ionicSideMenuDelegate, $co
 });
 
 app.controller('pronuncardController', function($scope, $cordovaSQLite){
+  $scope.loadData = function(){
+    var query = "select text, pronunced from vocabulary where idvocab = 1";
+    $cordovaSQLite.execute(db,query).then(function(result){
+      $scope.text = result.rows.item(0).text;
+      $scope.pronunced = result.rows.item(0).pronunced;
+    });
+  };
+  // $scope.loadData();
+});
+
+app.controller('vocablevelController', function($scope, $cordovaSQLite){
   $scope.loadData = function(){
     var query = "select text, pronunced from vocabulary where idvocab = 1";
     $cordovaSQLite.execute(db,query).then(function(result){
