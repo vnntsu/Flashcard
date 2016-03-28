@@ -46,9 +46,9 @@ ul{
 	background: #E54861;
 }
 
- ul li{
+ul li{
  	width: 100%;
- 	margin: 15% 0;
+ 	// margin: 15% 0;
  	position: relative;
  }
 
@@ -69,6 +69,7 @@ ul li a{
 	border-radius: 10px;
 	border: solid 1px;
 }
+
 .ion-volume-high{
 	font-size: 30px; 
 	color: #346473; 
