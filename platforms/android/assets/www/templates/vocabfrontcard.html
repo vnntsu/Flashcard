@@ -1,0 +1,20 @@
+<ion-view title="Card" ng-click="callBack()">
+  <ion-content class="box-sizing" scroll="false">
+	  <nav style="border: solid 1px; border-radius: 10px;">
+	    <ul>
+	    	<li class="vocabcard">
+	    		<p class="text">{{vocabText}}</p>
+	    		<p class="pronounce">/{{vocabPronounce}}/</p>
+	    		<div class="icon ion-ios-volume-high" ng-click="playSound('/android_asset/www/resources/vocabulary/audio/ability.mp3')"></div>
+	    	</li>
+	    	<li>
+	    		<img class="" ng-src="{{vocabImageURL}}" alt="">
+	    	</li>
+	    	<li>
+	    		<p>Meaning:</p>
+	    		<p style="font-size: 15px; width: 100%;">{{meaning}}</p>
+	    	</li>
+	    </ul>
+	  </nav>
+  </ion-content>
+</ion-view>

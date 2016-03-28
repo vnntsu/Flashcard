@@ -48,6 +48,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         }
       }
     })
+
+    // pronunciation
     .state('tabs.pronunciation', {
       url: '/pronunciation',
       views: {
@@ -65,6 +67,28 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         }
       }
     })
+
+
+    //vocabulary
+    .state('tabs.vocabulary', {
+      url: '/vocabulary',
+      views: {
+        'home-tab': {
+          templateUrl: "templates/vocabulary.html",
+        }
+      }
+    })
+    .state('tabs.vocabfrontcard', {
+      url: '/vocabfrontcard',
+      views: {
+        'home-tab': {
+          templateUrl: "templates/vocabfrontcard.html",
+          controller: 'vocabfrontcardController'
+        }
+      }
+    })
+
+
     .state('tabs.facts', {
       url: "/facts",
       views: {
@@ -172,7 +196,7 @@ app.controller('profileController', function($scope, $ionicSideMenuDelegate, $co
     $scope.loadWordPerDay();
   };
 
-  $scope.init();
+  // $scope.init();
 });
 
 app.controller('pronuncardController', function($scope, $cordovaSQLite){
@@ -183,5 +207,44 @@ app.controller('pronuncardController', function($scope, $cordovaSQLite){
       $scope.pronunced = result.rows.item(0).pronunced;
     });
   };
-  // $scope.loadData();
+  $scope.loadData();
+});
+
+app.controller('vocabfrontcardController', function($scope, $cordovaSQLite, $ionicLoading,$cordovaMedia){
+  $scope.loadData = function(id){
+    var query = "select text, pronounce, image, sound from vocabulary where idvocab = " + id;
+    $cordovaSQLite.execute(db,query).then(function(result){
+      $scope.vocabText = result.rows.item(0).text;
+      $scope.vocabPronounce = result.rows.item(0).pronounce;
+      $scope.vocabImageURL = result.rows.item(0).image;
+      $scope.vocabSound = result.rows.item(0).sound;
+      console.log($scope.vocabText + " - - - -" + $scope.vocabPronounce + " - - - " + $scope.vocabImageURL + " - - - - " + $scope.vocabSound);
+    });
+    query = "select example, meaning, vnmean from typeofword where idvocab = " + id;
+    $cordovaSQLite.execute(db,query).then(function(result){
+      $scope.example = result.rows.item(0).example;
+      $scope.meaning = result.rows.item(0).meaning;
+      $scope.vnmean = result.rows.item(0).vnmean;
+      console.log($scope.example + " - - - -" + $scope.meaning + " - - - " + $scope.vnmean);
+    });
+  };
+
+  $scope.callBack = function(){
+
+  }
+
+  $scope.playSound = function(src){
+    var media = new Media(src, null, null, mediaStatusCallback);
+    $cordovaMedia.play(media);
+  }
+
+  var mediaStatusCallback = function(status) {
+    if(status == 1) {
+        $ionicLoading.show({template: 'Loading...'});
+    } else {
+        $ionicLoading.hide();
+    }
+  }
+
+  $scope.loadData(2);
 });
