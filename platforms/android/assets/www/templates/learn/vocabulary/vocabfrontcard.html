@@ -1,4 +1,4 @@
-<ion-view title="Card" ng-click="callBack()">
+<ion-view title="Front card">
   <ion-content class="box-sizing" scroll="false">
 	  <nav style="border: solid 1px; border-radius: 10px;">
 	    <ul>
@@ -7,6 +7,8 @@
 	    		<p class="pronounce">/{{vocabPronounce}}/</p>
 	    		<div class="icon ion-ios-volume-high" ng-click="playSound('/android_asset/www/resources/vocabulary/audio/ability.mp3')"></div>
 	    	</li>
+	    	</ul>
+	    <ul ng-click="callBack(1)">
 	    	<li>
 	    		<img class="" ng-src="{{vocabImageURL}}" alt="">
 	    	</li>

@@ -1,22 +1,8 @@
-.pronun{
-	background: #E54861;
-	border-radius: 10px;
-	border: solid 1px;
+.button{
+	background: #339999;
+	border-radius: 5px;
 	padding: 0px 30px;
-}
-
-.vocab{
-	background: #F2A379;
-	border-radius: 10px;
-	border: solid 1px;
-	padding: 0px 30px;
-}
-
-.testgame{
-	background: #9BDF46;
-	border-radius: 10px;
-	border: solid 1px;
-	padding: 0px 30px;
+	color: #fff;
 }
 
 .scroll{
@@ -24,16 +10,18 @@
 }
 
 nav{
-	flex-wrap: wrap;
 	align-items: center;
 	height: 100%;
-	background: #468966;
+	background: rgba(51, 153, 153, 0.0);
 }
 
 ul{
-	height: auto;
 	width: 80%;
-	margin: auto;
+	height: auto;
+	margin-top: 50%;
+	margin-left: auto;
+	margin-right: auto;
+
 }
 
 .firtpronun{
@@ -48,11 +36,13 @@ ul{
 
 ul li{
  	width: 100%;
- 	// margin: 15% 0;
+ 	margin: 10% 0;
  	position: relative;
+ 	height: 33.333%;
  }
 
 ul li a{
+	color: #fff;
 	display: inline-block;
 	width: 100%;
 }

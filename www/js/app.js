@@ -26,25 +26,18 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
   $ionicConfigProvider.platform.android.navBar.alignTitle('center');
 
   $stateProvider
-    .state('search', {
-      url: '/search',
-      templateUrl: 'templates/search.html'
-    })
-    .state('settings', {
-      url: '/settings',
-      templateUrl: 'templates/settings.html'
-    })
     .state('tabs', {
       url: "/tab",
       abstract: true,
       templateUrl: "templates/tabs.html"
     })
-    .state('tabs.home', {
-      url: "/home",
+
+    .state('tabs.learn', {
+      url: "/learn",
       views: {
-        'home-tab': {
-          templateUrl: "templates/home.html",
-          controller: 'HomeTabCtrl'
+        'learn-tab': {
+          templateUrl: "templates/learn/learn.html",
+          controller: 'LearnTabCtrl'
         }
       }
     })
@@ -53,17 +46,17 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     .state('tabs.pronunciation', {
       url: '/pronunciation',
       views: {
-        'home-tab': {
-          templateUrl: "templates/pronunciation.html"
+        'learn-tab': {
+          templateUrl: "templates/learn/pronunciation/pronunciation.html"
         }
       }
     })
     .state('tabs.pronuncard', {
       url: '/pronuncard',
       views: {
-        'home-tab': {
-          templateUrl: "templates/pronuncard.html",
-          controller: 'pronuncardController'
+        'learn-tab': {
+          templateUrl: "templates/learn/pronunciation/pronuncard.html",
+          controller: 'PronunCardCtrl'
         }
       }
     })
@@ -72,45 +65,39 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     .state('tabs.vocabulary', {
       url: '/vocabulary',
       views: {
-        'home-tab': {
-          templateUrl: "templates/vocabulary.html",
+        'learn-tab': {
+          templateUrl: "templates/learn/vocabulary/vocabulary.html",
         }
       }
     })
     .state('tabs.vocabfrontcard', {
       url: '/vocabfrontcard',
       views: {
-        'home-tab': {
-          templateUrl: "templates/vocabfrontcard.html",
-          controller: 'vocabfrontcardController'
+        'learn-tab': {
+          templateUrl: "templates/learn/vocabulary/vocabfrontcard.html",
+          controller: 'VocabCardCtrl'
+        }
+      }
+    })
+    .state('tabs.vocabbackcard', {
+      url: '/vocabbackcard',
+      views: {
+        'learn-tab': {
+          templateUrl: "templates/learn/vocabulary/vocabbackcard.html",
+          controller: 'VocabCardCtrl'
         }
       }
     })
 
-    .state('tabs.facts', {
-      url: "/facts",
-      views: {
-        'home-tab': {
-          templateUrl: "templates/facts.html"
-        }
-      }
-    })
-    .state('tabs.facts2', {
-      url: "/facts2",
-      views: {
-        'home-tab': {
-          templateUrl: "templates/facts2.html"
-        }
-      }
-    })
     .state('tabs.custom', {
       url: "/custom",
       views: {
         'custom-tab': {
-          templateUrl: "templates/custom.html"
+          templateUrl: "templates/custom/custom.html"
         }
       }
     })
+
     .state('tabs.navstack', {
       url: "/navstack",
       views: {
@@ -119,25 +106,27 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         }
       }
     })
+
     .state('tabs.dict', {
       url: "/dict",
       views: {
         'dict-tab': {
-          templateUrl: "templates/dict.html"
+          templateUrl: "templates/dict/dict.html"
         }
       }
     })
+
     .state('tabs.profile', {
       url: "/profile",
       views: {
         'profile-tab': {
-          templateUrl: "templates/profile.html"
+          templateUrl: "templates/profile/profile.html",
+          controller: 'ProfileTabCtrl'
         }
       }
     });
 
-
-   $urlRouterProvider.otherwise("/tab/home");
+   $urlRouterProvider.otherwise("/tab/learn");
 
 });
 
@@ -150,10 +139,10 @@ app.controller('NavCtrl', function($scope, $ionicSideMenuDelegate) {
   };
 });
 
-app.controller('HomeTabCtrl', function($scope) {
+app.controller('LearnTabCtrl', function($scope) {
 }); 
 
-app.controller('profileController', function($scope, $ionicSideMenuDelegate, $cordovaSQLite){
+app.controller('ProfileTabCtrl', function($scope, $ionicSideMenuDelegate, $cordovaSQLite){
   $scope.selectName = function() {
     var query = "select firstname, lastname from profile";
     $cordovaSQLite.execute(db, query).then(function(result){
@@ -197,7 +186,7 @@ app.controller('profileController', function($scope, $ionicSideMenuDelegate, $co
   // $scope.init();
 });
 
-app.controller('pronuncardController', function($scope, $cordovaSQLite){
+app.controller('PronunCardCtrl', function($scope, $cordovaSQLite){
   $scope.loadData = function(){
     var query = "select text, pronunced from vocabulary where idvocab = 1";
     $cordovaSQLite.execute(db,query).then(function(result){
@@ -208,7 +197,7 @@ app.controller('pronuncardController', function($scope, $cordovaSQLite){
   $scope.loadData();
 });
 
-app.controller('vocabfrontcardController', function($scope, $cordovaSQLite, $ionicLoading,$cordovaMedia){
+app.controller('VocabCardCtrl', function($scope, $cordovaSQLite, $ionicLoading,$cordovaMedia, $state){
   $scope.loadData = function(id){
     var query = "select text, pronounce, image, sound from vocabulary where idvocab = " + id;
     $cordovaSQLite.execute(db,query).then(function(result){
@@ -227,8 +216,14 @@ app.controller('vocabfrontcardController', function($scope, $cordovaSQLite, $ion
     });
   };
 
-  $scope.callBack = function(){
-
+  $scope.callBack = function(id){
+    if(id==1){
+      $state.go('tabs.vocabbackcard');
+      console.log(id);
+    }else{
+      $state.go('tabs.vocabfrontcard');
+      console.log(id);
+    }
   }
 
   $scope.playSound = function(src){
