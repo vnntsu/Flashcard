@@ -1,3 +1,7 @@
+.{
+    background-color: #FFEBEE;
+}
+
 .item{
 	padding: 0px;
 	border-style: none;
@@ -8,16 +12,19 @@
 }
 
 .bar.bar-positive {
-    border-color: #339999;
-    background-color: #339999;
-    background-image: linear-gradient(0deg, #339999, #339999 50%, transparent 50%);
+    border-color: #00897B;
+    background-color: #00897B;
+    background-image: linear-gradient(0deg, #00897B, #00897B 50%, transparent 50%);
     color: #fff;
 }
 
 .tabs-positive > .tabs, .tabs.tabs-positive {
-    border-color: #339999;
-    background-color: #339999;
-    background-image: linear-gradient(0deg, #339999, #339999 50%, transparent 50%);
+    border-color: #00897B;
+    background-color: #00897B;
+    background-image: linear-gradient(0deg, #00897B, #00897B 50%, transparent 50%);
     color: #fff;
 }
 
+.scroll-content {
+  overflow: visible !important;
+}

@@ -183,7 +183,7 @@ app.controller('ProfileTabCtrl', function($scope, $ionicSideMenuDelegate, $cordo
     $scope.loadWordPerDay();
   };
 
-  // $scope.init();
+  $scope.init();
 });
 
 app.controller('PronunCardCtrl', function($scope, $cordovaSQLite){
