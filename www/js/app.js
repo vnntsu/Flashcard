@@ -70,6 +70,15 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         }
       }
     })
+    .state('tabs.topic', {
+      url: '/topic',
+      views: {
+        'learn-tab': {
+          templateUrl: "templates/learn/vocabulary/topic.html",
+          controller: 'TopicCtrl'
+        }
+      }
+    })
     .state('tabs.vocabfrontcard', {
       url: '/vocabfrontcard',
       views: {
@@ -241,3 +250,21 @@ app.controller('VocabCardCtrl', function($scope, $cordovaSQLite, $ionicLoading,$
 
   $scope.loadData(2);
 });
+
+app.controller('TopicCtrl', function($scope, $cordovaSQLite){
+  $scope.loadData = function(){
+    $scope.topics = [];
+    var query = 'SELECT idtopic, name, describe, image FROM topic'
+    $cordovaSQLite.execute(db,query).then(function(result){
+      if(result.rows.lenght>0){
+        for(var i=0; i<result.rows.lenght; i++){
+          $scope.topics.push(result);
+        }
+        $scope.topics(result);
+        console.log("DATA OF TOPIC:  ---- " + $scope.topics[0].name);
+      }
+    }); 
+  }
+
+  $scope.loadData();
+})
