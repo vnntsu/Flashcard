@@ -236,6 +236,7 @@ app.controller('VocabCardCtrl', function($scope, $cordovaSQLite, $ionicLoading,$
   }
 
   $scope.playSound = function(src){
+    console.log("LINK SOUND: " + src)
     var media = new Media(src, null, null, mediaStatusCallback);
     media.play();
   }
@@ -254,14 +255,18 @@ app.controller('VocabCardCtrl', function($scope, $cordovaSQLite, $ionicLoading,$
 app.controller('TopicCtrl', function($scope, $cordovaSQLite){
   $scope.loadData = function(){
     $scope.topics = [];
-    var query = 'SELECT idtopic, name, describe, image FROM topic'
+    var query = "select idtopic, name, describe, image from topic";
     $cordovaSQLite.execute(db,query).then(function(result){
-      if(result.rows.lenght>0){
-        for(var i=0; i<result.rows.lenght; i++){
-          $scope.topics.push(result);
+      console.log(result.rows.length + " Data: " + result.rows.item(0).name + " end END.");
+      if(result.rows.length > 0){
+        for(var i=0; i<result.rows.length; i++){
+          $scope.topics.push(result.rows.item(i));
         }
-        $scope.topics(result);
-        console.log("DATA OF TOPIC:  ---- " + $scope.topics[0].name);
+        for (var i = 0; i < $scope.topics.length; i++) {
+          console.log($scope.topics[i].idtopic + " - - "+ $scope.topics[i].name);
+        }
+      }else{
+        console.log("NO DATA");
       }
     }); 
   }
