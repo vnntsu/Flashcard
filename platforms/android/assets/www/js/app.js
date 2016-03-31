@@ -97,6 +97,17 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         }
       }
     })
+    .state('tabs.subtopic', {
+      url: '/subtopic?idtopic',
+      views: {
+        'learn-tab': {
+          templateUrl: "templates/learn/vocabulary/subtopic.html",
+          controller: 'SubTopicCtrl'
+        }
+      }
+    })
+
+
 
     .state('tabs.custom', {
       url: "/custom",
@@ -252,7 +263,7 @@ app.controller('VocabCardCtrl', function($scope, $cordovaSQLite, $ionicLoading,$
   $scope.loadData(2);
 });
 
-app.controller('TopicCtrl', function($scope, $cordovaSQLite){
+app.controller('TopicCtrl', function($scope, $cordovaSQLite, $state){
   $scope.loadData = function(){
     $scope.topics = [];
     var query = "select idtopic, name, describe, image from topic";
@@ -260,7 +271,7 @@ app.controller('TopicCtrl', function($scope, $cordovaSQLite){
       console.log(result.rows.length + " Data: " + result.rows.item(0).name + " end END.");
       if(result.rows.length > 0){
         for(var i=0; i<result.rows.length; i++){
-          $scope.topics.push(result.rows.item(0));
+          $scope.topics.push(result.rows.item(i));
         }
         for (var i = 0; i < $scope.topics.length; i++) {
           console.log($scope.topics[i].idtopic + " - - "+ $scope.topics[i].name);
@@ -272,4 +283,33 @@ app.controller('TopicCtrl', function($scope, $cordovaSQLite){
   }
 
   $scope.loadData();
+
+
+  $scope.showSubTopic = function(id){
+    $state.go('tabs.subtopic',{idtopic: id});
+  }
 })
+
+app.controller('SubTopicCtrl', function($scope, $cordovaSQLite, $stateParams){
+  if ($stateParams.idtopic) {
+    $scope.idtopic = $stateParams.idtopic;
+  }else{
+    console.log("Can not get data!")
+  }
+  $scope.loadData = function(id){
+    console.log(id + "  after call method");
+    $scope.subtopics = [];
+    var query = "select idsubtopic, name from subtopic where idtopic=" + id;
+    $cordovaSQLite.execute(db,query).then(function(result){
+      for (var i = 0; i < result.rows.length; i++) {
+        $scope.subtopics.push(result.rows.item(i));
+      }
+    });
+  }
+
+  $scope.loadData($scope.idtopic);
+
+  $scope.showCard = function(id){
+    $state.go('tabs.subtopic',{id: id});
+  }
+});

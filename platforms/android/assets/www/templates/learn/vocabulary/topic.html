@@ -1,9 +1,8 @@
 <ion-view title="Topic" >
-	<ion-content scroll="false">
+	<ion-content overflow-scroll="true">
 		<nav class="nav-learn">
 			<ul>
-				<li><a class="button icon icon-left ion-ios-bell button-first" ui-sref="">{{topics[0].name}}</a></li>
-				<li><a class="button icon icon-left ion-ios-bell" ui-sref="">{{topics[1].name}}</a></li>
+				<li ng-repeat="x in topics"><a class="button icon icon-left ion-ios-bell" ng-click="showSubTopic({{x.idtopic}})">{{x.name}}</a></li>
 			</ul>
 		</nav>
 	</ion-content>
