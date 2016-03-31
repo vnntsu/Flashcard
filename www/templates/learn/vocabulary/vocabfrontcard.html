@@ -2,19 +2,23 @@
 	<ion-content class="box-sizing">
 	    <ul>
 	    	<li class="vocabcard">
-	    		<p class="text">{{vocabText}}</p>
-	    		<p class="pronounce">/{{vocabPronounce}}/</p>
-	    		<div class="icon ion-ios-volume-high" ng-click="playSound(vocabSound)"></div>
+	    		<p class="text">{{text}}</p>
+	    		<p class="pronounce">/{{pronounce}}/</p>
+	    		<div class="icon ion-ios-volume-high" ng-click="playSound(sound)"></div>
 	    	</li>
 	    	</ul>
-	    <ul ng-click="callBack(1)">
+	    <!-- <ul ng-click="callBack(1)">
 	    	<li>
-	    		<img class="" ng-src="{{vocabImageURL}}" alt="">
+	    		<img class="" ng-src="{{image}}" alt="">
 	    	</li>
 	    	<li>
 	    		<p>Meaning:</p>
 	    		<p style="font-size: 15px; width: 100%;">{{meaning}}</p>
 	    	</li>
+	    </ul> -->
+	    <<ul style="display: inline;">
+	    	<li><a class="button icon ion-ios-undo" ng-click="previousCard()"></a></li>
+	    	<li><a class="button icon ion-ios-redo" ng-click="nextCard()"></a></li>
 	    </ul>
 	</ion-content>
 </ion-view>

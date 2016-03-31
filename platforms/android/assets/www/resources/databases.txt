@@ -160,11 +160,6 @@ INSERT INTO subtopic(idtopic, name) values(2, 'X');
 INSERT INTO subtopic(idtopic, name) values(2, 'Y');
 INSERT INTO subtopic(idtopic, name) values(2, 'Z');
 
-
-
-/// data of vocabulary
-
-
 /// data of kindorword
 INSERT INTO kindofword(name, vnmean) values('Noun', 'Danh từ');
 INSERT INTO kindofword(name, vnmean) values('Verb', 'Động từ');
@@ -174,3 +169,23 @@ INSERT INTO kindofword(name, vnmean) values('Pronoun', 'Đại từ');
 INSERT INTO kindofword(name, vnmean) values('Preposition', 'Giới từ');
 INSERT INTO kindofword(name, vnmean) values('Interjection', 'Thán từ');
 INSERT INTO kindofword(name, vnmean) values('Conjunction', 'Liên từ');
+
+/// data of vocabulary
+
+INSERT INTO vocabulary values(6,'cancellation','/ˌkænsəˈleɪʃn/','resources/vocabulary/image/cancellation.jpg', '/android_asset/www/resources/vocabulary/audio/cancellation.mp3',0,null,0);
+INSERT INTO vocabulary values(7,'cancellation','resources/vocabulary/image/cancellation.jpg', '/android_asset/www/resources/vocabulary/audio/cancellation.mp3',0,null,0);
+INSERT INTO vocabulary values(6,'cancellation','resources/vocabulary/image/cancellation.jpg', '/android_asset/www/resources/vocabulary/audio/cancellation.mp3',0,null,0);
+
+
+
+/// data of topicofword
+INSERT INTO topicofword values(6,1);
+
+
+/// data of typeofword
+INSERT INTO typeofword values(6,1,'a decision to stop something that has already been arranged from happening', 'We need at least 24 hours notice of cancellation', 'Sự bỏ, sự huỷ bỏ; sự xoá bỏ, sự bãi bỏ');
+
+
+
+
+

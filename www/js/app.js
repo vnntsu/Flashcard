@@ -1,4 +1,7 @@
-var db = null;
+var db = null,
+vocabularies = [],
+currentVocab = 0,
+clickedSubTopic = 0;
 
 var app = angular.module('ionicApp', ['ionic', 'ngCordova']);
 
@@ -79,8 +82,17 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         }
       }
     })
+    .state('tabs.subtopic', {
+      url: '/subtopic?idtopic',
+      views: {
+        'learn-tab': {
+          templateUrl: "templates/learn/vocabulary/subtopic.html",
+          controller: 'SubTopicCtrl'
+        }
+      }
+    })
     .state('tabs.vocabfrontcard', {
-      url: '/vocabfrontcard',
+      url: '/vocabfrontcard?idsubtopic',
       views: {
         'learn-tab': {
           templateUrl: "templates/learn/vocabulary/vocabfrontcard.html",
@@ -97,16 +109,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         }
       }
     })
-    .state('tabs.subtopic', {
-      url: '/subtopic?idtopic',
-      views: {
-        'learn-tab': {
-          templateUrl: "templates/learn/vocabulary/subtopic.html",
-          controller: 'SubTopicCtrl'
-        }
-      }
-    })
-
 
 
     .state('tabs.custom', {
@@ -217,24 +219,72 @@ app.controller('PronunCardCtrl', function($scope, $cordovaSQLite){
   $scope.loadData();
 });
 
-app.controller('VocabCardCtrl', function($scope, $cordovaSQLite, $ionicLoading,$cordovaMedia, $state){
+app.controller('VocabCardCtrl', function($scope, $cordovaSQLite, $ionicLoading,$cordovaMedia, $state, $stateParams){
+
+  if($stateParams.idsubtopic && !clickedSubTopic){
+    clickedSubTopic = 1;
+    $scope.idsubtopic = $stateParams.idsubtopic;
+    console.log("Get idsubtopic: " + $scope.idsubtopic);
+    currentVocab = 0;
+  };
+
   $scope.loadData = function(id){
-    var query = "select text, pronounce, image, sound from vocabulary where idvocab = " + id;
-    $cordovaSQLite.execute(db,query).then(function(result){
-      $scope.vocabText = result.rows.item(0).text;
-      $scope.vocabPronounce = result.rows.item(0).pronounce;
-      $scope.vocabImageURL = result.rows.item(0).image;
-      $scope.vocabSound = result.rows.item(0).sound;
-      console.log($scope.vocabText + " - - - -" + $scope.vocabPronounce + " - - - " + $scope.vocabImageURL + " - - - - " + $scope.vocabSound);
-    });
-    query = "select example, meaning, vnmean from typeofword where idvocab = " + id;
-    $cordovaSQLite.execute(db,query).then(function(result){
-      $scope.example = result.rows.item(0).example;
-      $scope.meaning = result.rows.item(0).meaning;
-      $scope.vnmean = result.rows.item(0).vnmean;
-      console.log($scope.example + " - - - -" + $scope.meaning + " - - - " + $scope.vnmean);
+    var query = "select * from (select * from (select * from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab where topicofword.idsubtopic = ?) as newtable left join typeofword on  newtable.idvocab = typeofword.idvocab) as newtable1 left join kindofword on newtable1.idkindword = kindofword.idkindword";
+    $cordovaSQLite.execute(db,query,[id]).then(function(result){
+      if(result.rows.length>0){
+        for (var i = 0; i < result.rows.length; i++) {
+          vocabularies.push(result.rows.item(i));
+          console.log("Vocabulary: " + result.rows.item(i).text);
+        }
+      }else{
+        console.log("Not get data yet!");
+      }
+      
+      console.log("Number record of vocabulary array: " + vocabularies.length);
+    }, function(error){
+      console.log("Error query database!");
     });
   };
+
+  $scope.playCard = function(){
+    console.log(vocabularies[currentVocab].text + " current vocab: " + currentVocab);
+    $scope.text = vocabularies[currentVocab].text;
+    $scope.pronounce = vocabularies[currentVocab].pronounce;
+    $scope.sound = vocabularies[currentVocab].sound;
+    $scope.image = vocabularies[currentVocab].iamge;
+    $scope.example = vocabularies[currentVocab].example;
+    $scope.meaning = vocabularies[currentVocab].meaning;
+    $scope.vnmean = vocabularies[currentVocab].vnmean;
+    $scope.topicName = vocabularies[currentVocab].name;
+    $scope.topicVNname = vocabularies[currentVocab].vnname;
+    $scope.isRemember = vocabularies[currentVocab].isremember;
+    $scope.rememberDay = vocabularies[currentVocab].rememberday;
+    $scope.isCustom = vocabularies[currentVocab].isCustom;
+  };
+
+  $scope.loadData($scope.idsubtopic);
+  $scope.playCard(vocabularies[currentVocab]);
+
+  $scope.nextCard = function(){
+    currentVocab++;
+    if(currentVocab<=vocabularies.length - 1){
+      $scope.playCard();
+    }else{
+      currentVocab = 0;
+      $scope.playCard();
+    }
+  };
+
+  $scope.previousCard = function(){
+    currentVocab--;
+    if(currentVocab<0){
+      $scope.playCard(vocabularies[currentVocab]);
+    }else{
+      currentVocab = vocabularies.length - 1;
+      $scope.playCard();
+    }
+  };
+
 
   $scope.callBack = function(id){
     if(id==1){
@@ -244,13 +294,13 @@ app.controller('VocabCardCtrl', function($scope, $cordovaSQLite, $ionicLoading,$
       $state.go('tabs.vocabfrontcard');
       console.log(id);
     }
-  }
+  };
 
   $scope.playSound = function(src){
     console.log("LINK SOUND: " + src)
     var media = new Media(src, null, null, mediaStatusCallback);
     media.play();
-  }
+  };
 
   var mediaStatusCallback = function(status) {
     if(status == 1) {
@@ -258,9 +308,7 @@ app.controller('VocabCardCtrl', function($scope, $cordovaSQLite, $ionicLoading,$
     } else {
         $ionicLoading.hide();
     }
-  }
-
-  $scope.loadData(2);
+  };
 });
 
 app.controller('TopicCtrl', function($scope, $cordovaSQLite, $state){
@@ -284,18 +332,20 @@ app.controller('TopicCtrl', function($scope, $cordovaSQLite, $state){
 
   $scope.loadData();
 
-
   $scope.showSubTopic = function(id){
     $state.go('tabs.subtopic',{idtopic: id});
   }
 })
 
-app.controller('SubTopicCtrl', function($scope, $cordovaSQLite, $stateParams){
+app.controller('SubTopicCtrl', function($scope, $cordovaSQLite, $stateParams, $state){
+  clickedSubTopic = 0;
   if ($stateParams.idtopic) {
     $scope.idtopic = $stateParams.idtopic;
+    console.log("Get idtopic successful");
   }else{
     console.log("Can not get data!")
   }
+
   $scope.loadData = function(id){
     console.log(id + "  after call method");
     $scope.subtopics = [];
@@ -310,6 +360,7 @@ app.controller('SubTopicCtrl', function($scope, $cordovaSQLite, $stateParams){
   $scope.loadData($scope.idtopic);
 
   $scope.showCard = function(id){
-    $state.go('tabs.subtopic',{id: id});
+    console.log("IDSUBTOPIC before transfer: " + id);
+    $state.go('tabs.vocabfrontcard',{idsubtopic: id});
   }
 });

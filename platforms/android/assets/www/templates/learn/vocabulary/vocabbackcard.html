@@ -3,20 +3,24 @@
 	  <nav style="border: solid 1px; border-radius: 10px;">
 	    <ul>
 	    	<li class="vocabcard">
-	    		<p class="text">{{vocabText}}</p>
-	    		<p class="pronounce">/{{vocabPronounce}}/</p>
+	    		<p class="text">{{text}}</p>
+	    		<p class="pronounce">/{{pronounce}}/</p>
 		    	<p style="font-size: 20px; text-align: center;">{{vnmean}}</p>
-	    		<div class="icon ion-ios-volume-high" style="bottom: 20%;" ng-click="playSound('/android_asset/www/resources/vocabulary/audio/ability.mp3')"></div>
+	    		<div class="icon ion-ios-volume-high" style="bottom: 20%;" ng-click="playSound({{sound}})"></div>
 	    	</li>
 	    </ul>
-	    <ul ng-click="callBack(0)">
+	    <!-- <ul ng-click="callBack(0)">
 	    	<li>
-	    		<img class="" ng-src="{{vocabImageURL}}" alt="">
+	    		<img class="" ng-src="{{image}}" alt="">
 	    	</li>
 	    	<li>
 	    		<p>Example:</p>
 	    		<p style="font-size: 15px; width: 100%;">{{example}}</p>
 	    	</li>
+	    </ul> -->
+	    <<ul style="display: inline;">
+	    	<li><a class="button icon ion-ios-undo" ng-click="previousCard()"></a></li>
+	    	<li><a class="button icon ion-ios-redo" ng-click="nextCard()"></a></li>
 	    </ul>
 	  </nav>
   </ion-content>
