@@ -1,6 +1,6 @@
-// angular.module('ionicApp.controllers', [])
+// angular.module('ionicApp.controller', [])
 
-// .controller('NavCtrl', function($scope, $ionicSideMenuDelegate) {
+// .controller('ACtrl', function($scope, $ionicSideMenuDelegate) {
 //   $scope.showMenu = function () {
 //     $ionicSideMenuDelegate.toggleLeft();
 //   };

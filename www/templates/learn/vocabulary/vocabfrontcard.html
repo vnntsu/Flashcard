@@ -3,11 +3,11 @@
 	    <ul>
 	    	<li class="vocabcard">
 	    		<p class="text">{{text}}</p>
-	    		<p class="pronounce">/{{pronounce}}/</p>
+	    		<p class="pronounce">{{pronounce}}</p>
 	    		<div class="icon ion-ios-volume-high" ng-click="playSound(sound)"></div>
 	    	</li>
-	    	</ul>
-	    <!-- <ul ng-click="callBack(1)">
+	    </ul>
+	    <ul ng-click="callBack(1)">
 	    	<li>
 	    		<img class="" ng-src="{{image}}" alt="">
 	    	</li>
@@ -15,10 +15,29 @@
 	    		<p>Meaning:</p>
 	    		<p style="font-size: 15px; width: 100%;">{{meaning}}</p>
 	    	</li>
-	    </ul> -->
-	    <<ul style="display: inline;">
-	    	<li><a class="button icon ion-ios-undo" ng-click="previousCard()"></a></li>
-	    	<li><a class="button icon ion-ios-redo" ng-click="nextCard()"></a></li>
 	    </ul>
+
+			<a class="icon ion-ios-undo large" ng-click="previousCard()" style="position: absolute; left: 10px;font-size: 30px;"></a>
+	    	
+	    	<a class="icon ion-ios-redo large" ng-click="nextCard()" style="position: absolute; right: 10px; font-size: 30px;">
+
+	    <!-- <ul>
+	    	<li class="vocabcard">
+	    		<p class="text">abcd</p>
+	    		<p class="pronounce">/abcd/</p>
+	    		<div class="icon ion-ios-volume-high" ng-click="playSound()"></div>
+	    	</li>
+	    </ul>
+	    <ul ng-click="callBack(1)">
+	    	<li>
+	    		<img class="" ng-src="resources/vocabulary/image/abandon.jpg" alt="">
+	    	</li>
+	    	<li>
+	    		<p>Meaning:</p>
+	    		<p style="font-size: 15px; width: 100%;">resources/vocabulary/image/abandon.jpg</p>
+	    	</li>
+	    </ul>
+	    	<a class="icon ion-ios-undo large" ng-click="previousCard()" style="position: fixed; left: 10px; bottom: 30px; font-size: 30px;"></a></li>
+	    	<a class="icon ion-ios-redo large" ng-click="nextCard()" style="position: fixed; fixed: 10px; bottom: 30px; right: 10px; font-size: 30px;"></a></li> -->
 	</ion-content>
 </ion-view>

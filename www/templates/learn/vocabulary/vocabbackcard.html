@@ -9,7 +9,7 @@
 	    		<div class="icon ion-ios-volume-high" style="bottom: 20%;" ng-click="playSound({{sound}})"></div>
 	    	</li>
 	    </ul>
-	    <!-- <ul ng-click="callBack(0)">
+	    <ul ng-click="callBack(0)">
 	    	<li>
 	    		<img class="" ng-src="{{image}}" alt="">
 	    	</li>
@@ -17,11 +17,11 @@
 	    		<p>Example:</p>
 	    		<p style="font-size: 15px; width: 100%;">{{example}}</p>
 	    	</li>
-	    </ul> -->
-	    <<ul style="display: inline;">
-	    	<li><a class="button icon ion-ios-undo" ng-click="previousCard()"></a></li>
-	    	<li><a class="button icon ion-ios-redo" ng-click="nextCard()"></a></li>
 	    </ul>
+	   <div style="display: inline-block; position: relative; margin-bottom: 100px; width: 100%; height: auto; bottom: 150px">
+	    	<a class="icon ion-ios-undo large" ng-click="previousCard()" style="position: fixed; left: 10px; bottom: 0px; font-size: 30px;"></a></li>
+	    	<a class="icon ion-ios-redo large" ng-click="nextCard()" style="position: fixed; fixed: 10px; bottom: 0px; right: 10px; font-size: 30px;"></a></li>
+	    </div>
 	  </nav>
   </ion-content>
 </ion-view>
