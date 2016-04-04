@@ -1,4 +1,4 @@
-// angular.module('ionicApp.controller', [])
+// angular.module('ionicApp')
 
 // .controller('ACtrl', function($scope, $ionicSideMenuDelegate) {
 //   $scope.showMenu = function () {
