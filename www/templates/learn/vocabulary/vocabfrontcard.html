@@ -1,43 +1,51 @@
 <ion-view title="Front card">
 	<ion-content class="box-sizing">
-	    <ul>
-	    	<li class="vocabcard">
-	    		<p class="text">{{text}}</p>
-	    		<p class="pronounce">{{pronounce}}</p>
-	    		<div class="icon ion-ios-volume-high" ng-click="playSound(sound)"></div>
-	    	</li>
-	    </ul>
-	    <ul ng-click="callBack(1)">
-	    	<li>
-	    		<img class="" ng-src="{{image}}" alt="">
-	    	</li>
-	    	<li>
-	    		<p>Meaning:</p>
-	    		<p style="font-size: 15px; width: 100%;">{{meaning}}</p>
-	    	</li>
-	    </ul>
+	    <nav ng-show="show">
+		    <ul>
+		    	<li class="vocabcard">
+		    		<p class="text">{{text}}</p>
+		    		<p class="pronounce">{{pronounce}}</p>
+		    		<div class="icon ion-ios-volume-high" ng-click="playSound(sound)"></div>
+		    	</li>
+		    </ul>
+		    <ul ng-click="turnPage(1)">
+		    	<li>
+		    		<img class="" ng-src="{{image}}" alt="">
+		    	</li>
+		    	<li>
+		    		<p>Meaning:</p>
+		    		<p style="font-size: 15px; width: 100%;">{{meaning}}</p>
+		    	</li>
+		    </ul>
 
 			<a class="icon ion-ios-undo large" ng-click="previousCard()" style="position: absolute; left: 10px;font-size: 30px;"></a>
-	    	
-	    	<a class="icon ion-ios-redo large" ng-click="nextCard()" style="position: absolute; right: 10px; font-size: 30px;">
+		    	
+		    <a class="icon ion-ios-redo large" ng-click="nextCard()" style="position: absolute; right: 10px; font-size: 30px;"></a>
+		</nav>
 
-	    <!-- <ul>
-	    	<li class="vocabcard">
-	    		<p class="text">abcd</p>
-	    		<p class="pronounce">/abcd/</p>
-	    		<div class="icon ion-ios-volume-high" ng-click="playSound()"></div>
-	    	</li>
-	    </ul>
-	    <ul ng-click="callBack(1)">
-	    	<li>
-	    		<img class="" ng-src="resources/vocabulary/image/abandon.jpg" alt="">
-	    	</li>
-	    	<li>
-	    		<p>Meaning:</p>
-	    		<p style="font-size: 15px; width: 100%;">resources/vocabulary/image/abandon.jpg</p>
-	    	</li>
-	    </ul>
-	    	<a class="icon ion-ios-undo large" ng-click="previousCard()" style="position: fixed; left: 10px; bottom: 30px; font-size: 30px;"></a></li>
-	    	<a class="icon ion-ios-redo large" ng-click="nextCard()" style="position: fixed; fixed: 10px; bottom: 30px; right: 10px; font-size: 30px;"></a></li> -->
+	    <nav ng-hide="hide" style="position: relative;">
+		    <ul>
+		    	<li class="vocabcard">
+		    		<p class="text">{{text}}</p>
+		    		<p class="pronounce">{{pronounce}}</p>
+			    	<p style="font-size: 20px; text-align: center;">{{vnmean}}</p>
+		    		<div class="icon ion-ios-volume-high" style="bottom: 50%;" ng-click="playSound({{sound}})"></div>
+		    	</li>
+		    </ul>
+		    <ul ng-click="turnPage(0)">
+		    	<li>
+		    		<img class="" ng-src="{{image}}" alt="">
+		    	</li>
+		    	<li>
+		    		<p>Example:</p>
+		    		<p style="font-size: 15px; width: 100%;">{{example}}</p>
+		    	</li>
+		    </ul>
+		    <div style="display: inline-block; position: absolute; bottom: 20px; width: 100%;">
+		    <a class="icon ion-ios-undo large" ng-click="previousCard()" style="position: absolute; left: 10px;font-size: 30px;"></a>
+		    	
+		    <a class="icon ion-ios-redo large" ng-click="nextCard()" style="position: absolute;  right: 10px; font-size: 30px;"></a>
+		    </div>
+	  	</nav>
 	</ion-content>
 </ion-view>
