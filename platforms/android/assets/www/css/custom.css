@@ -1,3 +1,61 @@
 nav.nav-custom{
 	background: #B2DFDB;
 }
+
+.title-card{
+	width: 100%; 
+	text-align: center; 
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 0px;
+}
+
+.label-input{
+	width: 80%; 
+	margin: auto; 
+	font-size: 20px;
+}
+
+input.input-text{
+	width: 100%;
+	font-size: 16px;
+	line-height: 30px;
+}
+
+input::-webkit-input-placeholder{
+	font-size: 14px;
+	line-height: 30px;
+}
+
+.title-image-add{
+	width: 80%;
+}
+
+div.image-add{
+	width: 80%; 
+	background: #A5D6A7; 
+	height: 30vh; 
+	margin: 5px auto; 
+	position: relative;
+}
+
+h5.label-input{
+	margin-top: 10px;
+	font-size: 14px;
+	color: #444;
+}
+
+.button-add-image{
+	font-size: 80px;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	line-height: 30vh;
+	text-align: center;
+}
+
+
+.item-floating-label .input-label.has-input{
+	font-size: 14px;
+	line-height: 22px;
+}

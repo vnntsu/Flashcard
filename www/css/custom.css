@@ -1,3 +1,78 @@
 nav.nav-custom{
 	background: #B2DFDB;
 }
+
+.title-card{
+	width: 100%; 
+	text-align: center; 
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 0px;
+}
+
+.label-input{
+	width: 80%; 
+	margin: auto; 
+	font-size: 20px;
+}
+
+input.input-text{
+	width: 100%;
+	font-size: 16px;
+	line-height: 30px;
+}
+
+input::-webkit-input-placeholder{
+	font-size: 14px;
+	line-height: 30px;
+}
+
+.title-image-add{
+	width: 80%;
+}
+
+div.image-add{
+	clear: both;
+	width: 80%; 
+	height: 100%; 
+	margin: 5px auto; 
+	position: relative;
+}
+
+img.image-add{
+	background: #A5D6A7; 
+	font-size: 80px;
+	width: 100%;
+	height: 30vh;
+	line-height: 100%;
+	text-align: center;
+}
+
+h5.label-input{
+	margin-top: 10px;
+	font-size: 14px;
+	color: #444;
+}
+
+a.button-add-image{
+	font-size: 80px;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	line-height: 30vh;
+	text-align: center;
+	top: 0px;
+}
+
+
+.item-floating-label .input-label.has-input{
+	font-size: 14px;
+	line-height: 22px;
+}
+
+div.add-sound{
+	clear: both; 
+	width: 80%; 
+	margin: auto;
+	margin-top: 5px;
+}

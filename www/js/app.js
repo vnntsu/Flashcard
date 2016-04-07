@@ -1,4 +1,4 @@
-var app = angular.module('ionicApp', ['ionic', 'ngCordova', 'ionicApp.services', 'ionicApp.controllers'])
+var app = angular.module('ionicApp', ['ionic', 'ngCordova', 'ionicApp.services', 'ionicApp.controllers','ionicApp.customControllers'])
 
 app.run(function($ionicPlatform, $cordovaSQLite, DatabaseService){
 
@@ -12,7 +12,7 @@ app.run(function($ionicPlatform, $cordovaSQLite, DatabaseService){
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
-    DatabaseService.init();
+    // DatabaseService.init();
   });
   // $rootScope.preventDefaultScroll = function(event){
   //   event.preventDefaultScroll();
@@ -114,7 +114,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         }
     })
 
-
+    /// Custom tabs
     .state('tabs.custom', {
         url: "/custom",
         views: {
@@ -123,6 +123,18 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             }
         }
     })
+
+    .state('tabs.newcard', {
+        url: "/newcard",
+        views: {
+            'custom-tab': {
+                templateUrl: "templates/custom/newcard.html",
+                controller: 'NewCardCtrl'
+            }
+        }
+    })
+
+
 
     .state('tabs.navstack', {
         url: "/navstack",
