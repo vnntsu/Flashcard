@@ -185,6 +185,13 @@ module.exports = [
         "clobbers": [
             "window.plugins.NativeAudio"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-actionsheet/www/ActionSheet.js",
+        "id": "cordova-plugin-actionsheet.ActionSheet",
+        "clobbers": [
+            "window.plugins.actionsheet"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -194,7 +201,8 @@ module.exports.metadata =
     "me.rahul.plugins.sqlDB": "1.0.3",
     "cordova-plugin-file": "4.1.1",
     "cordova-plugin-media": "2.1.0",
-    "cordova-plugin-nativeaudio": "3.0.6"
+    "cordova-plugin-nativeaudio": "3.0.6",
+    "cordova-plugin-actionsheet": "2.2.2"
 };
 // BOTTOM OF METADATA
 });

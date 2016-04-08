@@ -1,29 +1,47 @@
 <ion-view title="Create card">
+	<ion-nav-buttons side="right">
+      <a class="icon ion-ios-checkmark-empty done-button" ng-click="saveCard()">
+      </a>
+    </ion-nav-buttons>
 	<ion-content style="">
-		<h3 class="title-card">The front card</h3>
+	<ion-scroll direction="y" style="height: 100%;">
 		<ion-list>
-			<!-- <ion-item> -->
+			<ion-item>
+				<h2 class="title-card">Front card side</h2>
 				<label class="item-floating-label label-input"> 
-					<span class="input-label">Vocabulary</span> 
-					<input class="input-text" type="item text" placeholder="Vocabulary">
+					<span class ="input-label">Vocabulary</span> 
+					<input class="input-text" type="item text" placeholder="Vocabulary" ng-model="vocabText">
 				</label> 
 				<label class="item-floating-label label-input"> 
 					<span class="input-label">Pronouce</span> 
-					<input class="input-text" type="item text" placeholder="Pronouce">
+					<input class="input-text" type="item text" placeholder="Pronouce" ng-model="vocabPronouce">
 				</label> 
-			<!-- </ion-item> -->
-			<!-- <ion-item>
 				
-			</ion-item> -->
-			<h5 class="label-input">Image card:</h5>
+			<h5 class="label-input">Image</h5>
 			<div class="image-add">
-				<a class="icon ion-ios-plus-outline button-add-image" ng-click="setImage()"></a>
+				<img ng-src="" class="image-add"></img>
+				<a class="icon ion-ios-plus-outline button-add-image" ng-click="pickImage()"></a>
 			</div>
-			<div style="clear: both; width: 80%; margin: auto;">
-				<h5 class="" style="float: left; line-height: 30px; width: 50%; border: solid 1px; font-size: 15px;">Add sound:</h5>
-				<a style="float: right; line-height: 20px; font-size: 40px" class="icon ion-ios-mic"></a>
-				<a style="float: right; line-height: 20px; font-size: 40px; margin-right: 15px;" class="icon ion-ios-plus-outline"></a>
+			
+			
+			<div class="image-add">
+				<a style="font-size: 30px;" class="icon ion-ios-plus-outline label-image">Sound</a>
+				<a style="float: right; color: red; font-size: 30px;" class="icon ion-ios-loop-strong"></a>
 			</div>
+
+			<h5 class="label-input">Meaning</h5>
+			<textarea placeholder="The example" rows="4" style="width: 80%; margin: auto"></textarea>
+			</ion-item>
+			
+			<ion-item>
+				<h2 class="title-card">Back card side</h2>
+				<label class="item-floating-label label-input"> 
+					<span class="input-label">Vietnamese mean</span> 
+					<input class="input-text" type="item text" placeholder="Vocabulary">
+				</label> 
+				<h5 class="label-input">Example</h5>
+				<textarea placeholder="The example" rows="4" style="width: 80%; margin: auto"></textarea>
+			</ion-item>
 		</ion-list>
 
 		<!-- <div class="list"> 
@@ -77,6 +95,6 @@
 				</label> 
 				<button class="button button-block button-calm ink" data-ink-color="#9DEAFF" data-ink-opacity="1"> Submit </button> 
 			</div> -->
-                
+        </ion-scroll>
 	</ion-content>
 </ion-view>

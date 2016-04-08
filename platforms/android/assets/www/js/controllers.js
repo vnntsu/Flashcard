@@ -12,7 +12,7 @@ app.controller('NavCtrl', function($scope, $ionicSideMenuDelegate) {
 app.controller('LearnTabCtrl', function($scope){
 }); 
 
-app.controller('ProfileTabCtrl', function($scope, DatabaseService, ionicMaterialMotion){
+app.controller('ProfileTabCtrl', function($scope, DatabaseService){
     // var query = "select * from profile";
     // DatabaseService.get(query).then(function(result){
     //     var profile = result;

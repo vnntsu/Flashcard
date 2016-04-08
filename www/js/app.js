@@ -6,13 +6,14 @@ app.run(function($ionicPlatform, $cordovaSQLite, DatabaseService){
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
+      cordova.plugins.Keyboard.show();
 
     }
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
-    // DatabaseService.init();
+    DatabaseService.init();
   });
   // $rootScope.preventDefaultScroll = function(event){
   //   event.preventDefaultScroll();
