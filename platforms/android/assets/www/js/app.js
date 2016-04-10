@@ -2,19 +2,19 @@ var app = angular.module('ionicApp', ['ionic', 'ngCordova', 'ionicApp.services',
 
 app.run(function($ionicPlatform, $cordovaSQLite, DatabaseService){
 
-  $ionicPlatform.ready(function() {
+    $ionicPlatform.ready(function() {
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      cordova.plugins.Keyboard.disableScroll(true);
-      cordova.plugins.Keyboard.show();
+        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+        cordova.plugins.Keyboard.disableScroll(true);
+        cordova.plugins.Keyboard.show();
 
     }
     if (window.StatusBar) {
-      // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
+    // org.apache.cordova.statusbar required
+        StatusBar.styleDefault();
     }
     DatabaseService.init();
-  });
+});
   // $rootScope.preventDefaultScroll = function(event){
   //   event.preventDefaultScroll();
   //   window.scroll(0,0);

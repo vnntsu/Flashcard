@@ -38,3 +38,19 @@ li p{
 	height: 100%;
 	max-height: 150px;
 }
+
+ion-item.card{
+	max-height: 80px;
+	background: #26A69A;
+	margin: 10px 10px;
+}
+
+ion-item.item.activated{
+
+	background: #F44336;
+}
+
+.item-content{
+	padding: 0px !important;
+	background: #26A69A !important;
+}

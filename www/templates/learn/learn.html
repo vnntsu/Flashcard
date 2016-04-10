@@ -1,13 +1,30 @@
 <ion-view title="Learn">
 	<ion-content overflow-scroll="true">
-		<nav class="nav-learn">
-			<!-- <img src="img/background.jpg" alt="" style="width: 100%; height: 100%; position: absolute; background: #E0F2F1;"> -->
-			<!-- <p class="p-title">Start </br> your learning</p> -->
-			<ul>
-				<li><a class="button icon icon-left ion-ios-bell button-first" ui-sref="tabs.pronunciation">Pronunciation</a></li>
-				<li><a class="button icon icon-left ion-social-vimeo" ui-sref="tabs.vocabulary">Vocabulary</a></li>
-				<li><a class="button icon icon-left ion-ios-game-controller-b" href="#/learn/testandgame">Test and Game</a></li>
-			</ul>
-		</nav>
+		<ion-list>
+			<ion-item class="card" ui-sref="tabs.pronunciation">
+				<ion-thumbnail item-left style="float: left;">
+					<img src="img/avatar.png" style="max-height: 80px; max-width: 80px;">
+				</ion-thumbnail>
+				<h2 style="width: auto; height: auto; margin-left: 120px; padding-top: 10px; font-size: 20px;"><b>Pronunciation</b></h2>
+				<p style="margin-left: 120px;">Total: 2 pronunciations</p>
+				<!-- <button clear item-right>View</button> -->
+			</ion-item>
+			<ion-item class="card" ui-sref="tabs.vocabulary">
+				<ion-thumbnail item-left style="float: left;">
+					<img src="img/avatar.png" style="max-height: 80px; max-width: 80px;">
+				</ion-thumbnail>
+				<h2 style="width: auto; height: auto; margin-left: 120px; padding-top: 10px; font-size: 20px;"><b>Vocabulary</b></h2>
+				<p style="margin-left: 120px;">Total: 2 Subjects</p>
+				<!-- <button clear item-right>View</button> -->
+			</ion-item>
+			<ion-item class="card" ng-click="clicked()">
+				<ion-thumbnail item-left style="float: left;">
+					<img src="img/avatar.png" style="max-height: 80px; max-width: 80px;">
+				</ion-thumbnail>
+				<h2 style="width: auto; height: auto; margin-left: 120px; padding-top: 10px; font-size: 20px;"><b>Test and Game</b></h2>
+				<p style="margin-left: 120px;">Total: 2 Subjects</p>
+				<!-- <button clear item-right>View</button> -->
+			</ion-item>
+		</ion-list>
 	</ion-content>
 </ion-view>

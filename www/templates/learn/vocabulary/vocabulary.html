@@ -1,11 +1,22 @@
 <ion-view title="Vocabulary" >
 	<ion-content overflow-scroll="true">
-		<nav class="nav-learn">
-			<ul>
-				<li><a class="button icon icon-left ion-ios-bell button-first" ui-sref="tabs.vocabfrontcard">Level</a></li>
-				<li><a class="button icon icon-left ion-social-vimeo" ui-sref="tabs.topic">Topic</a></li>
-				<li><a class="button icon icon-left ion-ios-game-controller-b" href="#/learn/vocabulary">Test and Game</a></li>
-			</ul>
-		</nav>
+		<ion-list>
+			<ion-item class="card" ng-click="clicked()">
+				<ion-thumbnail item-left style="float: left;">
+					<img src="img/avatar.png" style="max-height: 80px; max-width: 80px;">
+				</ion-thumbnail>
+				<h2 style="width: auto; height: auto; margin-left: 120px; padding-top: 10px; font-size: 20px;"><b>Level</b></h2>
+				<p style="margin-left: 120px;">Total: 2 topics</p>
+				<!-- <button clear item-right>View</button> -->
+			</ion-item>
+			<ion-item class="card" ng-click="clicked()">
+				<ion-thumbnail item-left style="float: left;">
+					<img src="img/avatar.png" style="max-height: 80px; max-width: 80px;">
+				</ion-thumbnail>
+				<h2 style="width: auto; height: auto; margin-left: 120px; padding-top: 10px; font-size: 20px;"><b>Topic</b></h2>
+				<p style="margin-left: 120px;">Total: 2 topics</p>
+				<!-- <button clear item-right>View</button> -->
+			</ion-item>
+		</ion-list>
 	</ion-content>
 </ion-view>
