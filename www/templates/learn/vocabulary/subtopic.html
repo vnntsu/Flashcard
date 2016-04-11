@@ -2,11 +2,25 @@
 	<ion-slide>
 		<ion-content srcoll="true" class="page-conent-container padding-horizontal">
 		<ion-scroll direction="xy" style="height: 100%;">
-			<nav class="nav-learn">
+			<!-- <nav class="nav-learn">
 				<ul>
 					<li ng-repeat="x in subtopics"><a class="button icon icon-left ion-ios-bell" ng-click="showCard({{x.idsubtopic}})">{{x.name}}</a></li>
 				</ul>
-			</nav>
+			</nav> -->
+			<ion-list>
+				<ion-item ng-repeat="x in subtopics" class="card card-subtopic">
+					<ion-thumbnail item-left style="float: left;">
+						<img src="img/contract.png" style="max-height: 80px; max-width: 80px;border-radius: 50%;">
+					</ion-thumbnail>
+					<h2 style="width: auto; height: auto; margin-left: 120px; padding-top: 10px; font-size: 20px;"><b>{{x.name}}</b></h2>
+					<p style="margin-left: 120px;">Total: {{x.length}} words</p>
+					<p style="margin-left: 120px;">{{x.learned}} words learned</p>
+					<div style="text-align: center;">
+						<button class="button icon icon-left ion-ios-stopwatch-outline button-positive" ng-click="review(x.idsubtopic, x.name)">Review</button>
+						<button class="button icon icon-left ion-ios-lightbulb button-assertive" ng-click="showCard(x.idsubtopic, x.name)">Learn</button>
+					</div>
+				</ion-item>
+			</ion-list>
 		</ion-scroll>
 		</ion-content>
 	</ion-slide>

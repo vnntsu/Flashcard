@@ -31,6 +31,10 @@
                         {
                             "xml": "<feature name=\"ActionSheet\"><param name=\"android-package\" value=\"nl.xservices.plugins.actionsheet.ActionSheet\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"ProgressIndicator\"><param name=\"android-package\" value=\"org.apache.cordova.progressindicator.ProgressIndicator\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -82,6 +86,9 @@
             "PACKAGE_NAME": "com.ionicframework.starter"
         },
         "cordova-plugin-actionsheet": {
+            "PACKAGE_NAME": "com.ionicframework.starter"
+        },
+        "org.pbernasconi.progressindicator": {
             "PACKAGE_NAME": "com.ionicframework.starter"
         }
     },
@@ -279,6 +286,13 @@
             "clobbers": [
                 "window.plugins.actionsheet"
             ]
+        },
+        {
+            "file": "plugins/org.pbernasconi.progressindicator/www/progressIndicator.js",
+            "id": "org.pbernasconi.progressindicator.ProgressIndicator",
+            "clobbers": [
+                "ProgressIndicator"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -287,6 +301,7 @@
         "cordova-plugin-file": "4.1.1",
         "cordova-plugin-media": "2.1.0",
         "cordova-plugin-nativeaudio": "3.0.6",
-        "cordova-plugin-actionsheet": "2.2.2"
+        "cordova-plugin-actionsheet": "2.2.2",
+        "org.pbernasconi.progressindicator": "1.1.0"
     }
 }

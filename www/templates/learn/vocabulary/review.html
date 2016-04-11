@@ -1,0 +1,13 @@
+<ion-view>
+	<ion-content style="text-align: center;">
+	<!-- <ion-scroll direction="y" style="height: 100%; position:relative; "> -->
+		<h2>{{question}}</h2>
+		<h4>{{typeWord}}</h4>
+		<h1 ng-if="rightAnswerShow">Right answer!</h1>
+		<progress max="100"	value="{{ 100 - progressval }}"> </progress>
+		<div class="div-button">
+			<button ng-repeat="a in answers"class="card button button-block" ng-click="checkAnswer(a.isAnswer)">{{a.content}}</button>
+		</div>
+	<!-- </ion-scroll> -->
+	</ion-content>
+</ion-view>

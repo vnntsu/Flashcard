@@ -5,7 +5,6 @@ app.controller('NewCardCtrl', function($scope,$ionicActionSheet,$timeout){
 	// console.log($scope.hide);
 	$scope.ImageURI = 'Select Image';
     function UploadPicture(imageURI) {
-
         $scope.ImageURI =  imageURI;
         alert($scope.ImageURI );
     }

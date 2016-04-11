@@ -192,6 +192,13 @@ module.exports = [
         "clobbers": [
             "window.plugins.actionsheet"
         ]
+    },
+    {
+        "file": "plugins/org.pbernasconi.progressindicator/www/progressIndicator.js",
+        "id": "org.pbernasconi.progressindicator.ProgressIndicator",
+        "clobbers": [
+            "ProgressIndicator"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -202,7 +209,8 @@ module.exports.metadata =
     "cordova-plugin-file": "4.1.1",
     "cordova-plugin-media": "2.1.0",
     "cordova-plugin-nativeaudio": "3.0.6",
-    "cordova-plugin-actionsheet": "2.2.2"
+    "cordova-plugin-actionsheet": "2.2.2",
+    "org.pbernasconi.progressindicator": "1.1.0"
 };
 // BOTTOM OF METADATA
 });

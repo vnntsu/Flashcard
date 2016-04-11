@@ -1,4 +1,4 @@
-var app = angular.module('ionicApp', ['ionic', 'ngCordova', 'ionicApp.services', 'ionicApp.controllers','ionicApp.customControllers'])
+var app = angular.module('ionicApp', ['ionic', 'ngCordova', 'ionicApp.services', 'ionicApp.controllers','ionicApp.customControllers','ionicApp.vocabularyControllers']);
 
 app.run(function($ionicPlatform, $cordovaSQLite, DatabaseService){
 
@@ -97,7 +97,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         }
     })
     .state('tabs.vocabfrontcard', {
-        url: '/vocabfrontcard?idsubtopic',
+        url: '/vocabfrontcard?idsubtopic?title',
         views: {
             'learn-tab': {
                 templateUrl: "templates/learn/vocabulary/vocabfrontcard.html",
@@ -111,6 +111,15 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             'learn-tab': {
                 templateUrl: "templates/learn/vocabulary/vocabbackcard.html",
                 controller: 'VocabCardCtrl'
+            }
+        }
+    })
+    .state('tabs.review', {
+        url: '/review',
+        views: {
+            'learn-tab': {
+                templateUrl: "templates/learn/vocabulary/review.html",
+                controller: 'ReviewCtrl'
             }
         }
     })
