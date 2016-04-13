@@ -173,17 +173,18 @@ INSERT INTO kindofword(name, vnmean) values('Conjunction', 'Liên từ');
 /// data of vocabulary
 
 INSERT INTO vocabulary values(6,'cancellation','/ˌkænsəˈleɪʃn/','resources/vocabulary/image/cancellation.jpg', '/android_asset/www/resources/vocabulary/audio/cancellation.mp3',0,null,0);
-INSERT INTO vocabulary values(7,'cancellation','resources/vocabulary/image/cancellation.jpg', '/android_asset/www/resources/vocabulary/audio/cancellation.mp3',0,null,0);
-INSERT INTO vocabulary values(6,'cancellation','resources/vocabulary/image/cancellation.jpg', '/android_asset/www/resources/vocabulary/audio/cancellation.mp3',0,null,0);
+INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('determine','/dɪˈtɜːrmɪn/','resources/vocabulary/image/determine.jpg', '/android_asset/www/resources/vocabulary/audio/determine.mp3',0,0);
 
 
 
-/// data of topicofword
+/// data of topicofword (idvocab, idsubtopic)
 INSERT INTO topicofword values(6,1);
+INSERT INTO topicofword values(7,1);
 
 
-/// data of typeofword
+/// data of typeofword (idvocab, idkindword, example, meaning, vnmean)
 INSERT INTO typeofword values(6,1,'a decision to stop something that has already been arranged from happening', 'We need at least 24 hours notice of cancellation', 'Sự bỏ, sự huỷ bỏ; sự xoá bỏ, sự bãi bỏ');
+INSERT INTO typeofword values(7,1,'They determined to start early', 'to discover the facts about something; to calculate something exactly', 'quyết định, định đoạt');
 
 
 

@@ -138,7 +138,7 @@ app.controller('VocabCardCtrl',function($scope, DatabaseService, $ionicLoading,$
     };
 });
 
-app.controller('ReviewCtrl', function($scope, DatabaseService, $stateParams, $cordovaProgress, $interval){
+app.controller('ReviewCtrl', function($scope, DatabaseService, $stateParams, $cordovaProgress, $timeout){
 	if($stateParams.idsubtopic){
 		$scope.idSubtopicParam = $stateParams.idsubtopic;
 		$scope.title = $stateParams.title;
@@ -170,9 +170,10 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, $stateParams, $co
     // startprogress();
 
     function randomQuestion(rand){
+    	$scope.rightAnswerShow = false;
     	console.log("call back to create new question");
-    	var asked = [];
-		if($scope.vocabularies[rand].checkTimes<2){
+		if($scope.vocabularies[rand].checkTimes<100){
+    		var asked = [];
 			$scope.isCreateRightAnswer = false;
 			console.log("Less than 2");
 			$scope.idQuestion = rand;
@@ -189,10 +190,10 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, $stateParams, $co
 				if(i==$scope.rightAnswer){
 					$scope.isCreateRightAnswer = true;
 					console.log("create right answer");
-					asked.push($scope.random);
+					asked.push($scope.idQuestion);
+					console.log("Asked length: "+asked.length + "question: " + asked[i]);
 					$scope.answers[i].isAnswer=true;
 					$scope.answers[i].content = $scope.vocabularies[$scope.idQuestion].meaning;
-					asked.push($scope.random);
 					updateRandom($scope.vocabularies.length);
 				}else{
 					$scope.answers[i].isAnswer=false;
@@ -210,13 +211,14 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, $stateParams, $co
 								/// check the answer dont be same with other answers
 								if(asked.length){
 									for (var j = 0; j < asked.length; j++) {
+										console.log("Asked length: "+asked.length + " question: " + asked[j]);
 										if(asked[j]==$scope.random || $scope.random==$scope.idQuestion){
 											console.log("This answer have exist");
 											check=true;
 											updateRandom($scope.vocabularies.length);
 											break;
 										}else{
-											console.log("This answer not exist");
+											console.log("No answer exists");
 											check=false;
 										}
 									}
@@ -226,13 +228,12 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, $stateParams, $co
 								}
 								if(!check){
 									asked.push($scope.random);
+									console.log("After add answer, asked length: " + asked.length);
 									$scope.answers[i].content = $scope.vocabularies[$scope.random].meaning;
 									updateRandom($scope.vocabularies.length);
 								}
-								updateRandom($scope.vocabularies.length);
 							}while(check);
 						}
-						updateRandom($scope.vocabularies.length);
 					}while(check);
 				}
 				console.log("create answer: " + i + " success");
@@ -250,8 +251,7 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, $stateParams, $co
     		console.log("The answer: " + isAnswer);
     		$scope.rightAnswerShow = true;
     		updateRandom($scope.vocabularies.length);
-    		$interval(randomQuestion($scope.random), 2000);
-    		//////// wait 2s then call next question function
+    		$timeout(randomQuestion($scope.random), 2000);
     	}else{
     		console.log("wrong answer");
     	}
