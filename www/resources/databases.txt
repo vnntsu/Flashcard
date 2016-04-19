@@ -169,23 +169,64 @@ INSERT INTO kindofword(name, vnmean) values('Pronoun', 'Đại từ');
 INSERT INTO kindofword(name, vnmean) values('Preposition', 'Giới từ');
 INSERT INTO kindofword(name, vnmean) values('Interjection', 'Thán từ');
 INSERT INTO kindofword(name, vnmean) values('Conjunction', 'Liên từ');
+INSERT INTO kindofword(name, vnmean) values('Phrasal verb', 'Cụm động từ');
 
 /// data of vocabulary
-
-INSERT INTO vocabulary values(6,'cancellation','/ˌkænsəˈleɪʃn/','resources/vocabulary/image/cancellation.jpg', '/android_asset/www/resources/vocabulary/audio/cancellation.mp3',0,null,0);
+INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('abandon','/əˈbændən/','resources/vocabulary/image/abandon.jpg', '/android_asset/www/resources/vocabulary/audio/abandon.mp3',0,0);
+INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('ability','/əˈbɪləti/','resources/vocabulary/image/ability.jpg', '/android_asset/www/resources/vocabulary/audio/ability.mp3',0,0);
+INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('abide by','/əˈbaɪd baɪ/','resources/vocabulary/image/abide.jpg', '/android_asset/www/resources/vocabulary/audio/abide.mp3',0,0);
+INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('agreement','/əˈɡriːmənt/','resources/vocabulary/image/agreement.jpg', '/android_asset/www/resources/vocabulary/audio/agreement.mp3',0,0);
+INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('assurance','/əˈʃʊərəns/','resources/vocabulary/image/assurance.jpg', '/android_asset/www/resources/vocabulary/audio/assurance.mp3',0,0);
+INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('cancellation','/ˌkænsəˈleɪʃn/','resources/vocabulary/image/cancellation.jpg', '/android_asset/www/resources/vocabulary/audio/cancellation.mp3',0,0);
 INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('determine','/dɪˈtɜːrmɪn/','resources/vocabulary/image/determine.jpg', '/android_asset/www/resources/vocabulary/audio/determine.mp3',0,0);
+INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('determine','/dɪˈtɜːrmɪn/','resources/vocabulary/image/determine.jpg', '/android_asset/www/resources/vocabulary/audio/determine.mp3',0,0);
+INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('engage','/ɪnˈɡeɪdʒ/','resources/vocabulary/image/engage.jpg', '/android_asset/www/resources/vocabulary/audio/engage.mp3',0,0);
+INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('establish','/ɪˈstæblɪʃ/','resources/vocabulary/image/establish.jpg', '/android_asset/www/resources/vocabulary/audio/establish.mp3',0,0);
+INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('obligate','/ˈɑb·ləˌɡeɪt/','resources/vocabulary/image/obligate.jpg', '/android_asset/www/resources/vocabulary/audio/obligate.mp3',0,0);
+INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('provision','/prəˈvɪʒn/','resources/vocabulary/image/provision.jpg', '/android_asset/www/resources/vocabulary/audio/provision.mp3',0,0);
+INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('resolve','/rɪˈzɔːlv/','resources/vocabulary/image/resolve.jpg', '/android_asset/www/resources/vocabulary/audio/resolve.mp3',0,0);
+INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('specific','/spəˈsɪfɪk/','resources/vocabulary/image/specific.jpg', '/android_asset/www/resources/vocabulary/audio/specific.mp3',0,0);
 
 
 
 /// data of topicofword (idvocab, idsubtopic)
+INSERT INTO topicofword values(1,51);
+INSERT INTO topicofword values(2,51);
+INSERT INTO topicofword values(3,1);
+INSERT INTO topicofword values(4,1);
+INSERT INTO topicofword values(4,51);
+INSERT INTO topicofword values(5,1);
+INSERT INTO topicofword values(5,51);
 INSERT INTO topicofword values(6,1);
+INSERT INTO topicofword values(6,53);
 INSERT INTO topicofword values(7,1);
-
+INSERT INTO topicofword values(7,54);
+INSERT INTO topicofword values(8,1);
+INSERT INTO topicofword values(8,55);
+INSERT INTO topicofword values(9,1);
+INSERT INTO topicofword values(9,55);
+INSERT INTO topicofword values(10,1);
+INSERT INTO topicofword values(10,65);
+INSERT INTO topicofword values(11,1);
+INSERT INTO topicofword values(11,66);
+INSERT INTO topicofword values(12,1);
+INSERT INTO topicofword values(12,68);
+INSERT INTO topicofword values(13,1);
+INSERT INTO topicofword values(13,69);
 
 /// data of typeofword (idvocab, idkindword, example, meaning, vnmean)
-INSERT INTO typeofword values(6,1,'a decision to stop something that has already been arranged from happening', 'We need at least 24 hours notice of cancellation', 'Sự bỏ, sự huỷ bỏ; sự xoá bỏ, sự bãi bỏ');
-INSERT INTO typeofword values(7,1,'They determined to start early', 'to discover the facts about something; to calculate something exactly', 'quyết định, định đoạt');
-
+INSERT INTO typeofword values(1,2,'He abandoned himself to despair', 'to leave somebody, especially somebody you are responsible for', 'Bỏ, từ bỏ, ruồng bỏ');
+INSERT INTO typeofword values(2,1,'He has the ability to do the work', 'a level of skill or intelligence', 'Năng lực, khả năng, tố chất');
+INSERT INTO typeofword values(3,9,'We will abide by their decision', 'to accept and act according to a law, an agreement', 'Tôn trọng, tuân theo');
+INSERT INTO typeofword values(4,1,'They had made a verbal agreement to sell', 'an arrangement, a promise or a contract made with somebody', 'Sự đồng ý, hợp đồng');
+INSERT INTO typeofword values(5,1,'They called for assurances that the government is committed to its education policy', 'a statement that something will certainly be true or will certainly happen', 'Sự quả quyết, sự đảm bảo');
+INSERT INTO typeofword values(6,1,'We need at least 24 hours notice of cancellation', 'a decision to stop something that has already been arranged from happening', 'Sự bỏ, sự huỷ bỏ; sự xoá bỏ, sự bãi bỏ');
+INSERT INTO typeofword values(7,2,'They determined to start early', 'to discover the facts about something; to calculate something exactly', 'quyết định, định đoạt');
+INSERT INTO typeofword values(8,2,'Their pleas failed to engage any sympathy', 'to succeed in attracting and keeping somebody's attention and interest', 'Hẹn, ước hẹn, đính ước');
+INSERT INTO typeofword values(10,2,'I’m in ​favor of obligating ​welfare ​recipients to do more', 'to make someone ​feel ​morally or ​legally ​forced to do something', 'Bắt buộc, ép buộc');
+INSERT INTO typeofword values(11,1,'There is no provision for anyone to sit down here', 'the act of supplying somebody with something that they need or want', 'Sự cung cấp, sự chu cấp');
+INSERT INTO typeofword values(12,2,'Be patient and the situation may resolve itself', 'to find an acceptable solution to a problem or difficulty', 'Giải quyết');
+INSERT INTO typeofword values(13,3,'I gave you specific instructions', 'detailed and exact', 'Đặc trưng, riêng biệt');
 
 
 

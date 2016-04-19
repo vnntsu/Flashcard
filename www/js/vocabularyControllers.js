@@ -138,124 +138,51 @@ app.controller('VocabCardCtrl',function($scope, DatabaseService, $ionicLoading,$
     };
 });
 
-app.controller('ReviewCtrl', function($scope, DatabaseService, $stateParams, $cordovaProgress, $timeout){
+app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, $stateParams, $cordovaProgress, $cordovaMedia, $ionicLoading, RandomSrve, $timeout){
 	if($stateParams.idsubtopic){
 		$scope.idSubtopicParam = $stateParams.idsubtopic;
 		$scope.title = $stateParams.title;
-		$scope.answers = [{isAnswer:false,content:""},{isAnswer:false,content:""},{isAnswer:false,content:""},{isAnswer:false,content:""}];
 	}
-	$scope.progressval = 0;
-    $scope.stopinterval = null;
-  
-    $scope.updateProgressbar = function(){
-        startprogress();
+
+    $scope.playSound = function(src){
+        console.log("LINK SOUND: " + src)
+        var media = new Media(src, null, null, mediaStatusCallback);
+        media.play();
     };
 
-    function startprogress(){
-        $scope.progressval = 0;
-        if ($scope.stopinterval){
-            $interval.cancel($scope.stopinterval);
-        }
-        $scope.stopinterval = $interval(function() {
-            $scope.progressval = $scope.progressval + 1;
-            if( $scope.progressval >= 100 ) {
-                $interval.cancel($scope.stopinterval);
-                return;
-            }
-        }, 100);
-    };
-	function updateRandom(range) {
-		$scope.random = Math.round((Math.random() * (range-1)) * 1);
-	};
-    // startprogress();
-
-    function randomQuestion(rand){
-    	$scope.rightAnswerShow = false;
-    	console.log("call back to create new question");
-		if($scope.vocabularies[rand].checkTimes<100){
-    		var asked = [];
-			$scope.isCreateRightAnswer = false;
-			console.log("Less than 2");
-			$scope.idQuestion = rand;
-			console.log("current question: " + $scope.idQuestion);
-	    	$scope.question = $scope.vocabularies[rand].text;
-	    	$scope.typeword = $scope.vocabularies[rand].name;
-			$scope.vocabularies[rand].checkTimes++;
-	    	updateRandom(4);
-	    	$scope.rightAnswer = $scope.random;
-	    	console.log("the right answer is " + $scope.rightAnswer);
-	    	updateRandom($scope.vocabularies.length);
-			for (var i = 0; i < 4; i++) {
-				console.log("create the answer: " + i);
-				if(i==$scope.rightAnswer){
-					$scope.isCreateRightAnswer = true;
-					console.log("create right answer");
-					asked.push($scope.idQuestion);
-					console.log("Asked length: "+asked.length + "question: " + asked[i]);
-					$scope.answers[i].isAnswer=true;
-					$scope.answers[i].content = $scope.vocabularies[$scope.idQuestion].meaning;
-					updateRandom($scope.vocabularies.length);
-				}else{
-					$scope.answers[i].isAnswer=false;
-					var check = true;
-					do{
-						check = true;
-						console.log("1111 random to find other answer: " + $scope.random);
-						/// Check the answer dont be same with right answer
-						if($scope.random==$scope.idQuestion){
-							updateRandom($scope.vocabularies.length);
-							continue;
-						}else{
-							do{
-								console.log("2222 random to find other answer: " + $scope.random);
-								/// check the answer dont be same with other answers
-								if(asked.length){
-									for (var j = 0; j < asked.length; j++) {
-										console.log("Asked length: "+asked.length + " question: " + asked[j]);
-										if(asked[j]==$scope.random || $scope.random==$scope.idQuestion){
-											console.log("This answer have exist");
-											check=true;
-											updateRandom($scope.vocabularies.length);
-											break;
-										}else{
-											console.log("No answer exists");
-											check=false;
-										}
-									}
-								}else{
-									console.log("No any answer");
-									check=false;
-								}
-								if(!check){
-									asked.push($scope.random);
-									console.log("After add answer, asked length: " + asked.length);
-									$scope.answers[i].content = $scope.vocabularies[$scope.random].meaning;
-									updateRandom($scope.vocabularies.length);
-								}
-							}while(check);
-						}
-					}while(check);
-				}
-				console.log("create answer: " + i + " success");
-			}
-		}else{
-			console.log("have to change the question");
-			updateRandom($scope.vocabularies.length);
-			randomQuestion($scope.random);
-		}
+    var mediaStatusCallback = function(status) {
+	    if(status == 1) {
+	        $ionicLoading.show({template: 'Loading...'});
+	    } else {
+	        $ionicLoading.hide();
+	    }
     };
 
     $scope.checkAnswer = function(isAnswer){
-
     	if(isAnswer){
     		console.log("The answer: " + isAnswer);
     		$scope.rightAnswerShow = true;
-    		updateRandom($scope.vocabularies.length);
-    		$timeout(randomQuestion($scope.random), 2000);
+    		$scope.playSound($scope.vocabularies[$scope.theQuestion.idQuestion].sound);
+    		$timeout(function() {$scope.createQuestion()}, 1000 * 2);
     	}else{
+    		// showCard();
     		console.log("wrong answer");
     	}
     };
+
+    $scope.createQuestion = function(){
+   		$scope.rightAnswerShow = false;
+   		var randTypeOfQuestion = RandomSrve.myRandom(4);
+   		if(randTypeOfQuestion==0){ // Meaning questions
+        	$scope.theQuestion = QuestionSrve.meaningWordQuestion($scope.vocabularies, 4);
+   		}else if(randTypeOfQuestion==1){ // Word question (meaning is the answer)
+        	$scope.theQuestion = QuestionSrve.wordMeaningQuestion($scope.vocabularies, 4);
+   		}else if(randTypeOfQuestion==2){ // Vnmean question (vnmean is the answer)
+        	$scope.theQuestion = QuestionSrve.vnmeanWordQuestion($scope.vocabularies, 4);
+   		}else{// word vnmean question
+  		    $scope.theQuestion = QuestionSrve.wordVNMeanQuestion($scope.vocabularies, 4);
+   		}
+    }
 
     var query="select * from (select * from (select * from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab where topicofword.idsubtopic="+ $scope.idSubtopicParam +") as newtable left join typeofword on  newtable.idvocab = typeofword.idvocab) as newtable1 left join kindofword on newtable1.idkindword = kindofword.idkindword";
 	DatabaseService.get(query).then(function(result){
@@ -263,7 +190,6 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, $stateParams, $co
 		for (var i = 0; i < $scope.vocabularies.length; i++) {
 			$scope.vocabularies[i].checkTimes = 0;
 		}
-		updateRandom($scope.vocabularies.length);
-		randomQuestion($scope.random);
+		$scope.createQuestion();
 	});    
 });
