@@ -61,31 +61,16 @@ app.controller('LearnTabCtrl', function($scope, $cordovaProgress, $interval){
 }); 
 
 app.controller('ProfileTabCtrl', function($scope, DatabaseService){
-    // var query = "select * from profile";
-    // DatabaseService.get(query).then(function(result){
-    //     var profile = result;
-    // });
-    // $scope.$parent.showHeader();
-    // $scope.$parent.clearFabs();
-    // $scope.isExpanded = false;
-    // $scope.$parent.setExpanded(false);
-    // $scope.$parent.setHeaderFab(false);
+    
+    $scope.loadProfile = function(){
+        var query = "select * from (select profile.idlevel, currentexp, exppoint, idnameoflevel, firstname,lastname,wordperday,avatar from profile left join level on level.idlevel = profile.idlevel)as newtable left join nameoflevel on  newtable.idnameoflevel = nameoflevel.idnameoflevel";
+        DatabaseService.get(query).then(function(result){
+            $scope.profile = result;
+            console.log("level: "+ $scope.profile[0].idlevel + " current exp: " + $scope.profile[0].currentexp);
+        });
+    };
 
-    // // Set Motion
-    // $timeout(function() {
-    //     ionicMaterialMotion.slideUp({
-    //         selector: '.slide-up'
-    //     });
-    // }, 300);
-
-    // $timeout(function() {
-    //     ionicMaterialMotion.fadeSlideInRight({
-    //         startVelocity: 3000
-    //     });
-    // }, 700);
-
-    // // Set Ink
-    // ionicMaterialInk.displayEffect();
+    $scope.loadProfile();
 });
 
 app.controller('PronunCardCtrl', function($scope, $cordovaSQLite){

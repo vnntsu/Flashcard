@@ -21,6 +21,35 @@ app.factory('DatabaseService', function($cordovaSQLite){
 					console.log("NO DATA");
 				};
 			});
+		},
+		update: function(query){
+			database.transaction(function(transaction) {
+				transaction.executeSql(query);
+			});
+		}
+	};
+});
+
+app.factory('LevelServ', function(DatabaseService){
+	return {
+		increase: function(){
+			console.log("Come in!");
+			var query = "select idlevel, currentexp from profile";
+			DatabaseService.get(query).then(function(result){
+				var exp = result[0];
+				query = "select exppoint from level where idlevel=" + exp.idlevel;
+				DatabaseService.get(query).then(function(result){
+					var expPoint = result[0].exppoint;
+					console.log("exp point: " + expPoint);
+					exp.currentexp += 15;
+					if(expPoint<=exp.currentexp){
+						exp.idlevel++;
+						exp.currentexp = 0;
+					}
+					query = "update profile set idlevel="+exp.idlevel+",currentexp="+ exp.currentexp;
+					DatabaseService.update(query);
+				});
+			});
 		}
 	};
 });
@@ -51,6 +80,7 @@ app.factory('QuestionSrve', function(RandomSrve){
 	    	var typeWord = vocabs[idQuestion].name;
 	    	console.log("The current answer: " + idQuestion);
 	    	var rightAnswer = RandomSrve.myRandom(numOfQuestion);
+	    	asked.push(idQuestion);
 	    	console.log("Right answer: " + rightAnswer);
 			nextAnswer = RandomSrve.myRandom(vocabs.length);
 			for (var answerIndex = 0; answerIndex < numOfQuestion; answerIndex++){
@@ -61,26 +91,19 @@ app.factory('QuestionSrve', function(RandomSrve){
 				}else{
 					answers[answerIndex].isAnswer=false;
 					do{
-
 						console.log("random answer: " + nextAnswer);
 						var isExist = true;
-						// Checking the answer had been exist or be same the right answer
-						if(asked.length || nextAnswer==idQuestion){
-							console.log("asked array length: " + asked.length);
-							for (var i = 0; i < asked.length; i++) {
-								if(asked[i]==nextAnswer || nextAnswer==idQuestion){
-									console.log("This answer had been exist");
-									isExist = true;
-									nextAnswer = RandomSrve.myRandom(vocabs.length);
-									break;
-								}else{
-									console.log("No answer exists");
-									isExist=false;
-								}
+						console.log("asked array length: " + asked.length);
+						for (var i = 0; i < asked.length; i++) {
+							if(asked[i]==nextAnswer){
+								console.log("This answer had been exist");
+								isExist = true;
+								nextAnswer = RandomSrve.myRandom(vocabs.length);
+								break;
+							}else{
+								console.log("No answer exists");
+								isExist=false;
 							}
-						}else{
-							console.log("No any answer");
-							isExist=false;
 						}
 					}while(isExist);
 					if(!isExist){
@@ -109,6 +132,7 @@ app.factory('QuestionSrve', function(RandomSrve){
 	    	var typeWord = vocabs[idQuestion].name;
 	    	console.log("The current answer: " + idQuestion);
 	    	var rightAnswer = RandomSrve.myRandom(numOfQuestion);
+	    	asked.push(idQuestion);
 	    	console.log("Right answer: " + rightAnswer);
 			nextAnswer = RandomSrve.myRandom(vocabs.length);
 			for (var answerIndex = 0; answerIndex < numOfQuestion; answerIndex++){
@@ -119,26 +143,19 @@ app.factory('QuestionSrve', function(RandomSrve){
 				}else{
 					answers[answerIndex].isAnswer=false;
 					do{
-
 						console.log("random answer: " + nextAnswer);
 						var isExist = true;
-						// Checking the answer had been exist or be same the right answer
-						if(asked.length){
-							console.log("asked array length: " + asked.length);
-							for (var i = 0; i < asked.length; i++) {
-								if(asked[i]==nextAnswer || nextAnswer==idQuestion){
-									console.log("This answer had been exist");
-									isExist = true;
-									nextAnswer = RandomSrve.myRandom(vocabs.length);
-									break;
-								}else{
-									console.log("No answer exists");
-									isExist=false;
-								}
+						console.log("asked array length: " + asked.length);
+						for (var i = 0; i < asked.length; i++) {
+							if(asked[i]==nextAnswer){
+								console.log("This answer had been exist");
+								isExist = true;
+								nextAnswer = RandomSrve.myRandom(vocabs.length);
+								break;
+							}else{
+								console.log("No answer exists");
+								isExist=false;
 							}
-						}else{
-							console.log("No any answer");
-							isExist=false;
 						}
 					}while(isExist);
 					if(!isExist){
@@ -167,6 +184,7 @@ app.factory('QuestionSrve', function(RandomSrve){
 	    	var typeWord = vocabs[idQuestion].name;
 	    	console.log("The current answer: " + idQuestion);
 	    	var rightAnswer = RandomSrve.myRandom(numOfQuestion);
+	    	asked.push(idQuestion);
 	    	console.log("Right answer: " + rightAnswer);
 			nextAnswer = RandomSrve.myRandom(vocabs.length);
 			for (var answerIndex = 0; answerIndex < numOfQuestion; answerIndex++){
@@ -177,26 +195,19 @@ app.factory('QuestionSrve', function(RandomSrve){
 				}else{
 					answers[answerIndex].isAnswer=false;
 					do{
-
 						console.log("random answer: " + nextAnswer);
 						var isExist = true;
-						// Checking the answer had been exist or be same the right answer
-						if(asked.length){
-							console.log("asked array length: " + asked.length);
-							for (var i = 0; i < asked.length; i++) {
-								if(asked[i]==nextAnswer || nextAnswer==idQuestion){
-									console.log("This answer had been exist");
-									isExist = true;
-									nextAnswer = RandomSrve.myRandom(vocabs.length);
-									break;
-								}else{
-									console.log("No answer exists");
-									isExist=false;
-								}
+						console.log("asked array length: " + asked.length);
+						for (var i = 0; i < asked.length; i++) {
+							if(asked[i]==nextAnswer){
+								console.log("This answer had been exist");
+								isExist = true;
+								nextAnswer = RandomSrve.myRandom(vocabs.length);
+								break;
+							}else{
+								console.log("No answer exists");
+								isExist=false;
 							}
-						}else{
-							console.log("No any answer");
-							isExist=false;
 						}
 					}while(isExist);
 					if(!isExist){
@@ -225,6 +236,7 @@ app.factory('QuestionSrve', function(RandomSrve){
 	    	var typeWord = vocabs[idQuestion].name;
 	    	console.log("The current answer: " + idQuestion);
 	    	var rightAnswer = RandomSrve.myRandom(numOfQuestion);
+	    	asked.push(idQuestion);
 	    	console.log("Right answer: " + rightAnswer);
 			nextAnswer = RandomSrve.myRandom(vocabs.length);
 			for (var answerIndex = 0; answerIndex < numOfQuestion; answerIndex++){
@@ -235,26 +247,19 @@ app.factory('QuestionSrve', function(RandomSrve){
 				}else{
 					answers[answerIndex].isAnswer=false;
 					do{
-
 						console.log("random answer: " + nextAnswer);
 						var isExist = true;
-						// Checking the answer had been exist or be same the right answer
-						if(asked.length){
-							console.log("asked array length: " + asked.length);
-							for (var i = 0; i < asked.length; i++) {
-								if(asked[i]==nextAnswer || nextAnswer==idQuestion){
-									console.log("This answer had been exist");
-									isExist = true;
-									nextAnswer = RandomSrve.myRandom(vocabs.length);
-									break;
-								}else{
-									console.log("No answer exists");
-									isExist=false;
-								}
+						console.log("asked array length: " + asked.length);
+						for (var i = 0; i < asked.length; i++) {
+							if(asked[i]==nextAnswer){
+								console.log("This answer had been exist");
+								isExist = true;
+								nextAnswer = RandomSrve.myRandom(vocabs.length);
+								break;
+							}else{
+								console.log("No answer exists");
+								isExist=false;
 							}
-						}else{
-							console.log("No any answer");
-							isExist=false;
 						}
 					}while(isExist);
 					if(!isExist){

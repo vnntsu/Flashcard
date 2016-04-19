@@ -1,0 +1,53 @@
+<ion-view title="{{title}}">
+	<ion-content class="box-sizing">
+	    <nav ng-if="isFront">
+	    	<h2 style="text-align: center; width: 80%; margin: auto;">Front card</h2>
+		    <ul>
+		    	<li class="vocabcard">
+		    		<p class="text">{{text}}</p>
+		    		<p class="pronounce">{{pronounce}}</p>
+		    		<div class="icon ion-ios-volume-high" ng-click="playSound(sound)"></div>
+		    	</li>
+		    </ul>
+		    <ul ng-click="turnPage(1)">
+		    	<li>
+		    		<img class="" ng-src="{{image}}" alt="">
+		    	</li>
+		    	<li>
+		    		<p>Meaning:</p>
+		    		<p style="font-size: 15px; width: 100%;">{{meaning}}</p>
+		    	</li>
+		    </ul>
+
+			<a class="icon ion-ios-undo large" ng-click="previousCard()" style="position: absolute; left: 10px;font-size: 30px;"></a>
+		    	
+		    <a class="icon ion-ios-redo large" ng-click="nextCard()" style="position: absolute; right: 10px; font-size: 30px;"></a>
+		</nav>
+
+	    <nav ng-if="isBack">
+	    	<h2 style="text-align: center; width: 80%; margin: auto;">Back card</h2>
+		    <ul>
+		    	<li class="vocabcard">
+		    		<p class="text">{{text}}</p>
+		    		<p class="pronounce">{{pronounce}}</p>
+			    	<p style="font-size: 20px; text-align: center;">{{vnmean}}</p>
+		    		<div class="icon ion-ios-volume-high" style="bottom: 50%;" ng-click="playSound({{sound}})"></div>
+		    	</li>
+		    </ul>
+		    <ul ng-click="turnPage(0)">
+		    	<li>
+		    		<img class="" ng-src="{{image}}" alt="">
+		    	</li>
+		    	<li>
+		    		<p>Example:</p>
+		    		<p style="font-size: 15px; width: 100%;">{{example}}</p>
+		    	</li>
+		    </ul>
+		    <div style="display: inline-block; position: absolute; bottom: 20px; width: 100%;">
+		    <a class="icon ion-ios-undo large" ng-click="previousCard()" style="position: absolute; left: 10px;font-size: 30px;"></a>
+		    	
+		    <a class="icon ion-ios-redo large" ng-click="nextCard()" style="position: absolute;  right: 10px; font-size: 30px;"></a>
+		    </div>
+	  	</nav>
+	</ion-content>
+</ion-view>

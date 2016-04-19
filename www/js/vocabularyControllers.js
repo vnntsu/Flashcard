@@ -138,11 +138,36 @@ app.controller('VocabCardCtrl',function($scope, DatabaseService, $ionicLoading,$
     };
 });
 
-app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, $stateParams, $cordovaProgress, $cordovaMedia, $ionicLoading, RandomSrve, $timeout){
+app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, LevelServ, $stateParams, $cordovaProgress, $cordovaMedia, $ionicLoading, RandomSrve, $timeout){
 	if($stateParams.idsubtopic){
 		$scope.idSubtopicParam = $stateParams.idsubtopic;
 		$scope.title = $stateParams.title;
+        $scope.normalTest = true;
+        $scope.wrongCard = false;
 	}
+
+    $scope.showCard = function(vocab){
+        $scope.text = vocab.text;
+        $scope.pronounce = vocab.pronounce;
+        $scope.sound = vocab.sound;
+        $scope.image = vocab.image;
+        $scope.example = vocab.example;
+        $scope.meaning = vocab.meaning;
+        $scope.vnmean = vocab.vnmean;
+        $scope.topicName = vocab.name;
+        $scope.topicVNname = vocab.vnname;
+        $scope.isRemember = vocab.isremember;
+        $scope.rememberDay = vocab.rememberday;
+        $scope.isCustom = vocab.isCustom;
+    };
+
+    var mediaStatusCallback = function(status) {
+        if(status == 1) {
+            $ionicLoading.show({template: 'Loading...'});
+        } else {
+            $ionicLoading.hide();
+        }
+    };
 
     $scope.playSound = function(src){
         console.log("LINK SOUND: " + src)
@@ -150,34 +175,73 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, $st
         media.play();
     };
 
-    var mediaStatusCallback = function(status) {
-	    if(status == 1) {
-	        $ionicLoading.show({template: 'Loading...'});
-	    } else {
-	        $ionicLoading.hide();
-	    }
+    $scope.getWrongCard = function(idQuestion){
+        $scope.showCard($scope.vocabularies[idQuestion]);
+        $scope.normalTest = false;
+        $scope.wrongCard = true;
+        $scope.isFront = true;
+        $scope.isBack = !$scope.isFront;
+
+    };
+
+    $scope.turnPage = function(id){
+        if(id==1){
+            $scope.isFront = false;
+            $scope.isBack = !$scope.isFront;
+        }else{
+            $scope.isBack = false;
+            $scope.isFront = !$scope.isBack;
+        };
     };
 
     $scope.checkAnswer = function(isAnswer){
     	if(isAnswer){
+            LevelServ.increase();
     		console.log("The answer: " + isAnswer);
+            $scope.showAnswer = false;
+            $scope.showRight = true;
     		$scope.rightAnswerShow = true;
+            if($scope.randTypeOfQuestion==0){
+                $scope.rightContent = $scope.vocabularies[$scope.theQuestion.idQuestion].meaning;
+            }else if($scope.randTypeOfQuestion==2){
+                $scope.rightContent = $scope.vocabularies[$scope.theQuestion.idQuestion].vnmean;
+            }else{
+                $scope.rightContent = $scope.vocabularies[$scope.theQuestion.idQuestion].text;
+            }
+            
     		$scope.playSound($scope.vocabularies[$scope.theQuestion.idQuestion].sound);
     		$timeout(function() {$scope.createQuestion()}, 1000 * 2);
     	}else{
-    		// showCard();
+            if($scope.randTypeOfQuestion==0){
+                $scope.wrongContent = $scope.vocabularies[$scope.theQuestion.idQuestion].meaning;
+            }else if($scope.randTypeOfQuestion==2){
+                $scope.wrongContent = $scope.vocabularies[$scope.theQuestion.idQuestion].vnmean;
+            }else{
+                $scope.wrongContent = $scope.vocabularies[$scope.theQuestion.idQuestion].text;
+            }
+    		$scope.wrongAnswerShow = true;
+            $scope.showAnswer = false;
+            $scope.showWrong = true;
+            $timeout(function() {$scope.getWrongCard($scope.theQuestion.idQuestion)}, 1000);
     		console.log("wrong answer");
     	}
     };
 
     $scope.createQuestion = function(){
-   		$scope.rightAnswerShow = false;
-   		var randTypeOfQuestion = RandomSrve.myRandom(4);
-   		if(randTypeOfQuestion==0){ // Meaning questions
+        $scope.rightAnswerShow = false;
+        $scope.wrongAnswerShow = false;
+        $scope.normalTest = true;
+        $scope.wrongCard = false;
+        $scope.showAnswer = true;
+        $scope.showRight = false;
+        $scope.showWrong = false;
+        $scope.randTypeOfQuestion = RandomSrve.myRandom(4);
+        // var randTypeOfQuestion = 0;
+   		if($scope.randTypeOfQuestion==0){ // Meaning questions
         	$scope.theQuestion = QuestionSrve.meaningWordQuestion($scope.vocabularies, 4);
-   		}else if(randTypeOfQuestion==1){ // Word question (meaning is the answer)
+   		}else if($scope.randTypeOfQuestion==1){ // Word question (meaning is the answer)
         	$scope.theQuestion = QuestionSrve.wordMeaningQuestion($scope.vocabularies, 4);
-   		}else if(randTypeOfQuestion==2){ // Vnmean question (vnmean is the answer)
+   		}else if($scope.randTypeOfQuestion==2){ // Vnmean question (vnmean is the answer)
         	$scope.theQuestion = QuestionSrve.vnmeanWordQuestion($scope.vocabularies, 4);
    		}else{// word vnmean question
   		    $scope.theQuestion = QuestionSrve.wordVNMeanQuestion($scope.vocabularies, 4);
