@@ -13,7 +13,6 @@ p.text{
 
 p.pronounce{
 	font-size: 20px;
-	font-style: italic;
 	color: #F3E515;
 }
 
@@ -85,6 +84,6 @@ div button.card{
 }
 
 .button.activated{
-	transform: scale(1.2);
-	background-color: red !important;
+	transform: scale(2);
+	background-color: yellow !important;
 }

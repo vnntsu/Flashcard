@@ -195,9 +195,9 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
     };
 
     $scope.checkAnswer = function(isAnswer, content){
-        console.log("idQuestion: " + content + " isAnswer: " + isAnswer);
-        $scope.clicked=content;
+        $scope.clicked=true;
     	if(isAnswer){
+            $scope.rightButtonClicked = content;
             LevelServ.increase();
     		console.log("The answer: " + isAnswer);
             $scope.showAnswer = false;
@@ -214,6 +214,15 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
     		$scope.playSound($scope.vocabularies[$scope.theQuestion.idQuestion].sound);
     		$timeout(function() {$scope.createQuestion()}, 1000 * 2);
     	}else{
+            $scope.wrongButtonClicked = content;
+            for (var i = 0; i < $scope.theQuestion.answers.length; i++) {
+                console.log("isAnswer: " + $scope.theQuestion.answers[i].isAnswer + " ; content: " + $scope.theQuestion.answers[i].content)
+                if($scope.theQuestion.answers[i].isAnswer){
+                    $scope.rightButtonClicked = $scope.theQuestion.answers[i].content;
+                    break;
+                }
+            }
+        
             if($scope.randTypeOfQuestion==0){
                 $scope.wrongContent = $scope.vocabularies[$scope.theQuestion.idQuestion].meaning;
             }else if($scope.randTypeOfQuestion==2){
@@ -235,8 +244,9 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
         $scope.normalTest = true;
         $scope.wrongCard = false;
         $scope.showAnswer = true;
-        $scope.showRight = false;
-        $scope.showWrong = false;
+        $scope.rightButtonClicked = "";
+        $scope.wrongButtonClicked = "";
+        $scope.clicked = false;
         $scope.randTypeOfQuestion = RandomSrve.myRandom(4);
         // var randTypeOfQuestion = 0;
    		if($scope.randTypeOfQuestion==0){ // Meaning questions
