@@ -46,7 +46,6 @@ ion-item.card{
 }
 
 ion-item.item.activated{
-
 	background: #F44336;
 }
 
@@ -74,4 +73,18 @@ div button.card{
 	position:absolute;
 	width: 100%;
     height: auto;
+}
+
+.button-tran{
+	transition: all 0.3s;
+}
+
+.button.disabled {
+  opacity: 0.65; 
+  cursor: not-allowed;
+}
+
+.button.activated{
+	transform: scale(1.2);
+	background-color: red !important;
 }

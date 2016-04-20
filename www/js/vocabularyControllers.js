@@ -194,7 +194,9 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
         };
     };
 
-    $scope.checkAnswer = function(isAnswer){
+    $scope.checkAnswer = function(isAnswer, content){
+        console.log("idQuestion: " + content + " isAnswer: " + isAnswer);
+        $scope.clicked=content;
     	if(isAnswer){
             LevelServ.increase();
     		console.log("The answer: " + isAnswer);

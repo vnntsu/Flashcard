@@ -2,7 +2,7 @@
 	<ion-content class="box-sizing" on-swipe-right="nextCard()"
                    on-swipe-left="previousCard()">
 	    <nav ng-if="isFront">
-	    	<h2 style="text-align: center; width: 80%; margin: auto;">Front card</h2>
+	    	<h4 style="text-align: center; width: 80%; margin: auto;">Front card</h4>
 		    <ul>
 		    	<li class="vocabcard">
 		    		<p class="text">{{text}}</p>
@@ -19,14 +19,10 @@
 		    		<p style="font-size: 15px; width: 100%;">{{meaning}}</p>
 		    	</li>
 		    </ul>
-
-			<!-- <a class="icon ion-ios-undo large" ng-click="previousCard()" style="position: absolute; left: 10px;font-size: 30px;"></a>
-		    	
-		    <a class="icon ion-ios-redo large" ng-click="nextCard()" style="position: absolute; right: 10px; font-size: 30px;"></a> -->
 		</nav>
 
 	    <nav ng-if="isBack">
-	    	<h2 style="text-align: center; width: 80%; margin: auto;">Back card</h2>
+	    	<h4 style="text-align: center; width: 80%; margin: auto;">Back card</h4>
 		    <ul>
 		    	<li class="vocabcard">
 		    		<p class="text">{{text}}</p>
@@ -44,11 +40,6 @@
 		    		<p style="font-size: 15px; width: 100%;">{{example}}</p>
 		    	</li>
 		    </ul>
-		    <div style="display: inline-block; position: absolute; bottom: 20px; width: 100%;">
-		   <!--  <a class="icon ion-ios-undo large" ng-click="previousCard()" style="position: absolute; left: 10px;font-size: 30px;"></a>
-		    	
-		    <a class="icon ion-ios-redo large" ng-click="nextCard()" style="position: absolute;  right: 10px; font-size: 30px;"></a> -->
-		    </div>
 	  	</nav>
 	</ion-content>
 </ion-view>
