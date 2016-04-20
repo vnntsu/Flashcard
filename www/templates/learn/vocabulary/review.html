@@ -9,10 +9,10 @@
 				<button ng-repeat="a in theQuestion.answers"class="card button button-block" ng-click="checkAnswer(a.isAnswer)">{{a.content}}</button>
 			</div>
 			<div class="div-button" ng-if="showRight">
-				<button class="card button button-block button-calm">{{rightContent}}</button>
+				<button class="card button button-block button-balanced">{{rightContent}}</button>
 			</div>
 			<div class="div-button" ng-if="showWrong">
-				<button class="card button button-block button-energized">{{wrongContent}}</button>
+				<button class="card button button-block button-assertive">{{wrongContent}}</button>
 			</div>
 		</ion-scroll>
 	</ion-content>

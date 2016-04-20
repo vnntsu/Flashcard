@@ -55,7 +55,7 @@ app.controller('SubTopicCtrl', function($scope, DatabaseService, $stateParams, $
         $state.go('tabs.review',{idsubtopic: id, title: title});
     }
 });
-app.controller('VocabCardCtrl',function($scope, DatabaseService, $ionicLoading,$cordovaMedia, $state, $stateParams){
+app.controller('VocabCardCtrl',function($scope, DatabaseService, $ionicLoading,$cordovaMedia, $state, $stateParams, $ionicGesture){
     $scope.playCard = function(vocab){
         console.log(vocab.text + " current vocab: " + $scope.currentVocab);
         $scope.text = vocab.text;
