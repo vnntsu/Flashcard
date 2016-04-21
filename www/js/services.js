@@ -37,14 +37,13 @@ app.factory('LevelServ', function(DatabaseService){
 			var query = "select idlevel, currentexp from profile";
 			DatabaseService.get(query).then(function(result){
 				var exp = result[0];
-				query = "select exppoint from level where idlevel=" + exp.idlevel;
+				query = "select point from level where idlevel=" + (exp.idlevel+1);
 				DatabaseService.get(query).then(function(result){
-					var expPoint = result[0].exppoint;
-					console.log("exp point: " + expPoint);
-					exp.currentexp += 15;
-					if(expPoint<=exp.currentexp){
+					var point = result[0].point;
+					console.log("exp point: " + point);
+					exp.currentexp += 45;
+					if(exp.currentexp>=point){
 						exp.idlevel++;
-						exp.currentexp = 0;
 					}
 					query = "update profile set idlevel="+exp.idlevel+",currentexp="+ exp.currentexp;
 					DatabaseService.update(query);

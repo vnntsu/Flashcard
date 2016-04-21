@@ -1,113 +1,30 @@
-<!-- <ion-view title="Profile" style="text-align: center">
-  <ion-content>
-		<ion-card >
-		  	<ion-item class="item-profile">
-  			<div class="item item-avatar">
-    			<img ng-src="{{imageURL}}" class="avatar-img">
-			    <ion-label class="label-name">Hi! {{firstname + " " + lastname}} </ion-label>
-  			</div>
-			</ion-item>
-			<hr>
-			<ion-item class="item-profile item-level">
-				<ion-label class="level">Level: {{level}}</ion-label>
-				<ion-label class="level levelName">{{nameOfLevel}}</ion-label>
-				<div class="w3-progress-container w3-round-large" style="margin-top: 20px;">
-					<div id="myBar" class="w3-progressbar w3-round-large w3-green" style="width:{{currentExp/expPoint*100}}%;">
-						<div class="w3-center w3-text-white">{{currentExp/expPoint*100}}%</div>
-					</div>
-				</div>
-				<ion-label class="level">{{currentExp + "/" + expPoint}}</ion-label>
-			</ion-item>
-			<hr>
-			<ion-item class="item-profile">
-				<ion-label>Number word per day: {{wordPerDay}}</ion-label>
-			</ion-item>
-		</ion-card>
-  </ion-content>
-</ion-view> -->
-
-<ion-view title="Profile" style="text-align: center">
- <!--  <ion-content>
-   		<div class="hero" style="background-image: url('img/profile-bg.jpg');">
-            <div class="content">
-                <div class="avatar" style="background-image: url('img/daenerys.jpg');"></div>
-                <h3><a class="light">Daenerys Targaryen</a></h3>
-                <h4>dragon_mommy</h4>
-            </div>
-        </div>
-		<ion-card >
-		  	<ion-item class="item-profile">
-  			<div class="item item-avatar">
-    			<img ng-src="{{imageURL}}" class="avatar-img">
-			    <ion-label class="label-name">Hi! {{firstname + " " + lastname}} </ion-label>
-  			</div>
-			</ion-item>
-			<hr>
-			<ion-item class="item-profile item-level">
-				<ion-label class="level">Level: {{level}}</ion-label>
-				<ion-label class="level levelName">{{nameOfLevel}}</ion-label>
-				<div class="w3-progress-container w3-round-large" style="margin-top: 20px;">
-					<div id="myBar" class="w3-progressbar w3-round-large w3-green" style="width:{{currentExp/expPoint*100}}%;">
-						<div class="w3-center w3-text-white">{{currentExp/expPoint*100}}%</div>
-					</div>
-				</div>
-				<ion-label class="level">{{currentExp + "/" + expPoint}}</ion-label>
-			</ion-item>
-			<hr>
-			<ion-item class="item-profile">
-				<ion-label>Number word per day: {{wordPerDay}}</ion-label>
-			</ion-item>
-		</ion-card>
-
-		<ion-card >
-		  	<ion-item class="item-profile">
-    			<img src="img/avatar.png" class="avatar">
-			</ion-item>
-			<ion-label class="label-name">Hi! Sion </ion-label>
-			<hr> -->
-			<!-- <ion-item class="item-profile item-level">
-				<ion-label class="level">Level: {{level}}</ion-label>
-				<ion-label class="level levelName">{{nameOfLevel}}</ion-label>
-				<div class="w3-progress-container w3-round-large" style="margin-top: 20px;">
-					<div id="myBar" class="w3-progressbar w3-round-large w3-green" style="width:{{currentExp/expPoint*100}}%;">
-						<div class="w3-center w3-text-white">{{currentExp/expPoint*100}}%</div>
-					</div>
-				</div>
-				<ion-label class="level">{{currentExp + "/" + expPoint}}</ion-label>
-			</ion-item>
-			<hr>
-			<ion-item class="item-profile">
-				<ion-label>Number word per day: {{wordPerDay}}</ion-label>
-			</ion-item> -->
-		<!-- </ion-card>
-  </ion-content> -->
-  <ion-content style="margin-top: 44px;">
-        <div class="hero" style="background-image: url('img/material.jpg');">
-            <div class="content">
-                <div class="avatar" style="background-image: url('img/avatar.png');"></div>
-                <h3><a class="light">{{profile[0].firstname + " " + profile[0].lastname}}</a></h3>
-                <h4>{{profile[0].name}}</h4>
-            </div>
-        </div>
-        <div class="tabs tabs-dark tabs-icon-top static">
-            <a ui-sref="app.activity" class="tab-item">
-                <i class="icon ion-arrow-graph-up-right"></i> Activity
-            </a>
-            <a ui-sref="app.friends" class="tab-item">
-                <i class="icon ion-android-people"></i> Friends
-            </a>
-            <a ui-sref="app.gallery" class="tab-item">
-                <i class="icon ion-images"></i> Photos
-            </a>
-        </div>
-        <!-- <h4 class="content padding double-padding-x">Following</h4> -->
-        <ion-item class="item-profile item-level">
-		<ion-label class="level">Level: {{profile[0].idlevel}}</ion-label>
-		<div class="w3-progress-container w3-round-large" style="margin-top: 20px;">
-					<div id="myBar" class="w3-progressbar w3-round-large w3-green" style="width:{{profile[0].currentexp/profile[0].exppoint*100}}%;">
-						<div class="w3-center w3-text-white">{{profile[0].currentexp/profile[0].exppoint*100}}%</div>
-					</div>
-				</div>
-				<ion-label class="level">{{profile[0].currentexp + "/" + profile[0].exppoint}}</ion-label>
-    </ion-content>
+<ion-view title="Profile">
+  	<ion-content>
+  		<div style="height: 185px; text-align: center">
+	  		<div class="avatar-background">
+	            <h1 class="text-name">{{profile.firstname + " " + profile.lastname}}</h1>
+	            <img src="{{profile.avatar}}" class="avatar-image">
+				<h4 style="margin: 0px;">{{profile.nameoflevel}}</h4>
+	        </div>
+		</div>
+		<div style="clear: both; margin: 0px;" class="card">
+			<div style="width: 50%; height: 60px; float: left; text-align: center;">
+				<img src="{{profile.image}}" alt="" style="height: 60px; width: 60px; border-radius: 50%">
+			</div>
+			<div style="width: 50%; height: 60px; float: left; text-align: center">
+				<img src="{{imageAchieve}}" alt="" style="height: 60px; width: 60px; border-radius: 50%">
+			</div>
+		</div>
+		<div style="clear: both; margin: 5px 0;">
+			<div style="width: 50%; height: auto; float: left; text-align: center">
+				<h3 style="margin: 0px;">{{wordsLearned}}</h3>
+				<p>words learned</p>
+			</div>
+			<div style="width: 50%; height: auto; float: left; text-align: center">
+				<h3 style="margin: 0px;">{{profile.currentexp}}</h3>
+				<p>points</p>
+			</div>
+		</div>
+ 	</ion-content>
 </ion-view>
+

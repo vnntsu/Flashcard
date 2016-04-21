@@ -243,7 +243,6 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
         $scope.wrongAnswerShow = false;
         $scope.normalTest = true;
         $scope.wrongCard = false;
-        $scope.showAnswer = true;
         $scope.rightButtonClicked = "";
         $scope.wrongButtonClicked = "";
         $scope.clicked = false;

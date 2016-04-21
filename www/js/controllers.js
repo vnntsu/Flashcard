@@ -61,16 +61,21 @@ app.controller('LearnTabCtrl', function($scope, $cordovaProgress, $interval){
 }); 
 
 app.controller('ProfileTabCtrl', function($scope, DatabaseService){
-    
-    $scope.loadProfile = function(){
-        var query = "select * from (select profile.idlevel, currentexp, exppoint, idnameoflevel, firstname,lastname,wordperday,avatar from profile left join level on level.idlevel = profile.idlevel)as newtable left join nameoflevel on  newtable.idnameoflevel = nameoflevel.idnameoflevel";
-        DatabaseService.get(query).then(function(result){
-            $scope.profile = result;
-            console.log("level: "+ $scope.profile[0].idlevel + " current exp: " + $scope.profile[0].currentexp);
+    var query = "select * from profile, level where profile.idlevel=level.idlevel";
+    DatabaseService.get(query).then(function(result){
+        $scope.profile = result[0];
+        console.log("profile.nameoflevel: " + $scope.profile.nameoflevel);
+        query = "select * from achievement where isachieve=1";
+        DatabaseService.get(query).then(function(result1){
+            $scope.imageAchieve = result1[0].image;
+            console.log("profile.image: " + $scope.imageAchieve);
+            query = "select count(isremember) as wordsLearned from vocabulary where isremember=1";
+            DatabaseService.get(query).then(function(result2){
+                $scope.wordsLearned = result2[0].wordsLearned;
+            });
         });
-    };
-
-    $scope.loadProfile();
+    });
+    
 });
 
 app.controller('PronunCardCtrl', function($scope, $cordovaSQLite){

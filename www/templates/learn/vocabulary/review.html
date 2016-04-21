@@ -5,16 +5,9 @@
 			<h4>{{theQuestion.typeWord}}</h4>
 			<h1 ng-if="rightAnswerShow">Right!</h1>
 			<h1 ng-if="wrongAnswerShow">Wrong!</h1>
-			<!-- <div class="div-button" ng-if="showAnswer"> -->
 			<div class="div-button">
 				<button ng-repeat="a in theQuestion.answers" class="card button button-block button-tran" ng-click="checkAnswer(a.isAnswer,a.content)" ng-disabled="clicked" ng-class="{'button-assertive': a.content==wrongButtonClicked, 'button-balanced': a.content==rightButtonClicked}">{{a.content}}</button>
 			</div>
-			<!-- <div class="div-button" ng-if="showRight">
-				<button class="card button button-block button-balanced">{{rightContent}}</button>
-			</div>
-			<div class="div-button" ng-if="showWrong">
-				<button class="card button button-block button-assertive">{{wrongContent}}</button>
-			</div> -->
 		</ion-scroll>
 	</ion-content>
 </ion-view>

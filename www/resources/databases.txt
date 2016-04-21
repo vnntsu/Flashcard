@@ -39,13 +39,9 @@ CREATE TABLE topicofvocab(
 
 CREATE TABLE level(
 	idlevel INTEGER PRIMARY KEY AUTOINCREMENT,
-	exppoint int,
-	idnameoflevel int
-);
-
-CREATE TABLE nameoflevel(
-	idnameoflevel INTEGER PRIMARY KEY AUTOINCREMENT,
-	name varchar(50)
+	point int,
+	nameoflevel int,
+	image varchar(255)
 );
 
 CREATE TABLE profile(
@@ -171,6 +167,28 @@ INSERT INTO kindofword(name, vnmean) values('Interjection', 'Thán từ');
 INSERT INTO kindofword(name, vnmean) values('Conjunction', 'Liên từ');
 INSERT INTO kindofword(name, vnmean) values('Phrasal verb', 'Cụm động từ');
 
+
+/// data of level
+INSERT INTO level(point, nameoflevel, image) values('0', 'Newbie', 'resource/level/rank0.png');
+INSERT INTO level(point, nameoflevel, image) values('500', 'Novice', 'resource/level/rank1.png');
+INSERT INTO level(point, nameoflevel, image) values('2000', 'Rookie', 'resource/level/rank2.png');
+INSERT INTO level(point, nameoflevel, image) values('5000', 'Beginner', 'resource/level/rank3.png');
+INSERT INTO level(point, nameoflevel, image) values('10000', 'Junior', 'resource/level/rank4.png');
+INSERT INTO level(point, nameoflevel, image) values('25000', 'Talented', 'resource/level/rank5.png');
+INSERT INTO level(point, nameoflevel, image) values('50000', 'Skilled', 'resource/level/rank6.png');
+INSERT INTO level(point, nameoflevel, image) values('75000', 'Intermediate', 'resource/level/rank7.png');
+INSERT INTO level(point, nameoflevel, image) values('100000', 'Skillful', 'resource/level/rank8.png');
+INSERT INTO level(point, nameoflevel, image) values('150000', 'Seasoned', 'resource/level/rank9.png');
+INSERT INTO level(point, nameoflevel, image) values('250000', 'Proficient', 'resource/level/rank10.png');
+INSERT INTO level(point, nameoflevel, image) values('500000', 'Experienced', 'resource/level/rank11.png');
+INSERT INTO level(point, nameoflevel, image) values('1000000', 'Advanced', 'resource/level/rank12.png');
+INSERT INTO level(point, nameoflevel, image) values('2500000', 'Senior', 'resource/level/rank13.png');
+INSERT INTO level(point, nameoflevel, image) values('5000000', 'Expert', 'resource/level/rank14.png');
+INSERT INTO level(point, nameoflevel, image) values('10000000', 'Professional', 'resource/level/rank15.png');
+INSERT INTO level(point, nameoflevel, image) values('50000000', 'Lord', 'resource/level/rank16.png');
+INSERT INTO level(point, nameoflevel, image) values('100000000', 'Overload', 'resource/level/rank17.png');
+
+
 /// data of vocabulary
 INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('abandon','/əˈbændən/','resources/vocabulary/image/abandon.jpg', '/android_asset/www/resources/vocabulary/audio/abandon.mp3',0,0);
 INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('ability','/əˈbɪləti/','resources/vocabulary/image/ability.jpg', '/android_asset/www/resources/vocabulary/audio/ability.mp3',0,0);
@@ -186,7 +204,6 @@ INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('o
 INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('provision','/prəˈvɪʒn/','resources/vocabulary/image/provision.jpg', '/android_asset/www/resources/vocabulary/audio/provision.mp3',0,0);
 INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('resolve','/rɪˈzɔːlv/','resources/vocabulary/image/resolve.jpg', '/android_asset/www/resources/vocabulary/audio/resolve.mp3',0,0);
 INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('specific','/spəˈsɪfɪk/','resources/vocabulary/image/specific.jpg', '/android_asset/www/resources/vocabulary/audio/specific.mp3',0,0);
-
 
 
 /// data of topicofword (idvocab, idsubtopic)
