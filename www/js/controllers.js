@@ -9,55 +9,10 @@ app.controller('NavCtrl', function($scope, $ionicSideMenuDelegate) {
     };
 });
 
-app.controller('LearnTabCtrl', function($scope, $cordovaProgress, $interval){
-    // $scope.progressval = 0;
-    // $scope.stopinterval = null;
-  
-    // $scope.updateProgressbar = function(){
-    //     startprogress();
-    // }
-
-    // function startprogress(){
-    //     $scope.progressval = 0;
-    //     if ($scope.stopinterval){
-    //         $interval.cancel($scope.stopinterval);
-    //     }
-    //     $scope.stopinterval = $interval(function() {
-    //         $scope.progressval = $scope.progressval + 1;
-    //         if( $scope.progressval >= 100 ) {
-    //             $interval.cancel($scope.stopinterval);
-    //             return;
-    //         }
-    //     }, 100);
-    // }
-
-    // startprogress();
-    // $cordovaProgress.showSimple(true);  // requires .hide()
-
-// $cordovaProgress.showSimpleWithLabel(true, "Loading") // .hide()
-
-// $cordovaProgress.showSimpleWithLabelDetail(true, "Loading", "detail")
-//     // requires .hide()
-
-// $cordovaProgress.hide()
-
-
-// $cordovaProgress.showDeterminate(false, 100000)
-
-// $cordovaProgress.showDeterminateWithLabel(true, 50000, "Loading")
-
-// $cordovaProgress.showAnnular(true, 50000)
-
-// $cordovaProgress.showAnnularWithLabel(false, 100000, "Loading")
-
-// $cordovaProgress.showBar(true, 50000)
-
-// $cordovaProgress.showBarWithLabel(false, 100000, "Loading")
-
-
-// $cordovaProgress.showSuccess(true, "Success!") // requires .hide()
-
-// $cordovaProgress.showText(false, 100000, "Loading")
+app.controller('LearnTabCtrl', function($scope, $cordovaProgress, $timeout, $filter){
+    // $scope.date = new Date();=
+    // var today1 = $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    
 }); 
 
 app.controller('ProfileTabCtrl', function($scope, DatabaseService){
