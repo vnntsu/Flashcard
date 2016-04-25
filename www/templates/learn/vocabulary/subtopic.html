@@ -11,7 +11,7 @@
 					<p style="margin-left: 120px;">Total: {{x.length}} words</p>
 					<p style="margin-left: 120px;">{{x.learned}} words learned</p>
 					<div style="text-align: center;">
-						<button class="button icon icon-left ion-ios-stopwatch-outline button-positive" ng-click="review(x.idsubtopic, x.name)">Review</button>
+						<button class="button icon icon-left ion-ios-stopwatch-outline button-positive" ng-click="review(x.idsubtopic, x.name)" ng-disabled="x.isReview">Review ({{x.numberWordViewed}})</button>
 						<button class="button icon icon-left ion-ios-lightbulb button-assertive" ng-click="showCard(x.idsubtopic, x.name)">Learn</button>
 					</div>
 				</ion-item>

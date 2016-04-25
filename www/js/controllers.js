@@ -10,8 +10,9 @@ app.controller('NavCtrl', function($scope, $ionicSideMenuDelegate) {
 });
 
 app.controller('LearnTabCtrl', function($scope, $cordovaProgress, $timeout, $filter){
-    // $scope.date = new Date();=
+    // $scope.date = new Date();
     // var today1 = $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    // Date.parse(today1,'yyyy-MM-dd');
     
 }); 
 

@@ -19,6 +19,7 @@ app.factory('DatabaseService', function($cordovaSQLite){
 					return datas;
 				}else{
 					console.log("NO DATA");
+					return false;
 				};
 			});
 		},

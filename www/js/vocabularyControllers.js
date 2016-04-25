@@ -18,13 +18,20 @@ app.controller('SubTopicCtrl', function($scope, DatabaseService, $stateParams, $
     }else{
         console.log("Can not get data!")
     };
-    var query = "select * from subtopic where idtopic="+$scope.idTopicParam;
+// select idsubtopic, (case isview when 1 then count(isview) else 0 end )
+// from
+// select idsubtopic,(case isview when 1 then 1 else 0 end) isview from (select * from subtopic left join topicofword on topicofword.idsubtopic=subtopic.idsubtopic where subtopic.idtopic=1) as newtable left join vocabulary on newtable.idvocab=vocabulary.idvocab 
+//     select idsubtopic,(case isview when 1 then 1 else 0 end) from (select * from subtopic left join topicofword on topicofword.idsubtopic=subtopic.idsubtopic where subtopic.idtopic=1) as newtable left join vocabulary on newtable.idvocab=vocabulary.idvocab 
+//     select idsubtopic, if(isview is null, 0, 1) from (select * from subtopic left join topicofword on topicofword.idsubtopic=subtopic.idsubtopic where subtopic.idtopic=1) as newtable left join vocabulary on newtable.idvocab=vocabulary.idvocab group by idsubtopic
+//     select idsubtopic, isview from (select * from subtopic left join topicofword on topicofword.idsubtopic=subtopic.idsubtopic where subtopic.idtopic=1) as newtable left join vocabulary on newtable.idvocab=vocabulary.idvocab group by idsubtopic
+    var query = "select idsubtopic, name from subtopic where idtopic="+$scope.idTopicParam;
     DatabaseService.get(query).then(function(result){
         $scope.subtopics = result;
         for (var i = 0; i < $scope.subtopics.length; i++) {
             $scope.subtopics[i].length=0;
             $scope.subtopics[i].learned=0;
         }
+
         console.log("subtopics.length = " + $scope.subtopics.length);
         query = "select subtopic.idsubtopic as idsubtopic, newtable2.isremember as isremember, count(newtable2.isremember) as learned from (select * from (select * from (select * from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab) as newtable left join typeofword on  newtable.idvocab = typeofword.idvocab) as newtable1 left join kindofword on newtable1.idkindword = kindofword.idkindword) as newtable2 join subtopic on newtable2.idsubtopic=subtopic.idsubtopic where subtopic.idtopic="+$scope.idTopicParam+" group by newtable2.isremember";
         DatabaseService.get(query).then(function(result){
@@ -42,6 +49,30 @@ app.controller('SubTopicCtrl', function($scope, DatabaseService, $stateParams, $
                     console.log($scope.subtopics[i].learned + " words learned");
                 };
             };
+            query = "select idsubtopic, count(isview)as number from (select * from subtopic join topicofword on topicofword.idsubtopic=subtopic.idsubtopic where subtopic.idtopic="+$scope.idTopicParam+") as newtable join vocabulary on newtable.idvocab=vocabulary.idvocab where vocabulary.isview=1 group by idsubtopic";
+            DatabaseService.get(query).then(function(result){
+                var array = result;
+                if(array==false){
+                    for(var i = 0; i < $scope.subtopics.length; i++){
+                        $scope.subtopics[i].numberWordViewed = 0;
+                        $scope.subtopics[i].isReview = true;
+                    }
+                }else{
+                    for(var i = 0; i < $scope.subtopics.length; i++){
+                        for (var j = 0; j < array.length; j++) {
+                            if($scope.subtopics[i].idsubtopic==array[j].idsubtopic){
+                                $scope.subtopics[i].numberWordViewed = array[j].number;
+                                $scope.subtopics[i].isReview = false;
+                                break;
+                            }else{
+                                $scope.subtopics[i].numberWordViewed = 0;
+                                $scope.subtopics[i].isReview = true;
+                            }
+                        }
+                    }
+                }
+                
+            });
         });
     });
 
@@ -55,7 +86,7 @@ app.controller('SubTopicCtrl', function($scope, DatabaseService, $stateParams, $
         $state.go('tabs.review',{idsubtopic: id, title: title});
     }
 });
-app.controller('VocabCardCtrl',function($scope, DatabaseService, $ionicLoading,$cordovaMedia, $state, $stateParams, $ionicGesture){
+app.controller('VocabCardCtrl',function($scope, $filter, DatabaseService, $ionicLoading,$cordovaMedia, $state, $stateParams, $ionicGesture){
     $scope.playCard = function(vocab){
         console.log(vocab.text + " current vocab: " + $scope.currentVocab);
         $scope.text = vocab.text;
@@ -70,6 +101,16 @@ app.controller('VocabCardCtrl',function($scope, DatabaseService, $ionicLoading,$
         $scope.isRemember = vocab.isremember;
         $scope.rememberDay = vocab.rememberday;
         $scope.isCustom = vocab.isCustom;
+        if(vocab.isview==0){
+            var toDay = $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss');
+            var query = "update vocabulary set isview=1, timeview='"+ toDay +"' where idvocab="+vocab.idvocab;
+            console.log(query);
+            DatabaseService.update(query);
+        }
+        query = "select * from vocabulary where isview=1";
+        DatabaseService.get(query).then(function(result){
+            console.log(result[0].idvocab);
+        });
     };
 
     if($stateParams.idsubtopic){
@@ -81,6 +122,7 @@ app.controller('VocabCardCtrl',function($scope, DatabaseService, $ionicLoading,$
     };
     var query = "select * from (select * from (select * from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab where topicofword.idsubtopic="+ $scope.idSubtopicParam +") as newtable left join typeofword on  newtable.idvocab = typeofword.idvocab) as newtable1 left join kindofword on newtable1.idkindword = kindofword.idkindword";
     DatabaseService.get(query).then(function(result){
+        /// please show alert to inform user know that the words haven't had yet.
         $scope.vocabularies = result;
         $scope.playCard($scope.vocabularies[$scope.currentVocab]);
         $scope.isFront = true;
@@ -130,11 +172,11 @@ app.controller('VocabCardCtrl',function($scope, DatabaseService, $ionicLoading,$
     };
 
     var mediaStatusCallback = function(status) {
-    if(status == 1) {
-        $ionicLoading.show({template: 'Loading...'});
-    } else {
-        $ionicLoading.hide();
-    }
+        if(status == 1) {
+            $ionicLoading.show({template: 'Loading...'});
+        } else {
+            $ionicLoading.hide();
+        }
     };
 });
 
@@ -265,6 +307,7 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
 		for (var i = 0; i < $scope.vocabularies.length; i++) {
 			$scope.vocabularies[i].checkTimes = 0;
 		}
+        // query = "select idvocab, "
 		$scope.createQuestion();
 	});    
 });
