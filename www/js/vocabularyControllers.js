@@ -18,12 +18,6 @@ app.controller('SubTopicCtrl', function($scope, DatabaseService, $stateParams, $
     }else{
         console.log("Can not get data!")
     };
-// select idsubtopic, (case isview when 1 then count(isview) else 0 end )
-// from
-// select idsubtopic,(case isview when 1 then 1 else 0 end) isview from (select * from subtopic left join topicofword on topicofword.idsubtopic=subtopic.idsubtopic where subtopic.idtopic=1) as newtable left join vocabulary on newtable.idvocab=vocabulary.idvocab 
-//     select idsubtopic,(case isview when 1 then 1 else 0 end) from (select * from subtopic left join topicofword on topicofword.idsubtopic=subtopic.idsubtopic where subtopic.idtopic=1) as newtable left join vocabulary on newtable.idvocab=vocabulary.idvocab 
-//     select idsubtopic, if(isview is null, 0, 1) from (select * from subtopic left join topicofword on topicofword.idsubtopic=subtopic.idsubtopic where subtopic.idtopic=1) as newtable left join vocabulary on newtable.idvocab=vocabulary.idvocab group by idsubtopic
-//     select idsubtopic, isview from (select * from subtopic left join topicofword on topicofword.idsubtopic=subtopic.idsubtopic where subtopic.idtopic=1) as newtable left join vocabulary on newtable.idvocab=vocabulary.idvocab group by idsubtopic
     var query = "select idsubtopic, name from subtopic where idtopic="+$scope.idTopicParam;
     DatabaseService.get(query).then(function(result){
         $scope.subtopics = result;
@@ -33,33 +27,49 @@ app.controller('SubTopicCtrl', function($scope, DatabaseService, $stateParams, $
         }
 
         console.log("subtopics.length = " + $scope.subtopics.length);
-        query = "select subtopic.idsubtopic as idsubtopic, newtable2.isremember as isremember, count(newtable2.isremember) as learned from (select * from (select * from (select * from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab) as newtable left join typeofword on  newtable.idvocab = typeofword.idvocab) as newtable1 left join kindofword on newtable1.idkindword = kindofword.idkindword) as newtable2 join subtopic on newtable2.idsubtopic=subtopic.idsubtopic where subtopic.idtopic="+$scope.idTopicParam+" group by newtable2.isremember";
+        query = "select subtopic.idsubtopic as idsubtopic, remembered, count(subtopic.idsubtopic)as number from subtopic join (select vocabulary.idvocab, idsubtopic, viewed,viewday,remembered,rememberday from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab) newtable on newtable.idsubtopic=subtopic.idsubtopic where idtopic="+$scope.idTopicParam+" group by subtopic.idsubtopic, remembered";
         DatabaseService.get(query).then(function(result){
             $scope.datas = result;
-            for(var i = 0; i < $scope.datas.length; i++){
-                for (var j = 0; j < $scope.subtopics.length; j++) {
-                    if($scope.datas[i].idsubtopic==$scope.subtopics[j].idsubtopic){
-                        $scope.subtopics[j].length += $scope.datas[i].learned;
-                        if($scope.datas[i].isremember==1){
-                            $scope.subtopics[j].learned = $scope.datas[i].learned;
-                        };
-                        break;
-                    };
-                    console.log("Total: "+$scope.subtopics[i].length + " words");
-                    console.log($scope.subtopics[i].learned + " words learned");
-                };
-            };
-            query = "select idsubtopic, count(isview)as number from (select * from subtopic join topicofword on topicofword.idsubtopic=subtopic.idsubtopic where subtopic.idtopic="+$scope.idTopicParam+") as newtable join vocabulary on newtable.idvocab=vocabulary.idvocab where vocabulary.isview=1 group by idsubtopic";
+            console.log("length of datas: " +$scope.datas.length);
+            for(var i = 0; i < $scope.subtopics.length; i++){
+                $scope.subtopics[i].length = 0;
+                $scope.subtopics[i].learned = 0;
+            }
+            if($scope.datas==false){
+                console.log("false!");
+            }else{
+                console.log("wwhy");
+                for(var i = 0; i < $scope.datas.length; i++){
+
+                    console.log("check "+ i + "   :::" + $scope.datas[i].idsubtopic);
+                    for (var j = 0; j < $scope.subtopics.length; j++) {
+                        console.log("loop "+ j);
+                        if($scope.datas[i].idsubtopic==$scope.subtopics[j].idsubtopic){
+                            $scope.subtopics[j].length += $scope.datas[i].number;
+                            if($scope.datas[i].remembered==1){
+                                console.log("vo day");
+                                $scope.subtopics[j].learned = $scope.datas[i].number;
+                            };
+                            break;
+                        }
+                    }
+                }
+                console.log("Total: "+$scope.subtopics[0].length + " words");
+                console.log($scope.subtopics[0].learned + " words learned");
+            }
+            
+            query = "select idsubtopic, count(viewed)as number from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab where topicofword.idsubtopic in (select subtopic.idsubtopic from subtopic where idtopic="+$scope.idTopicParam+") and viewed=1 group by idsubtopic, viewed";
             DatabaseService.get(query).then(function(result){
                 var array = result;
-                if(array==false){
-                    for(var i = 0; i < $scope.subtopics.length; i++){
+                for(var i = 0; i < $scope.subtopics.length; i++){
                         $scope.subtopics[i].numberWordViewed = 0;
                         $scope.subtopics[i].isReview = true;
-                    }
+                }
+                if(array==false){
+                    
                 }else{
-                    for(var i = 0; i < $scope.subtopics.length; i++){
-                        for (var j = 0; j < array.length; j++) {
+                    for (var j = 0; j < array.length; j++) {
+                        for(var i = 0; i < $scope.subtopics.length; i++){
                             if($scope.subtopics[i].idsubtopic==array[j].idsubtopic){
                                 $scope.subtopics[i].numberWordViewed = array[j].number;
                                 $scope.subtopics[i].isReview = false;
@@ -103,11 +113,11 @@ app.controller('VocabCardCtrl',function($scope, $filter, DatabaseService, $ionic
         $scope.isCustom = vocab.isCustom;
         if(vocab.isview==0){
             var toDay = $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss');
-            var query = "update vocabulary set isview=1, timeview='"+ toDay +"' where idvocab="+vocab.idvocab;
+            var query = "update topicofword set viewed=1, viewday='"+ toDay +"' where idvocab="+vocab.idvocab+" and idsubtopic=" + $scope.idSubtopicParam;
             console.log(query);
             DatabaseService.update(query);
         }
-        query = "select * from vocabulary where isview=1";
+        query = "select * from topicofword where viewed=1";
         DatabaseService.get(query).then(function(result){
             console.log(result[0].idvocab);
         });
