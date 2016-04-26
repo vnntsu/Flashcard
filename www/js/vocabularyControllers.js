@@ -231,8 +231,8 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
         media.play();
     };
 
-    $scope.getWrongCard = function(idQuestion){
-        $scope.showCard($scope.vocabularies[idQuestion]);
+    $scope.getWrongCard = function(vocab){
+        $scope.showCard(vocab);
         $scope.normalTest = false;
         $scope.wrongCard = true;
         $scope.isFront = true;
@@ -300,20 +300,21 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
                 }
             }
         
-            if($scope.randTypeOfQuestion==0){
-                $scope.wrongContent = $scope.vocabularies[$scope.theQuestion.idQuestion].meaning;
-            }else if($scope.randTypeOfQuestion==2){
-                $scope.wrongContent = $scope.vocabularies[$scope.theQuestion.idQuestion].vnmean;
-            }else{
-                $scope.wrongContent = $scope.vocabularies[$scope.theQuestion.idQuestion].text;
-            }
+            // if($scope.randTypeOfQuestion==0){
+            //     $scope.wrongContent = $scope.vocabularies[$scope.theQuestion.idQuestion].meaning;
+            // }else if($scope.randTypeOfQuestion==2){
+            //     $scope.wrongContent = $scope.vocabularies[$scope.theQuestion.idQuestion].vnmean;
+            // }else{
+            //     $scope.wrongContent = $scope.vocabularies[$scope.theQuestion.idQuestion].text;
+            // }
     		$scope.wrongAnswerShow = true;
             $scope.showAnswer = false;
             $scope.showWrong = true;
     		console.log("wrong answer");
+            var tmp = $scope.questions[$scope.current-1];
+            $scope.playSound(tmp.sound);
 
-            $scope.playSound($scope.questions[$scope.current-1].sound);
-
+            $timeout(function() {$scope.getWrongCard(tmp)}, 1000 * 2);
             if($scope.questions[$scope.questions.length-1].checkTimes>=5){
                 alert("Finish test!");
                 $scope.callBack();
@@ -321,7 +322,6 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
                 if($scope.current==($scope.questions.length)){
                     $scope.current=0;
                 }
-                $timeout(function() {$scope.showCard($scope.questions[$scope.current-1])}, 1000 * 2);
             }
     	}
     };
