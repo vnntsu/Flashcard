@@ -115,7 +115,7 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         }
     })
     .state('tabs.review', {
-        url: '/review?idsubtopic?title',
+        url: '/review?idsubtopic?numberWordViewed',
         views: {
             'learn-tab': {
                 templateUrl: "templates/learn/vocabulary/review.html",

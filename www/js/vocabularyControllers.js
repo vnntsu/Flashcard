@@ -58,7 +58,7 @@ app.controller('SubTopicCtrl', function($scope, DatabaseService, $stateParams, $
                 console.log($scope.subtopics[0].learned + " words learned");
             }
             
-            query = "select idsubtopic, count(viewed)as number from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab where topicofword.idsubtopic in (select subtopic.idsubtopic from subtopic where idtopic="+$scope.idTopicParam+") and viewed=1 group by idsubtopic, viewed";
+            query = "select idsubtopic, count(viewed)as number from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab where topicofword.idsubtopic in (select subtopic.idsubtopic from subtopic where idtopic="+$scope.idTopicParam+") and viewed=1 and remembered=0 group by idsubtopic, viewed";
             DatabaseService.get(query).then(function(result){
                 var array = result;
                 for(var i = 0; i < $scope.subtopics.length; i++){
@@ -91,9 +91,9 @@ app.controller('SubTopicCtrl', function($scope, DatabaseService, $stateParams, $
         console.log("IDSUBTOPIC before transfer: " + id);
         $state.go('tabs.vocabfrontcard',{idsubtopic: id, title: title});
     }
-    $scope.review = function(id,title){
+    $scope.review = function(id,number){
         console.log("IDSUBTOPIC before transfer: " + id);
-        $state.go('tabs.review',{idsubtopic: id, title: title});
+        $state.go('tabs.review',{idsubtopic: id, numberWordViewed: number});
     }
 });
 app.controller('VocabCardCtrl',function($scope, $filter, DatabaseService, $ionicLoading,$cordovaMedia, $state, $stateParams, $ionicGesture){
@@ -108,10 +108,10 @@ app.controller('VocabCardCtrl',function($scope, $filter, DatabaseService, $ionic
         $scope.vnmean = vocab.vnmean;
         $scope.topicName = vocab.name;
         $scope.topicVNname = vocab.vnname;
-        $scope.isRemember = vocab.isremember;
+        $scope.isRemember = vocab.remembered;
         $scope.rememberDay = vocab.rememberday;
         $scope.isCustom = vocab.isCustom;
-        if(vocab.isview==0){
+        if(vocab.viewed==0){
             var toDay = $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss');
             var query = "update topicofword set viewed=1, viewday='"+ toDay +"' where idvocab="+vocab.idvocab+" and idsubtopic=" + $scope.idSubtopicParam;
             console.log(query);
@@ -119,7 +119,7 @@ app.controller('VocabCardCtrl',function($scope, $filter, DatabaseService, $ionic
         }
         query = "select * from topicofword where viewed=1";
         DatabaseService.get(query).then(function(result){
-            console.log(result[0].idvocab);
+            console.log("Word have learned: "+result[0].idvocab);
         });
     };
 
@@ -130,7 +130,7 @@ app.controller('VocabCardCtrl',function($scope, $filter, DatabaseService, $ionic
         console.log($scope.title);
         $scope.currentVocab = 0;
     };
-    var query = "select * from (select * from (select * from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab where topicofword.idsubtopic="+ $scope.idSubtopicParam +") as newtable left join typeofword on  newtable.idvocab = typeofword.idvocab) as newtable1 left join kindofword on newtable1.idkindword = kindofword.idkindword";
+    var query = "select * from (select * from (select * from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab where idsubtopic="+$scope.idSubtopicParam+") newtable1 join typeofword on typeofword.idvocab=newtable1.idvocab) newtable2 join kindofword on kindofword.idkindword=newtable2.idkindword";
     DatabaseService.get(query).then(function(result){
         /// please show alert to inform user know that the words haven't had yet.
         $scope.vocabularies = result;
@@ -190,15 +190,19 @@ app.controller('VocabCardCtrl',function($scope, $filter, DatabaseService, $ionic
     };
 });
 
-app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, LevelServ, $stateParams, $cordovaProgress, $cordovaMedia, $ionicLoading, RandomSrve, $timeout){
+app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, LevelServ, $stateParams, $cordovaProgress, $cordovaMedia, $ionicLoading, RandomSrve, $timeout, $state){
 	if($stateParams.idsubtopic){
 		$scope.idSubtopicParam = $stateParams.idsubtopic;
-		$scope.title = $stateParams.title;
+		$scope.numberWordViewed = $stateParams.numberWordViewed;
+        console.log("get number word Viewed: " + $scope.numberWordViewed);
         $scope.normalTest = true;
         $scope.wrongCard = false;
+        $scope.current = 0;
+        $scope.questions = [];
 	}
 
     $scope.showCard = function(vocab){
+        // here here
         $scope.text = vocab.text;
         $scope.pronounce = vocab.pronounce;
         $scope.sound = vocab.sound;
@@ -246,9 +250,20 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
         };
     };
 
+    $scope.callBack = function(){
+        $state.go('tabs.subtopic',{idtopic: $scope.idSubtopicParam});
+    }
+
     $scope.checkAnswer = function(isAnswer, content){
         $scope.clicked=true;
+        $scope.questions[$scope.current-1].checkTimes++;
     	if(isAnswer){
+            $scope.questions[$scope.current-1].reviewtimes++;
+            if($scope.questions[$scope.current-1].reviewtimes >= 5){
+                $scope.questions[$scope.current-1].remembered=1;
+                query = "update topicofword set remembered=1, reviewtimes="+$scope.questions[$scope.current-1].reviewtimes+" where idvocab="+$scope.theQuestion.idQuestion;
+                DatabaseService.update(query);
+            }
             $scope.rightButtonClicked = content;
             LevelServ.increase();
     		console.log("The answer: " + isAnswer);
@@ -256,15 +271,25 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
             $scope.showRight = true;
     		$scope.rightAnswerShow = true;
             if($scope.randTypeOfQuestion==0){
-                $scope.rightContent = $scope.vocabularies[$scope.theQuestion.idQuestion].meaning;
+                $scope.rightContent = $scope.questions[$scope.current-1].meaning;
             }else if($scope.randTypeOfQuestion==2){
-                $scope.rightContent = $scope.vocabularies[$scope.theQuestion.idQuestion].vnmean;
+                $scope.rightContent = $scope.questions[$scope.current-1].vnmean;
             }else{
-                $scope.rightContent = $scope.vocabularies[$scope.theQuestion.idQuestion].text;
+                $scope.rightContent = $scope.questions[$scope.current-1].text;
             }
             
-    		$scope.playSound($scope.vocabularies[$scope.theQuestion.idQuestion].sound);
-    		$timeout(function() {$scope.createQuestion()}, 1000 * 2);
+    		$scope.playSound($scope.questions[$scope.current-1].sound);
+
+            if($scope.questions[$scope.questions.length-1].checkTimes>=5){
+                alert("Finish test!");
+                $scope.callBack();
+            }else{
+                if($scope.current==($scope.questions.length)){
+                    $scope.current=0;
+                }
+                $timeout(function() {$scope.createQuestion()}, 1000 * 2);
+            }
+
     	}else{
             $scope.wrongButtonClicked = content;
             for (var i = 0; i < $scope.theQuestion.answers.length; i++) {
@@ -285,12 +310,25 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
     		$scope.wrongAnswerShow = true;
             $scope.showAnswer = false;
             $scope.showWrong = true;
-            $timeout(function() {$scope.getWrongCard($scope.theQuestion.idQuestion)}, 1000);
     		console.log("wrong answer");
+
+            $scope.playSound($scope.questions[$scope.current-1].sound);
+
+            if($scope.questions[$scope.questions.length-1].checkTimes>=5){
+                alert("Finish test!");
+                $scope.callBack();
+            }else{
+                if($scope.current==($scope.questions.length)){
+                    $scope.current=0;
+                }
+                $timeout(function() {$scope.showCard($scope.questions[$scope.current-1])}, 1000 * 2);
+            }
     	}
     };
 
     $scope.createQuestion = function(){
+        console.log("current of current: " +$scope.current);
+        console.log("sldkfjasldkfjal;sd: "+ $scope.questions[$scope.current].idvocab);
         $scope.rightAnswerShow = false;
         $scope.wrongAnswerShow = false;
         $scope.normalTest = true;
@@ -301,23 +339,32 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
         $scope.randTypeOfQuestion = RandomSrve.myRandom(4);
         // var randTypeOfQuestion = 0;
    		if($scope.randTypeOfQuestion==0){ // Meaning questions
-        	$scope.theQuestion = QuestionSrve.meaningWordQuestion($scope.vocabularies, 4);
+        	$scope.theQuestion = QuestionSrve.meaningWordQuestion($scope.vocabularies,  $scope.questions[$scope.current], 4);
    		}else if($scope.randTypeOfQuestion==1){ // Word question (meaning is the answer)
-        	$scope.theQuestion = QuestionSrve.wordMeaningQuestion($scope.vocabularies, 4);
+        	$scope.theQuestion = QuestionSrve.wordMeaningQuestion($scope.vocabularies,  $scope.questions[$scope.current], 4);
    		}else if($scope.randTypeOfQuestion==2){ // Vnmean question (vnmean is the answer)
-        	$scope.theQuestion = QuestionSrve.vnmeanWordQuestion($scope.vocabularies, 4);
+        	$scope.theQuestion = QuestionSrve.vnmeanWordQuestion($scope.vocabularies,   $scope.questions[$scope.current], 4);
    		}else{// word vnmean question
-  		    $scope.theQuestion = QuestionSrve.wordVNMeanQuestion($scope.vocabularies, 4);
+  		    $scope.theQuestion = QuestionSrve.wordVNMeanQuestion($scope.vocabularies,   $scope.questions[$scope.current], 4);
    		}
+        $scope.current++;
     }
 
-    var query="select * from (select * from (select * from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab where topicofword.idsubtopic="+ $scope.idSubtopicParam +") as newtable left join typeofword on  newtable.idvocab = typeofword.idvocab) as newtable1 left join kindofword on newtable1.idkindword = kindofword.idkindword";
+    var query="select newtable1.idvocab as idvocab, * from (select newtable.idvocab as idvocab, * from (select vocabulary.idvocab as idvocab, * from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab where topicofword.idsubtopic="+$scope.idSubtopicParam+") as newtable left join typeofword on  newtable.idvocab = typeofword.idvocab) as newtable1 left join kindofword on newtable1.idkindword = kindofword.idkindword";
 	DatabaseService.get(query).then(function(result){
 		$scope.vocabularies = result;
-		for (var i = 0; i < $scope.vocabularies.length; i++) {
-			$scope.vocabularies[i].checkTimes = 0;
-		}
-        // query = "select idvocab, "
+        console.log("number word will be reviewed: " + $scope.numberWordViewed + "   idvocab111: " + $scope.vocabularies[0].idvocab);
+        if($scope.numberWordViewed<=5){
+            for (var i = 0; i < $scope.vocabularies.length; i++) {
+                console.log("viewed: " + $scope.vocabularies[i].viewed + " --- remembered: " +$scope.vocabularies[i].remembered);
+                if($scope.vocabularies[i].viewed==1&&$scope.vocabularies[i].remembered==0){
+                    console.log("Id vocab: " + $scope.vocabularies[i].idvocab);
+                    $scope.vocabularies[i].checkTimes=0;
+                    $scope.questions.push($scope.vocabularies[i]);
+                    console.log("OK OK : " +  $scope.questions[0].idvocab);
+                }
+            }
+        }
 		$scope.createQuestion();
 	});    
 });

@@ -71,13 +71,13 @@ app.factory('QuestionSrve', function(RandomSrve){
 				return false;
 			}
 		},
-		meaningWordQuestion: function(vocabs, numOfQuestion){
+		meaningWordQuestion: function(vocabs, question, numOfQuestion){
 			var answers = [{isAnswer:false,content:""},{isAnswer:false,content:""},{isAnswer:false,content:""},{isAnswer:false,content:""}];
 			var asked = [];
 			var nextAnswer = 0;
-			var idQuestion = RandomSrve.myRandom(vocabs.length);
-	    	var question = vocabs[idQuestion].text;
-	    	var typeWord = vocabs[idQuestion].name;
+			var idQuestion = question.idvocab;
+	    	var question1 = question.text;
+	    	var typeWord = question.name;
 	    	console.log("The current answer: " + idQuestion);
 	    	var rightAnswer = RandomSrve.myRandom(numOfQuestion);
 	    	asked.push(idQuestion);
@@ -87,7 +87,7 @@ app.factory('QuestionSrve', function(RandomSrve){
 				console.log("create answer: " + answerIndex);
 				if(this.isEqualRightAnswer(answerIndex,rightAnswer)){
 					answers[answerIndex].isAnswer=true;
-					answers[answerIndex].content = vocabs[idQuestion].meaning;
+					answers[answerIndex].content = question.meaning;
 				}else{
 					answers[answerIndex].isAnswer=false;
 					do{
@@ -95,7 +95,7 @@ app.factory('QuestionSrve', function(RandomSrve){
 						var isExist = true;
 						console.log("asked array length: " + asked.length);
 						for (var i = 0; i < asked.length; i++) {
-							if(asked[i]==nextAnswer){
+							if(asked[i]==vocabs[nextAnswer].idvocab){
 								console.log("This answer had been exist");
 								isExist = true;
 								nextAnswer = RandomSrve.myRandom(vocabs.length);
@@ -107,7 +107,7 @@ app.factory('QuestionSrve', function(RandomSrve){
 						}
 					}while(isExist);
 					if(!isExist){
-						asked.push(nextAnswer);
+						asked.push(vocabs[nextAnswer].idvocab);
 						answers[answerIndex].content = vocabs[nextAnswer].meaning;
 						nextAnswer = RandomSrve.myRandom(vocabs.length);
 					}
@@ -116,20 +116,20 @@ app.factory('QuestionSrve', function(RandomSrve){
 			}
 			var questionAndAnswer = {idQuestion: "", question: "", typeWord: "", answers: []};
 			questionAndAnswer.idQuestion = idQuestion;
-			questionAndAnswer.question = question;
+			questionAndAnswer.question = question1;
 			questionAndAnswer.typeWord = typeWord;
 			for (var i = 0; i < answers.length; i++) {
 				questionAndAnswer.answers.push(answers[i]);
 			}
 			return questionAndAnswer;
 		},
-		wordMeaningQuestion: function(vocabs, numOfQuestion){
+		wordMeaningQuestion: function(vocabs, question, numOfQuestion){
 			var answers = [{isAnswer:false,content:""},{isAnswer:false,content:""},{isAnswer:false,content:""},{isAnswer:false,content:""}];
 			var asked = [];
 			var nextAnswer = 0;
-			var idQuestion = RandomSrve.myRandom(vocabs.length);
-	    	var question = vocabs[idQuestion].meaning;
-	    	var typeWord = vocabs[idQuestion].name;
+			var idQuestion = question.idvocab;
+	    	var question1 = question.meaning;
+	    	var typeWord = question.name;
 	    	console.log("The current answer: " + idQuestion);
 	    	var rightAnswer = RandomSrve.myRandom(numOfQuestion);
 	    	asked.push(idQuestion);
@@ -139,7 +139,7 @@ app.factory('QuestionSrve', function(RandomSrve){
 				console.log("create answer: " + answerIndex);
 				if(this.isEqualRightAnswer(answerIndex,rightAnswer)){
 					answers[answerIndex].isAnswer=true;
-					answers[answerIndex].content = vocabs[idQuestion].text;
+					answers[answerIndex].content = question.text;
 				}else{
 					answers[answerIndex].isAnswer=false;
 					do{
@@ -147,7 +147,7 @@ app.factory('QuestionSrve', function(RandomSrve){
 						var isExist = true;
 						console.log("asked array length: " + asked.length);
 						for (var i = 0; i < asked.length; i++) {
-							if(asked[i]==nextAnswer){
+							if(asked[i]==vocabs[nextAnswer].idvocab){
 								console.log("This answer had been exist");
 								isExist = true;
 								nextAnswer = RandomSrve.myRandom(vocabs.length);
@@ -159,7 +159,7 @@ app.factory('QuestionSrve', function(RandomSrve){
 						}
 					}while(isExist);
 					if(!isExist){
-						asked.push(nextAnswer);
+						asked.push(vocabs[nextAnswer].idvocab);
 						answers[answerIndex].content = vocabs[nextAnswer].text;
 						nextAnswer = RandomSrve.myRandom(vocabs.length);
 					}
@@ -168,20 +168,20 @@ app.factory('QuestionSrve', function(RandomSrve){
 			}
 			var questionAndAnswer = {idQuestion: "", question: "", typeWord: "", answers: []};
 			questionAndAnswer.idQuestion = idQuestion;
-			questionAndAnswer.question = question;
+			questionAndAnswer.question = question1;
 			questionAndAnswer.typeWord = typeWord;
 			for (var i = 0; i < answers.length; i++) {
 				questionAndAnswer.answers.push(answers[i]);
 			}
 			return questionAndAnswer;
 		},
-		vnmeanWordQuestion: function(vocabs, numOfQuestion){
+		vnmeanWordQuestion: function(vocabs, question, numOfQuestion){
 			var answers = [{isAnswer:false,content:""},{isAnswer:false,content:""},{isAnswer:false,content:""},{isAnswer:false,content:""}];
 			var asked = [];
 			var nextAnswer = 0;
-			var idQuestion = RandomSrve.myRandom(vocabs.length);
-	    	var question = vocabs[idQuestion].text;
-	    	var typeWord = vocabs[idQuestion].name;
+			var idQuestion = question.idvocab;
+	    	var question1 = question.text;
+	    	var typeWord = question.name;
 	    	console.log("The current answer: " + idQuestion);
 	    	var rightAnswer = RandomSrve.myRandom(numOfQuestion);
 	    	asked.push(idQuestion);
@@ -191,7 +191,7 @@ app.factory('QuestionSrve', function(RandomSrve){
 				console.log("create answer: " + answerIndex);
 				if(this.isEqualRightAnswer(answerIndex,rightAnswer)){
 					answers[answerIndex].isAnswer=true;
-					answers[answerIndex].content = vocabs[idQuestion].vnmean;
+					answers[answerIndex].content = question.vnmean;
 				}else{
 					answers[answerIndex].isAnswer=false;
 					do{
@@ -199,7 +199,7 @@ app.factory('QuestionSrve', function(RandomSrve){
 						var isExist = true;
 						console.log("asked array length: " + asked.length);
 						for (var i = 0; i < asked.length; i++) {
-							if(asked[i]==nextAnswer){
+							if(asked[i]==vocabs[nextAnswer].idvocab){
 								console.log("This answer had been exist");
 								isExist = true;
 								nextAnswer = RandomSrve.myRandom(vocabs.length);
@@ -211,7 +211,7 @@ app.factory('QuestionSrve', function(RandomSrve){
 						}
 					}while(isExist);
 					if(!isExist){
-						asked.push(nextAnswer);
+						asked.push(vocabs[nextAnswer].idvocab);
 						answers[answerIndex].content = vocabs[nextAnswer].vnmean;
 						nextAnswer = RandomSrve.myRandom(vocabs.length);
 					}
@@ -220,20 +220,20 @@ app.factory('QuestionSrve', function(RandomSrve){
 			}
 			var questionAndAnswer = {idQuestion: "", question: "", typeWord: "", answers: []};
 			questionAndAnswer.idQuestion = idQuestion;
-			questionAndAnswer.question = question;
+			questionAndAnswer.question = question1;
 			questionAndAnswer.typeWord = typeWord;
 			for (var i = 0; i < answers.length; i++) {
 				questionAndAnswer.answers.push(answers[i]);
 			}
 			return questionAndAnswer;
 		},
-		wordVNMeanQuestion: function(vocabs, numOfQuestion){
+		wordVNMeanQuestion: function(vocabs, question, numOfQuestion){
 			var answers = [{isAnswer:false,content:""},{isAnswer:false,content:""},{isAnswer:false,content:""},{isAnswer:false,content:""}];
 			var asked = [];
 			var nextAnswer = 0;
-			var idQuestion = RandomSrve.myRandom(vocabs.length);
-	    	var question = vocabs[idQuestion].vnmean;
-	    	var typeWord = vocabs[idQuestion].name;
+			var idQuestion = question.idvocab;
+	    	var question1 = question.vnmean;
+	    	var typeWord = question.name;
 	    	console.log("The current answer: " + idQuestion);
 	    	var rightAnswer = RandomSrve.myRandom(numOfQuestion);
 	    	asked.push(idQuestion);
@@ -243,7 +243,7 @@ app.factory('QuestionSrve', function(RandomSrve){
 				console.log("create answer: " + answerIndex);
 				if(this.isEqualRightAnswer(answerIndex,rightAnswer)){
 					answers[answerIndex].isAnswer=true;
-					answers[answerIndex].content = vocabs[idQuestion].text;
+					answers[answerIndex].content = question.text;
 				}else{
 					answers[answerIndex].isAnswer=false;
 					do{
@@ -251,7 +251,7 @@ app.factory('QuestionSrve', function(RandomSrve){
 						var isExist = true;
 						console.log("asked array length: " + asked.length);
 						for (var i = 0; i < asked.length; i++) {
-							if(asked[i]==nextAnswer){
+							if(asked[i]==vocabs[nextAnswer].idvocab){
 								console.log("This answer had been exist");
 								isExist = true;
 								nextAnswer = RandomSrve.myRandom(vocabs.length);
@@ -263,7 +263,7 @@ app.factory('QuestionSrve', function(RandomSrve){
 						}
 					}while(isExist);
 					if(!isExist){
-						asked.push(nextAnswer);
+						asked.push(vocabs[nextAnswer].idvocab);
 						answers[answerIndex].content = vocabs[nextAnswer].text;
 						nextAnswer = RandomSrve.myRandom(vocabs.length);
 					}
@@ -272,7 +272,7 @@ app.factory('QuestionSrve', function(RandomSrve){
 			}
 			var questionAndAnswer = {idQuestion: "", question: "", typeWord: "", answers: []};
 			questionAndAnswer.idQuestion = idQuestion;
-			questionAndAnswer.question = question;
+			questionAndAnswer.question = question1;
 			questionAndAnswer.typeWord = typeWord;
 			for (var i = 0; i < answers.length; i++) {
 				questionAndAnswer.answers.push(answers[i]);
