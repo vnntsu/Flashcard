@@ -69,7 +69,7 @@ div button.card{
 
 .div-button{
 	bottom: 0px; 
-	position:absolute;
+	position: relative;
 	width: 100%;
     height: auto;
 }
@@ -94,23 +94,42 @@ div button.card{
 }
 
 .container {
-	margin-top: 44px !important;
+	/*margin-top: 44px !important;*/
 	width: 60px;
 	height: 60px;
 	position: absolute;
 	float: right;
-	top: 20px;
+	top: 0px;
 	right: 20px;
+	border-radius: 50%;
+	/*background: red;*/
 }
 
 .container1 {
-	margin-top: 44px !important;
+	/*margin-top: 44px !important;*/
 	width: 60px;
 	height: 60px;
 	position: absolute;
 	float: right;
-	top: 20px;
+	top: 0px;
 	right: 20px;
 	border-radius: 50%;
 }
 
+.question-test{
+	position: relative;
+	width: 90%;
+	margin: auto;
+	margin-top: 2px;
+	border: solid 1px green;
+	border-radius: 15px;
+	padding: 10px;
+	text-align: center;
+}
+
+.button-next{
+	position: relative; 
+	height: 60px; 
+	width: 100%; 
+	text-align: center;
+}

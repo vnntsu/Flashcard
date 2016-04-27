@@ -348,7 +348,49 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
   		    $scope.theQuestion = QuestionSrve.wordVNMeanQuestion($scope.vocabularies,   $scope.questions[$scope.current], 4);
    		}
         $scope.current++;
-    }
+    };
+
+    // $scope.loadProgressBar = function(){
+    //     define(['require', './bower_components/progressbar.js/dist/progressbar.js'], function (require) {
+    //     var ProgressBar = require('./bower_components/progressbar.js/dist/progressbar.js');
+    //     });
+    //     // var ProgressBar = require('./bower_components/progressbar.js/dist/progressbar.js');
+    //     // var line = new ProgressBar.Line('#container');
+    //     var bar = new ProgressBar.Circle(container, {
+    //         color: '#333',
+    //         // This has to be the same size as the maximum width to
+    //         // prevent clipping
+    //         strokeWidth: 6,
+    //         trailWidth: 6,
+    //         easing: 'easeInOut',
+    //         duration: 12000,
+    //         text: {
+    //             autoStyleContainer: false
+    //         },
+    //         from: { color: '#333', width: 6 },
+    //         to: { color: '#333', width: 6 },
+    //         // Set default step function for all animate calls
+    //         step: function(state, circle) {
+    //             circle.path.setAttribute('stroke', state.color);
+    //             circle.path.setAttribute('stroke-width', state.width);
+
+    //             var value = Math.round(100 - circle.value() * 100);
+    //             if (value === 0) {
+    //               circle.setText('');
+    //             } else {
+    //               circle.setText(value);
+    //             }
+    //         }
+    //     });
+    //     bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
+    //     bar.text.style.fontSize = '2rem';
+    //     bar.animate(1); 
+    // };
+
+    // $scope.loadButton = function(){
+    //     $scope.showButton = true;
+    // };
+    
 
     var query="select newtable1.idvocab as idvocab, * from (select newtable.idvocab as idvocab, * from (select vocabulary.idvocab as idvocab, * from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab where topicofword.idsubtopic="+$scope.idSubtopicParam+") as newtable left join typeofword on  newtable.idvocab = typeofword.idvocab) as newtable1 left join kindofword on newtable1.idkindword = kindofword.idkindword";
 	DatabaseService.get(query).then(function(result){
@@ -366,10 +408,186 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
             }
         }
 		$scope.createQuestion();
+        // $scope.showButton=false;
+        // $scope.showProgressBar = true;
+        // $scope.loadProgressBar();
+        // $timeout(function() {$scope.loadButton();}, 1000 * 11);
 	});    
 });
 
-app.controller('TestCtrl', function($scope, $timeout){
+app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, LevelServ, $stateParams, $cordovaProgress, $cordovaMedia, $ionicLoading, RandomSrve, $timeout, $state){
+    $scope.showCard = function(vocab){
+        // here here
+        $scope.text = vocab.text;
+        $scope.pronounce = vocab.pronounce;
+        $scope.sound = vocab.sound;
+        $scope.image = vocab.image;
+        $scope.example = vocab.example;
+        $scope.meaning = vocab.meaning;
+        $scope.vnmean = vocab.vnmean;
+        $scope.topicName = vocab.name;
+        $scope.topicVNname = vocab.vnname;
+        $scope.isRemember = vocab.isremember;
+        $scope.rememberDay = vocab.rememberday;
+        $scope.isCustom = vocab.isCustom;
+    };
+
+    var mediaStatusCallback = function(status) {
+        if(status == 1) {
+            $ionicLoading.show({template: 'Loading...'});
+        } else {
+            $ionicLoading.hide();
+        }
+    };
+
+    $scope.playSound = function(src){
+        console.log("LINK SOUND: " + src)
+        var media = new Media(src, null, null, mediaStatusCallback);
+        media.play();
+    };
+
+    $scope.getWrongCard = function(vocab){
+        $scope.showCard(vocab);
+        $scope.normalTest = false;
+        $scope.wrongCard = true;
+        $scope.isFront = true;
+        $scope.isBack = !$scope.isFront;
+
+    };
+
+    $scope.turnPage = function(id){
+        if(id==1){
+            $scope.isFront = false;
+            $scope.isBack = !$scope.isFront;
+        }else{
+            $scope.isBack = false;
+            $scope.isFront = !$scope.isBack;
+        };
+    };
+
+    $scope.callBack = function(){
+        $state.go('tabs.subtopic',{idtopic: $scope.idSubtopicParam});
+    }
+
+    $scope.checkAnswer = function(isAnswer, content){
+        $scope.clicked=true;
+        $scope.questions[$scope.current-1].checkTimes++;
+        if(isAnswer){
+            $scope.questions[$scope.current-1].reviewtimes++;
+            if($scope.questions[$scope.current-1].reviewtimes >= 5){
+                $scope.questions[$scope.current-1].remembered=1;
+                query = "update topicofword set remembered=1, reviewtimes="+$scope.questions[$scope.current-1].reviewtimes+" where idvocab="+$scope.theQuestion.idQuestion;
+                DatabaseService.update(query);
+            }
+            $scope.rightButtonClicked = content;
+            LevelServ.increase();
+            console.log("The answer: " + isAnswer);
+            $scope.showAnswer = false;
+            $scope.showRight = true;
+            $scope.rightAnswerShow = true;
+            if($scope.randTypeOfQuestion==0){
+                $scope.rightContent = $scope.questions[$scope.current-1].meaning;
+            }else if($scope.randTypeOfQuestion==2){
+                $scope.rightContent = $scope.questions[$scope.current-1].vnmean;
+            }else{
+                $scope.rightContent = $scope.questions[$scope.current-1].text;
+            }
+            
+            $scope.playSound($scope.questions[$scope.current-1].sound);
+
+            if($scope.questions[$scope.questions.length-1].checkTimes>=5){
+                alert("Finish test!");
+                $scope.callBack();
+            }else{
+                if($scope.current==($scope.questions.length)){
+                    $scope.current=0;
+                }
+                $timeout(function() {$scope.createQuestion()}, 1000 * 5);
+            }
+
+        }else{
+            $scope.wrongButtonClicked = content;
+            for (var i = 0; i < $scope.theQuestion.answers.length; i++) {
+                console.log("isAnswer: " + $scope.theQuestion.answers[i].isAnswer + " ; content: " + $scope.theQuestion.answers[i].content)
+                if($scope.theQuestion.answers[i].isAnswer){
+                    $scope.rightButtonClicked = $scope.theQuestion.answers[i].content;
+                    break;
+                }
+            }
+        
+            // if($scope.randTypeOfQuestion==0){
+            //     $scope.wrongContent = $scope.vocabularies[$scope.theQuestion.idQuestion].meaning;
+            // }else if($scope.randTypeOfQuestion==2){
+            //     $scope.wrongContent = $scope.vocabularies[$scope.theQuestion.idQuestion].vnmean;
+            // }else{
+            //     $scope.wrongContent = $scope.vocabularies[$scope.theQuestion.idQuestion].text;
+            // }
+            $scope.wrongAnswerShow = true;
+            $scope.showAnswer = false;
+            $scope.showWrong = true;
+            console.log("wrong answer");
+            var tmp = $scope.questions[$scope.current-1];
+            $scope.playSound(tmp.sound);
+
+            $timeout(function() {$scope.getWrongCard(tmp)}, 1000 * 5);
+            if($scope.questions[$scope.questions.length-1].checkTimes>=5){
+                alert("Finish test!");
+                $scope.callBack();
+            }else{$scope.questions[$scope.current-1]
+                if($scope.current==($scope.questions.length)){
+                    $scope.current=0;
+                }
+            }
+        }
+    };
+
+    $scope.timeOut = function(isAnswer, content){
+        $scope.showButton = true;
+        $scope.wrongButtonClicked = content;
+        var tmp = $scope.questions[$scope.current-1];
+        $scope.playSound(tmp.sound);
+        $scope.rightButtonClicked = $scope.theQuestion.answers[i].content;
+        $timeout(function() {$scope.getWrongCard(tmp)}, 1000 * 5);
+        if($scope.questions[$scope.questions.length-1].checkTimes>=5){
+            alert("Finish test!");
+            $scope.callBack();
+        }else{$scope.questions[$scope.current-1]
+            if($scope.current==($scope.questions.length)){
+                $scope.current=0;
+            }
+        }
+    };
+
+    $scope.nextQuestion = function(isNext){
+        if(isNext){
+            $scope.createQuestion();
+        }else{
+            $scope.getWrongCard($scope.questions[$scope.current-1]);
+        }
+    };
+
+    $scope.createQuestion = function(){
+        $scope.rightAnswerShow = false;
+        $scope.wrongAnswerShow = false;
+        $scope.normalTest = true;
+        $scope.wrongCard = false;
+        $scope.rightButtonClicked = "";
+        $scope.wrongButtonClicked = "";
+        $scope.clicked = false;
+        $scope.randTypeOfQuestion = RandomSrve.myRandom(4);
+        // var randTypeOfQuestion = 0;
+        if($scope.randTypeOfQuestion==0){ // Meaning questions
+            $scope.theQuestion = QuestionSrve.meaningWordQuestion($scope.vocabularies,  $scope.questions[$scope.current], 4);
+        }else if($scope.randTypeOfQuestion==1){ // Word question (meaning is the answer)
+            $scope.theQuestion = QuestionSrve.wordMeaningQuestion($scope.vocabularies,  $scope.questions[$scope.current], 4);
+        }else if($scope.randTypeOfQuestion==2){ // Vnmean question (vnmean is the answer)
+            $scope.theQuestion = QuestionSrve.vnmeanWordQuestion($scope.vocabularies,   $scope.questions[$scope.current], 4);
+        }else{// word vnmean question
+            $scope.theQuestion = QuestionSrve.wordVNMeanQuestion($scope.vocabularies,   $scope.questions[$scope.current], 4);
+        }
+        $scope.current++;
+    };
+
     $scope.loadProgressBar = function(){
         define(['require', './bower_components/progressbar.js/dist/progressbar.js'], function (require) {
         var ProgressBar = require('./bower_components/progressbar.js/dist/progressbar.js');
@@ -377,18 +595,18 @@ app.controller('TestCtrl', function($scope, $timeout){
         // var ProgressBar = require('./bower_components/progressbar.js/dist/progressbar.js');
         // var line = new ProgressBar.Line('#container');
         var bar = new ProgressBar.Circle(container, {
-            color: '#aaa',
+            color: '#333',
             // This has to be the same size as the maximum width to
             // prevent clipping
-            strokeWidth: 4,
-            trailWidth: 1,
+            strokeWidth: 6,
+            trailWidth: 6,
             easing: 'easeInOut',
             duration: 12000,
             text: {
                 autoStyleContainer: false
             },
-            from: { color: '#aaa', width: 1 },
-            to: { color: '#333', width: 4 },
+            from: { color: '#333', width: 6 },
+            to: { color: '#333', width: 6 },
             // Set default step function for all animate calls
             step: function(state, circle) {
                 circle.path.setAttribute('stroke', state.color);
@@ -407,11 +625,24 @@ app.controller('TestCtrl', function($scope, $timeout){
         bar.animate(1); 
     };
 
-    $scope.loadButton = function(){
-        $scope.showButton = true;
-    };
-    $scope.showButton=false;
-    $scope.showProgressBar = true;
-    $scope.loadProgressBar();
-    $timeout(function() {$scope.loadButton();}, 1000 * 11);
+    $scope.questions=[];
+    var query="select newtable1.idvocab as idvocab, * from (select newtable.idvocab as idvocab, * from (select vocabulary.idvocab as idvocab, * from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab) as newtable left join typeofword on newtable.idvocab = typeofword.idvocab) as newtable1 left join kindofword on newtable1.idkindword = kindofword.idkindword";
+    DatabaseService.get(query).then(function(result){
+        $scope.vocabularies = result;
+        // if($scope.numberWordViewed<=5){
+            for (var i = 0; i < $scope.vocabularies.length; i++) {
+                if($scope.vocabularies[i].remembered==1){
+                    $scope.vocabularies[i].checkTimes=0;
+                    $scope.questions.push($scope.vocabularies[i]);
+                    console.log("length : " + $scope.questions.length);
+                }
+            }
+        // }
+        $scope.createQuestion();
+        $scope.showButton=false;
+        $scope.showProgressBar = true;
+        $scope.loadProgressBar();
+        $timeout(function() {$scope.timeOut();}, 1000 * 11);
+    });   
+    
 });
