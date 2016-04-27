@@ -75,15 +75,42 @@ div button.card{
 }
 
 .button-tran{
-	transition: all 0.3s;
+	transition: all 0.5s;
 }
 
 .button.disabled {
-  opacity: 0.65; 
-  cursor: not-allowed;
+	opacity: 0.65; 
+	cursor: not-allowed;
 }
 
 .button.activated{
-	transform: scale(2);
+	transform: scale(1.1);
 	background-color: yellow !important;
 }
+
+.question-text{
+	height: 100%;
+	position:relative;
+}
+
+.container {
+	margin-top: 44px !important;
+	width: 60px;
+	height: 60px;
+	position: absolute;
+	float: right;
+	top: 20px;
+	right: 20px;
+}
+
+.container1 {
+	margin-top: 44px !important;
+	width: 60px;
+	height: 60px;
+	position: absolute;
+	float: right;
+	top: 20px;
+	right: 20px;
+	border-radius: 50%;
+}
+

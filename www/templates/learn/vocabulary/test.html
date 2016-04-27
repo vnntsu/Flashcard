@@ -1,0 +1,36 @@
+<!-- <ion-view ng-if="normalTest">
+	<ion-content style="text-align: center;">
+		<ion-scroll direction="y" style="height: 100%; position:relative; ">
+			<h2 style="color: blue;">{{theQuestion.question}}</h2>
+			<h4>{{theQuestion.typeWord}}</h4>
+			<h1 ng-if="rightAnswerShow">Right!</h1>
+			<h1 ng-if="wrongAnswerShow">Wrong!</h1>
+			<div class="div-button">
+				<button ng-repeat="a in theQuestion.answers" class="card button button-block button-tran" ng-click="checkAnswer(a.isAnswer,a.content)" ng-disabled="clicked" ng-class="{'button-assertive': a.content==wrongButtonClicked, 'button-balanced': a.content==rightButtonClicked}">{{a.content}}</button>
+			</div>
+		</ion-scroll>
+	</ion-content>
+</ion-view> -->
+
+<!-- <ion-vie>
+	<ion-content style="text-align: center; margin-top: 44px">
+		<ion-scroll direction="y" class="question-text">
+			
+			<h2 style="color: blue;">ABCDEF</h2>
+			<h4>Noun</h4>
+			<h1 ng-if="rightAnswerShow">Right!</h1> -->
+			<!-- <h1 ng-if="wrongAnswerShow">Wrong!</h1> -->
+			<!-- <div class="div-button">
+				<button class="card button button-block button-tran" ng-click="checkAnswer(a.isAnswer,a.content)" ng-disabled="clicked" ng-class="{'button-assertive': a.content==wrongButtonClicked, 'button-balanced': a.content==rightButtonClicked}">ABC</button>
+				<button class="card button button-block button-tran" ng-click="checkAnswer(a.isAnswer,a.content)" ng-disabled="clicked" ng-class="{'button-assertive': a.content==wrongButtonClicked, 'button-balanced': a.content==rightButtonClicked}">DEF</button>
+				<button class="card button button-block button-tran" ng-click="checkAnswer(a.isAnswer,a.content)" ng-disabled="clicked" ng-class="{'button-assertive': a.content==wrongButtonClicked, 'button-balanced': a.content==rightButtonClicked}">GHI</button>
+				<button class="card button button-block button-tran" ng-click="checkAnswer(a.isAnswer,a.content)" ng-disabled="clicked" ng-class="{'button-assertive': a.content==wrongButtonClicked, 'button-balanced': a.content==rightButtonClicked}">JKL</button>
+			</div>
+		</ion-scroll>
+	</ion-content>
+</ion-view> -->
+<ion-view>
+	<div style="background: black; position: relative;"></div>
+	<div id="container" class="container"></div>
+	<img src="img/play.png" class="container1" ng-if="showButton">
+</ion-view>

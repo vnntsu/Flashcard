@@ -123,6 +123,15 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             }
         }
     })
+    .state('tabs.test', {
+        url: '/test',
+        views: {
+            'learn-tab': {
+                templateUrl: "templates/learn/vocabulary/test.html",
+                controller: 'TestCtrl'
+            }
+        }
+    })
 
     /// Custom tabs
     .state('tabs.custom', {
