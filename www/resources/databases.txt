@@ -205,6 +205,31 @@ INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('p
 INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('resolve','/rɪˈzɔːlv/','resources/vocabulary/image/resolve.jpg', '/android_asset/www/resources/vocabulary/audio/resolve.mp3',0,0);
 INSERT INTO vocabulary(text,pronounce,image,sound,isremember,iscustom) values('specific','/spəˈsɪfɪk/','resources/vocabulary/image/specific.jpg', '/android_asset/www/resources/vocabulary/audio/specific.mp3',0,0);
 
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('attract','/əˈtrækt/','resources/vocabulary/image/attract.jpg', '/android_asset/www/resources/vocabulary/audio/attract.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('compare','/kəmˈper/','resources/vocabulary/image/compare.png', '/android_asset/www/resources/vocabulary/audio/compare.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('competition','/ˌkɑːmpəˈtɪʃn/','resources/vocabulary/image/competition.jpg', '/android_asset/www/resources/vocabulary/audio/competition.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('consume','/kənˈsuːm/','resources/vocabulary/image/consume.jpg', '/android_asset/www/resources/vocabulary/audio/consume.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('consume','/kənˈsuːm/','resources/vocabulary/image/consume.png', '/android_asset/www/resources/vocabulary/audio/consume.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('convince','/kənˈvɪns/','resources/vocabulary/image/convince.jpg', '/android_asset/www/resources/vocabulary/audio/convince.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('currently','/ˈkɜːrəntli/','resources/vocabulary/image/currently.jpg', '/android_asset/www/resources/vocabulary/audio/currently.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('fad','/fæd/','resources/vocabulary/image/fad.jpg', '/android_asset/www/resources/vocabulary/audio/fad.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('inspiration','/ˌɪnspəˈreɪʃn/','resources/vocabulary/image/inspiration.jpg', '/android_asset/www/resources/vocabulary/audio/inspiration.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('market','/ˈmɑːrkɪt/','resources/vocabulary/image/market.jpg', '/android_asset/www/resources/vocabulary/audio/market.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('persuasion','/pərˈsweɪʒn/','resources/vocabulary/image/persuasion.jpg', '/android_asset/www/resources/vocabulary/audio/persuasion.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('productive','/prəˈdʌktɪv/','resources/vocabulary/image/productive.jpg', '/android_asset/www/resources/vocabulary/audio/productive.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('satisfaction','/ˌsætɪsˈfækʃn/','resources/vocabulary/image/satisfaction.jpg', '/android_asset/www/resources/vocabulary/audio/satisfaction.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('characteristic','/ˌkærəktəˈrɪstɪk/','resources/vocabulary/image/characteristic.jpg', '/android_asset/www/resources/vocabulary/audio/characteristic.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('consequence','/ˈkɑːnsəkwens/','resources/vocabulary/image/consequence.jpg', '/android_asset/www/resources/vocabulary/audio/consequence.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('consider','/kənˈsɪdər/','resources/vocabulary/image/consider.jpg', '/android_asset/www/resources/vocabulary/audio/consider.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('cover','/ˈkʌvər/','resources/vocabulary/image/cover.jpg', '/android_asset/www/resources/vocabulary/audio/cover.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('frequently','/ˈfriːkwəntli/','resources/vocabulary/image/frequently.jpg', '/android_asset/www/resources/vocabulary/audio/frequently.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('imply','/ɪmˈplaɪ/','resources/vocabulary/image/imply.jpg', '/android_asset/www/resources/vocabulary/audio/imply.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('promise','/ˈprɑːmɪs/','resources/vocabulary/image/promise.jpg', '/android_asset/www/resources/vocabulary/audio/promise.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('protect','/prəˈtekt/','resources/vocabulary/image/protect.jpg', '/android_asset/www/resources/vocabulary/audio/protect.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('reputation','/ˌrepjuˈteɪʃn/','resources/vocabulary/image/reputation.png', '/android_asset/www/resources/vocabulary/audio/reputation.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('require','/rɪˈkwaɪər/','resources/vocabulary/image/require.png', '/android_asset/www/resources/vocabulary/audio/require.mp3',0);
+INSERT INTO vocabulary(text,pronounce,image,sound,iscustom) values('variety','/vəˈraɪəti/','resources/vocabulary/image/variety.png', '/android_asset/www/resources/vocabulary/audio/variety.mp3',0);
+
 
 /// data of topicofword (idvocab, idsubtopic)
 INSERT INTO topicofword values(1,51);
@@ -231,6 +256,49 @@ INSERT INTO topicofword values(12,68);
 INSERT INTO topicofword values(13,1);
 INSERT INTO topicofword values(13,69);
 
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(14,2,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(14,51,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(15,2,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(15,53,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(16,2,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(16,53,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(17,2,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(17,53,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(18,2,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(18,53,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(19,2,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(19,53,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(20,2,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(20,56,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(21,2,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(21,59,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(22,2,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(22,63,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(23,2,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(23,66,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(24,2,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(24,66,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(25,2,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(25,70,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(26,3,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(26,53,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(27,3,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(27,53,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(28,3,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(28,53,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(29,3,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(29,53,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(30,3,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(30,55,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(31,3,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(31,56,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(32,3,0,0,0),(32,59,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(33,3,0,0,0),(33,66,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(34,3,0,0,0),(34,66,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(35,3,0,0,0),(35,68,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(36,3,0,0,0),(36,68,0,0,0);
+INSERT INTO topicofword(idvocab,idsubtopic,viewed,remembered,reviewtimes) values(37,3,0,0,0),(37,73,0,0,0);
+
 /// data of typeofword (idvocab, idkindword, example, meaning, vnmean)
 INSERT INTO typeofword values(1,2,'He abandoned himself to despair', 'to leave somebody, especially somebody you are responsible for', 'Bỏ, từ bỏ, ruồng bỏ');
 INSERT INTO typeofword values(2,1,'He has the ability to do the work', 'a level of skill or intelligence', 'Năng lực, khả năng, tố chất');
@@ -244,7 +312,28 @@ INSERT INTO typeofword values(10,2,'I’m in ​favor of obligating ​welfare �
 INSERT INTO typeofword values(11,1,'There is no provision for anyone to sit down here', 'the act of supplying somebody with something that they need or want', 'Sự cung cấp, sự chu cấp');
 INSERT INTO typeofword values(12,2,'Be patient and the situation may resolve itself', 'to find an acceptable solution to a problem or difficulty', 'Giải quyết');
 INSERT INTO typeofword values(13,3,'I gave you specific instructions', 'detailed and exact', 'Đặc trưng, riêng biệt');
-
-
-
+INSERT INTO typeofword values(14,3,'That was what first attracted me to the place.', 'if you are attracted by something, it interests you and makes you want it', 'Thu hút, hấp dẫn, lôi cuốn');
+INSERT INTO typeofword values(15,3,'We compared the two reports carefully.', 'to examine people or things to see how they are similar and how they are different', 'So sánh, đối chiếu');
+INSERT INTO typeofword values(16,1,'We won the contract in the face of stiff competition.', 'an event in which people compete with each other to find out who is the best at something', 'Sự cạnh tranh, cuộc thi');
+INSERT INTO typeofword values(17,3,'The electricity industry consumes large amounts of fossil fuels', 'to use something, especially fuel, energy or time', 'Dùng, tiêu thụ');
+INSERT INTO typeofword values(18,1,'The experience convinced him that Europe was on the brink of a revolution', 'to make somebody/yourself believe that something is true', 'Làm cho tin, thuyết phục');
+INSERT INTO typeofword values(19,4,'The hourly charge is currently £35', 'at the present time', 'Hiện thời, hiện nay');
+INSERT INTO typeofword values(20,1,'a fad for physical fitness', 'something that people are interested in for only a short period of time', 'Mốt nhất thời');
+INSERT INTO typeofword values(21,1,'Dreams can be a rich source of inspiration for an artist', 'the process that takes place when somebody sees or hears something that causes them to have exciting new ideas or makes them want to create something, especially in art, music or literature', 'Sự truyền cảm');
+INSERT INTO typeofword values(22,1,'We buy our fruit and vegetables at the market', 'business or trade, or the amount of trade in a particular type of goods', 'Chợ');
+INSERT INTO typeofword values(23,1,'She has great powers of persuasion', 'the act of persuading somebody to do something or to believe something', 'Sự làm cho tin; sự thuyết phục');
+INSERT INTO typeofword values(24,3,'The aim was to maximize the machine’s productive capacity', 'making goods or growing crops, especially in large quantities', '(thuộc về) sản xuất, giàu tưởng tượng');
+INSERT INTO typeofword values(25,1,'The company is trying to improve customer satisfaction', 'the good feeling that you have when you have achieved something', 'Sự thỏa mãn, toại nguyện');
+INSERT INTO typeofword values(26,4,'She spoke with characteristic enthusiasm.', 'very typical of something or of somebody’s character', 'riêng, riêng biệt, đặc trưng');
+INSERT INTO typeofword values(27,1,'his decision could have serious consequences for the industry', 'a result of something that has happened', 'Hậu quả, kết quả');
+INSERT INTO typeofword values(28,2,'I’d like some time to consider', 'to think about something carefully, especially in order to make a decision', 'Cân nhắc, suy nghĩ');
+INSERT INTO typeofword values(29,2,'She covered her face with her hands', 'to place something over or in front of something in order to hide or protect it', 'Che, phủ');
+INSERT INTO typeofword values(30,1,'He ​stayed on past the expiration of his ​tourist ​visa', 'the end of a ​period of ​time during which an ​agreement or ​official ​document', 'Sự mãn hạn, sự kết thúc');
+INSERT INTO typeofword values(31,4,'Buses run frequently between the city and the airport', 'often', 'thường xuyên');
+INSERT INTO typeofword values(32,2,'Are you implying (that) I am wrong?', 'to suggest that something is true or that you feel or think something, without saying so directly', 'Ý nói, ngụ ý, bao hàm ý');
+INSERT INTO typeofword values(33,2,'The college principal promised to look into the matter', 'to tell somebody that you will definitely do or not do something', 'hứa, hẹn');
+INSERT INTO typeofword values(34,2,'They huddled together to protect themselves from the wind', 'to make sure that somebody/something is not harmed, injured, damaged', 'Bảo vệ, che chở');
+INSERT INTO typeofword values(35,1,'The weather in England is living up to its reputation', 'the opinion that people have about what somebody/something is like', 'Sự nổi danh; danh tiếng');
+INSERT INTO typeofword values(36,2,'This condition requires urgent treatment', 'to need something; to depend on somebody/something', 'Đòi hỏi, yêu cầu');
+INSERT INTO typeofword values(37,1,'He resigned for a variety of reasons.', 'several different sorts of the same thing', 'Nhiều thứ; đủ loại');
 

@@ -1,34 +1,3 @@
-<!-- <ion-view ng-if="normalTest">
-	<ion-content style="text-align: center;">
-		<ion-scroll direction="y" style="height: 100%; position:relative; ">
-			<h2 style="color: blue;">{{theQuestion.question}}</h2>
-			<h4>{{theQuestion.typeWord}}</h4>
-			<h1 ng-if="rightAnswerShow">Right!</h1>
-			<h1 ng-if="wrongAnswerShow">Wrong!</h1>
-			<div class="div-button">
-				<button ng-repeat="a in theQuestion.answers" class="card button button-block button-tran" ng-click="checkAnswer(a.isAnswer,a.content)" ng-disabled="clicked" ng-class="{'button-assertive': a.content==wrongButtonClicked, 'button-balanced': a.content==rightButtonClicked}">{{a.content}}</button>
-			</div>
-		</ion-scroll>
-	</ion-content>
-</ion-view> -->
-
-<!-- <ion-vie>
-	<ion-content style="text-align: center; margin-top: 44px">
-		<ion-scroll direction="y" class="question-text">
-			
-			<h2 style="color: blue;">ABCDEF</h2>
-			<h4>Noun</h4>
-			<h1 ng-if="rightAnswerShow">Right!</h1> -->
-			<!-- <h1 ng-if="wrongAnswerShow">Wrong!</h1> -->
-			<!-- <div class="div-button">
-				<button class="card button button-block button-tran" ng-click="checkAnswer(a.isAnswer,a.content)" ng-disabled="clicked" ng-class="{'button-assertive': a.content==wrongButtonClicked, 'button-balanced': a.content==rightButtonClicked}">ABC</button>
-				<button class="card button button-block button-tran" ng-click="checkAnswer(a.isAnswer,a.content)" ng-disabled="clicked" ng-class="{'button-assertive': a.content==wrongButtonClicked, 'button-balanced': a.content==rightButtonClicked}">DEF</button>
-				<button class="card button button-block button-tran" ng-click="checkAnswer(a.isAnswer,a.content)" ng-disabled="clicked" ng-class="{'button-assertive': a.content==wrongButtonClicked, 'button-balanced': a.content==rightButtonClicked}">GHI</button>
-				<button class="card button button-block button-tran" ng-click="checkAnswer(a.isAnswer,a.content)" ng-disabled="clicked" ng-class="{'button-assertive': a.content==wrongButtonClicked, 'button-balanced': a.content==rightButtonClicked}">JKL</button>
-			</div>
-		</ion-scroll>
-	</ion-content>
-</ion-view> -->
 <ion-view title="Test">
 	<ion-content>
 	<ion-scroll direction="y" style="height: 100%;">
@@ -36,7 +5,8 @@
 	<div class="button-next">
 		<h4 style="line-height: 60px;">{{theQuestion.typeWord}}</h4>
 		<div id="container" class="container"></div>
-		<img src="img/play.png" class="container1" ng-if="showButton">
+		<!-- <div id="countdown"></div> -->
+		<img src="img/play.png" class="container1" ng-if="showButton" ng-model="isNext" ng-click="nextQuestion(isNext)">
 	</div>
 	<div class="div-button">
 		<h1 style="text-align: center;" ng-if="rightAnswerShow">Right</h1>
@@ -44,5 +14,55 @@
 		<button ng-repeat="a in theQuestion.answers" class="card button button-block button-tran" ng-click="checkAnswer(a.isAnswer,a.content)" ng-disabled="clicked" ng-class="{'button-assertive': a.content==wrongButtonClicked, 'button-balanced': a.content==rightButtonClicked}">{{a.content}}</button>
 	</div>
 	</ion-scroll>
+	</ion-content>
+</ion-view>
+
+<ion-view title="{{title}}" ng-if="wrongCard">
+	<ion-content class="box-sizing">
+		<ion-scroll direction="y" style="height: 100%;">
+	    <nav ng-if="isFront">
+	    	<h5 style="text-align: center; width: 80%; margin: auto;">Front card</h5>
+		    <ul>
+		    	<li class="vocabcard">
+		    		<p class="text">{{text}}</p>
+		    		<p class="pronounce">{{pronounce}}</p>
+		    		<div class="icon ion-ios-volume-high" ng-click="playSound(sound)"></div>
+		    	</li>
+		    </ul>
+		    <ul ng-click="turnPage(1)">
+		    	<li>
+		    		<img class="" ng-src="{{image}}" alt="">
+		    	</li>
+		    	<li>
+		    		<p>Meaning:</p>
+		    		<p style="font-size: 15px; width: 100%;">{{meaning}}</p>
+		    	</li>
+		    </ul>
+			<a class="button button-calm" ng-click="createQuestion()" style="width: 100%;">Continue</a>
+		</nav>
+
+	    <nav ng-if="isBack">
+	    	<h5 style="text-align: center; width: 80%; margin: auto;">Back card</h5>
+		    <ul>
+		    	<li class="vocabcard">
+		    		<p class="text">{{text}}</p>
+		    		<p class="pronounce">{{pronounce}}</p>
+			    	<p style="font-size: 20px; text-align: center;">{{vnmean}}</p>
+		    		<div class="icon ion-ios-volume-high" style="bottom: 50%;" ng-click="playSound({{sound}})"></div>
+		    	</li>
+		    </ul>
+		    <ul ng-click="turnPage(0)">
+		    	<li>
+		    		<img class="" ng-src="{{image}}" alt="">
+		    	</li>
+		    	<li>
+		    		<p>Example:</p>
+		    		<p style="font-size: 15px; width: 100%;">{{example}}</p>
+		    	</li>
+		    </ul>
+		   	<a class="button button-calm" ng-click="createQuestion()" style="width: 100%;">Continue</a>
+	  	</nav>
+
+		</ion-scroll>
 	</ion-content>
 </ion-view>

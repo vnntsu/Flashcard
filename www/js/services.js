@@ -28,6 +28,7 @@ app.factory('DatabaseService', function($cordovaSQLite){
 				transaction.executeSql(query);
 			});
 		}
+
 	};
 });
 
@@ -280,5 +281,29 @@ app.factory('QuestionSrve', function(RandomSrve){
 			return questionAndAnswer;
 		}
 	};
+});
+
+app.factory('ProgressBarServ', function(){
+	return{
+		init: function(){
+	        define(['require', './bower_components/progressbar.js/dist/progressbar.js'], function (require) {
+	        	var ProgressBar = require('./bower_components/progressbar.js/dist/progressbar.js');
+	        });
+	        return ProgressBar;
+		},
+		createCircle: function(){
+			var ProgressBar = this.init();
+			var bar = new ProgressBar.Circle(container, {
+				strokeWidth: 6,
+				easing: 'easeInOut',
+				duration: 12000,
+				color: '#F44336',
+				trailColor: '#eee',
+				trailWidth: 6,
+				svgStyle: null
+	        });
+	        return bar;
+		}
+	}
 });
 

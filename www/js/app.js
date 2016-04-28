@@ -154,7 +154,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     })
 
 
-
     .state('tabs.navstack', {
         url: "/navstack",
         views: {
@@ -168,7 +167,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         url: "/dict",
         views: {
             'dict-tab': {
-                templateUrl: "templates/dict/dict.html"
+                templateUrl: "templates/dict/dict.html",
+                controller: 'DictCtrl'
             }
         }
     })

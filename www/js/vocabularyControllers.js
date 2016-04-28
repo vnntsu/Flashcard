@@ -98,7 +98,6 @@ app.controller('SubTopicCtrl', function($scope, DatabaseService, $stateParams, $
 });
 app.controller('VocabCardCtrl',function($scope, $filter, DatabaseService, $ionicLoading,$cordovaMedia, $state, $stateParams, $ionicGesture){
     $scope.playCard = function(vocab){
-        console.log(vocab.text + " current vocab: " + $scope.currentVocab);
         $scope.text = vocab.text;
         $scope.pronounce = vocab.pronounce;
         $scope.sound = vocab.sound;
@@ -114,12 +113,10 @@ app.controller('VocabCardCtrl',function($scope, $filter, DatabaseService, $ionic
         if(vocab.viewed==0){
             var toDay = $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss');
             var query = "update topicofword set viewed=1, viewday='"+ toDay +"' where idvocab="+vocab.idvocab+" and idsubtopic=" + $scope.idSubtopicParam;
-            console.log(query);
             DatabaseService.update(query);
         }
         query = "select * from topicofword where viewed=1";
         DatabaseService.get(query).then(function(result){
-            console.log("Word have learned: "+result[0].idvocab);
         });
     };
 
@@ -293,7 +290,6 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
     	}else{
             $scope.wrongButtonClicked = content;
             for (var i = 0; i < $scope.theQuestion.answers.length; i++) {
-                console.log("isAnswer: " + $scope.theQuestion.answers[i].isAnswer + " ; content: " + $scope.theQuestion.answers[i].content)
                 if($scope.theQuestion.answers[i].isAnswer){
                     $scope.rightButtonClicked = $scope.theQuestion.answers[i].content;
                     break;
@@ -327,8 +323,6 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
     };
 
     $scope.createQuestion = function(){
-        console.log("current of current: " +$scope.current);
-        console.log("sldkfjasldkfjal;sd: "+ $scope.questions[$scope.current].idvocab);
         $scope.rightAnswerShow = false;
         $scope.wrongAnswerShow = false;
         $scope.normalTest = true;
@@ -395,15 +389,11 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
     var query="select newtable1.idvocab as idvocab, * from (select newtable.idvocab as idvocab, * from (select vocabulary.idvocab as idvocab, * from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab where topicofword.idsubtopic="+$scope.idSubtopicParam+") as newtable left join typeofword on  newtable.idvocab = typeofword.idvocab) as newtable1 left join kindofword on newtable1.idkindword = kindofword.idkindword";
 	DatabaseService.get(query).then(function(result){
 		$scope.vocabularies = result;
-        console.log("number word will be reviewed: " + $scope.numberWordViewed + "   idvocab111: " + $scope.vocabularies[0].idvocab);
         if($scope.numberWordViewed<=5){
             for (var i = 0; i < $scope.vocabularies.length; i++) {
-                console.log("viewed: " + $scope.vocabularies[i].viewed + " --- remembered: " +$scope.vocabularies[i].remembered);
                 if($scope.vocabularies[i].viewed==1&&$scope.vocabularies[i].remembered==0){
-                    console.log("Id vocab: " + $scope.vocabularies[i].idvocab);
                     $scope.vocabularies[i].checkTimes=0;
                     $scope.questions.push($scope.vocabularies[i]);
-                    console.log("OK OK : " +  $scope.questions[0].idvocab);
                 }
             }
         }
@@ -415,7 +405,13 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
 	});    
 });
 
-app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, LevelServ, $stateParams, $cordovaProgress, $cordovaMedia, $ionicLoading, RandomSrve, $timeout, $state){
+app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, LevelServ, $stateParams, $cordovaProgress, $cordovaMedia, $ionicLoading, RandomSrve, $timeout, $state,ProgressBarServ){
+    $scope.questions=[];
+    $scope.current=0;
+    var tmp = null;
+    var bar = null;
+    $scope.questionCountDown=null;
+    $scope.pressCountDown=null;
     $scope.showCard = function(vocab){
         // here here
         $scope.text = vocab.text;
@@ -470,9 +466,13 @@ app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, Level
     }
 
     $scope.checkAnswer = function(isAnswer, content){
+        $timeout.cancel($scope.questionCountDown);
+        bar.destroy();
+        $scope.showButton = true;
         $scope.clicked=true;
         $scope.questions[$scope.current-1].checkTimes++;
         if(isAnswer){
+            $scope.isNext=true;
             $scope.questions[$scope.current-1].reviewtimes++;
             if($scope.questions[$scope.current-1].reviewtimes >= 5){
                 $scope.questions[$scope.current-1].remembered=1;
@@ -494,18 +494,10 @@ app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, Level
             }
             
             $scope.playSound($scope.questions[$scope.current-1].sound);
-
-            if($scope.questions[$scope.questions.length-1].checkTimes>=5){
-                alert("Finish test!");
-                $scope.callBack();
-            }else{
-                if($scope.current==($scope.questions.length)){
-                    $scope.current=0;
-                }
-                $timeout(function() {$scope.createQuestion()}, 1000 * 5);
-            }
+            $scope.pressCountDown = $timeout(function() {$scope.createQuestion()}, 1000 * 5);
 
         }else{
+            $scope.isNext=false;
             $scope.wrongButtonClicked = content;
             for (var i = 0; i < $scope.theQuestion.answers.length; i++) {
                 console.log("isAnswer: " + $scope.theQuestion.answers[i].isAnswer + " ; content: " + $scope.theQuestion.answers[i].content)
@@ -514,40 +506,49 @@ app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, Level
                     break;
                 }
             }
-        
-            // if($scope.randTypeOfQuestion==0){
-            //     $scope.wrongContent = $scope.vocabularies[$scope.theQuestion.idQuestion].meaning;
-            // }else if($scope.randTypeOfQuestion==2){
-            //     $scope.wrongContent = $scope.vocabularies[$scope.theQuestion.idQuestion].vnmean;
-            // }else{
-            //     $scope.wrongContent = $scope.vocabularies[$scope.theQuestion.idQuestion].text;
-            // }
             $scope.wrongAnswerShow = true;
             $scope.showAnswer = false;
             $scope.showWrong = true;
             console.log("wrong answer");
-            var tmp = $scope.questions[$scope.current-1];
+            tmp = $scope.questions[$scope.current-1];
             $scope.playSound(tmp.sound);
 
-            $timeout(function() {$scope.getWrongCard(tmp)}, 1000 * 5);
-            if($scope.questions[$scope.questions.length-1].checkTimes>=5){
-                alert("Finish test!");
-                $scope.callBack();
-            }else{$scope.questions[$scope.current-1]
-                if($scope.current==($scope.questions.length)){
-                    $scope.current=0;
-                }
-            }
+            $scope.pressCountDown = $timeout(function() {$scope.getWrongCard(tmp)}, 1000 * 5);
+            
         }
     };
 
     $scope.timeOut = function(isAnswer, content){
+        bar.destroy();
+        $scope.isNext=false;
         $scope.showButton = true;
+        $scope.clicked = true;
         $scope.wrongButtonClicked = content;
-        var tmp = $scope.questions[$scope.current-1];
+        $scope.rightButtonClicked = "";
+        tmp = $scope.questions[$scope.current-1];
         $scope.playSound(tmp.sound);
-        $scope.rightButtonClicked = $scope.theQuestion.answers[i].content;
-        $timeout(function() {$scope.getWrongCard(tmp)}, 1000 * 5);
+        for (var i = 0; i < $scope.theQuestion.answers.length; i++) {
+            if($scope.theQuestion.answers[i].isAnswer){
+                $scope.rightButtonClicked = $scope.theQuestion.answers[i].content;
+                break;
+            }
+        }
+        $scope.pressCountDown = $timeout(function() {
+                $scope.getWrongCard(tmp);
+        }, 1000 * 2);
+    };
+
+    $scope.nextQuestion = function(isNext){
+        $timeout.cancel($scope.pressCountDown);
+        if(isNext){
+            $scope.createQuestion();
+        }else{
+            console.log("tmp.idvocab: "+tmp);
+            $scope.getWrongCard(tmp);
+        }
+    };
+
+    $scope.createQuestion = function(){
         if($scope.questions[$scope.questions.length-1].checkTimes>=5){
             alert("Finish test!");
             $scope.callBack();
@@ -556,17 +557,6 @@ app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, Level
                 $scope.current=0;
             }
         }
-    };
-
-    $scope.nextQuestion = function(isNext){
-        if(isNext){
-            $scope.createQuestion();
-        }else{
-            $scope.getWrongCard($scope.questions[$scope.current-1]);
-        }
-    };
-
-    $scope.createQuestion = function(){
         $scope.rightAnswerShow = false;
         $scope.wrongAnswerShow = false;
         $scope.normalTest = true;
@@ -586,46 +576,17 @@ app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, Level
             $scope.theQuestion = QuestionSrve.wordVNMeanQuestion($scope.vocabularies,   $scope.questions[$scope.current], 4);
         }
         $scope.current++;
+        $scope.showButton=false;
+        $scope.showProgressBar = true;
+        // bar.value(0);
+        ProgressBarServ.init();
+        bar = ProgressBarServ.createCircle();
+        bar.animate(1);
+        $scope.questionCountDown = $timeout(function() {
+            $scope.timeOut();
+        }, 1000 * 11);
     };
 
-    $scope.loadProgressBar = function(){
-        define(['require', './bower_components/progressbar.js/dist/progressbar.js'], function (require) {
-        var ProgressBar = require('./bower_components/progressbar.js/dist/progressbar.js');
-        });
-        // var ProgressBar = require('./bower_components/progressbar.js/dist/progressbar.js');
-        // var line = new ProgressBar.Line('#container');
-        var bar = new ProgressBar.Circle(container, {
-            color: '#333',
-            // This has to be the same size as the maximum width to
-            // prevent clipping
-            strokeWidth: 6,
-            trailWidth: 6,
-            easing: 'easeInOut',
-            duration: 12000,
-            text: {
-                autoStyleContainer: false
-            },
-            from: { color: '#333', width: 6 },
-            to: { color: '#333', width: 6 },
-            // Set default step function for all animate calls
-            step: function(state, circle) {
-                circle.path.setAttribute('stroke', state.color);
-                circle.path.setAttribute('stroke-width', state.width);
-
-                var value = Math.round(100 - circle.value() * 100);
-                if (value === 0) {
-                  circle.setText('');
-                } else {
-                  circle.setText(value);
-                }
-            }
-        });
-        bar.text.style.fontFamily = '"Raleway", Helvetica, sans-serif';
-        bar.text.style.fontSize = '2rem';
-        bar.animate(1); 
-    };
-
-    $scope.questions=[];
     var query="select newtable1.idvocab as idvocab, * from (select newtable.idvocab as idvocab, * from (select vocabulary.idvocab as idvocab, * from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab) as newtable left join typeofword on newtable.idvocab = typeofword.idvocab) as newtable1 left join kindofword on newtable1.idkindword = kindofword.idkindword";
     DatabaseService.get(query).then(function(result){
         $scope.vocabularies = result;
@@ -634,15 +595,11 @@ app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, Level
                 if($scope.vocabularies[i].remembered==1){
                     $scope.vocabularies[i].checkTimes=0;
                     $scope.questions.push($scope.vocabularies[i]);
-                    console.log("length : " + $scope.questions.length);
+                    console.log("current checktimes of word: " + $scope.questions[$scope.current].checkTimes);
                 }
             }
         // }
         $scope.createQuestion();
-        $scope.showButton=false;
-        $scope.showProgressBar = true;
-        $scope.loadProgressBar();
-        $timeout(function() {$scope.timeOut();}, 1000 * 11);
     });   
     
 });
