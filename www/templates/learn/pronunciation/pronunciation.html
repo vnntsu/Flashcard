@@ -1,10 +1,21 @@
 <ion-view title="Pronunciation" >
-  <ion-content scroll="false">
-    <nav style="display: flex">
-      <ul>
-        <li><a class="button icon icon-left ion-ios-bell pronun" ui-sref="tabs.pronuncard">Vowel</a></li>
-        <li><a class="button icon icon-left ion-social-vimeo vocab" href="#/learn/vocabulary">Consonant</a></li>
-      </ul>
-    </nav>
-  </ion-content>
+	<ion-content scroll="false">
+		<ion-list>
+			<ion-item class="card" ng-click="getCard(1)">
+				<ion-thumbnail item-left style="float: left;">
+					<img src="img/pronunciation.jpg" style="height: 80px; width: 80px;">
+				</ion-thumbnail>
+				<h2 style="width: auto; height: auto; margin-left: 120px; padding-top: 10px; font-size: 20px;"><b>Vowel</b></h2>
+				<p style="margin-left: 120px;">Total: 20 Vowels</p>
+			</ion-item>
+			<ion-item class="card" ng-click="getCard(2)">
+				<ion-thumbnail item-left style="float: left;">
+					<img src="img/vocabulary.jpg" style="height: 80px; width: 80px;">
+				</ion-thumbnail>
+				<h2 style="width: auto; height: auto; margin-left: 120px; padding-top: 10px; font-size: 20px;"><b>Consonant</b></h2>
+				<p style="margin-left: 120px;">Total: 24 Consonants</p>
+			</ion-item>
+			</ion-item>
+		</ion-list>
+	</ion-content>
 </ion-view>

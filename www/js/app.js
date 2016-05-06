@@ -1,4 +1,4 @@
-var app = angular.module('ionicApp', ['ionic', 'ngCordova', 'ionicApp.services', 'ionicApp.controllers','ionicApp.customControllers','ionicApp.vocabularyControllers']);
+var app = angular.module('ionicApp', ['ionic', 'ngCordova', 'ionicApp.services', 'ionicApp.controllers','ionicApp.customControllers','ionicApp.vocabularyControllers', 'ionicApp.pronunciationControllers']);
 
 app.run(function($ionicPlatform, $cordovaSQLite, DatabaseService){
 
@@ -13,7 +13,7 @@ app.run(function($ionicPlatform, $cordovaSQLite, DatabaseService){
     // org.apache.cordova.statusbar required
         StatusBar.styleDefault();
     }
-    DatabaseService.init();
+    // DatabaseService.init();
 });
   // $rootScope.preventDefaultScroll = function(event){
   //   event.preventDefaultScroll();
@@ -55,12 +55,13 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         url: '/pronunciation',
         views: {
             'learn-tab': {
-                templateUrl: "templates/learn/pronunciation/pronunciation.html"
+                templateUrl: "templates/learn/pronunciation/pronunciation.html",
+                controller: 'pronunCtrl'
             }
         }
     })
     .state('tabs.pronuncard', {
-        url: '/pronuncard',
+        url: '/pronuncard?type',
         views: {
             'learn-tab': {
                 templateUrl: "templates/learn/pronunciation/pronuncard.html",

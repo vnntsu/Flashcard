@@ -34,10 +34,5 @@ app.controller('ProfileTabCtrl', function($scope, DatabaseService){
     
 });
 
-app.controller('PronunCardCtrl', function($scope, $cordovaSQLite){
-    
-});
-
-
 app.controller('DictCtrl', function($scope){
 });
