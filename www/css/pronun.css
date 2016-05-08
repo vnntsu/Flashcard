@@ -2,13 +2,13 @@ div.pronun-text{
 	height: 80px;
 	width: 80px;
 	text-align: center;
-	line-height: 80px;
 	font-size: 30px;
 	margin: auto;
+	margin-top: 50px;
 }
 
 button.first{
 	height: 80px;
 	width: 80px;
-	
+	line-height: 40px;
 }
