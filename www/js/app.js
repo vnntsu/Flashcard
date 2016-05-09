@@ -106,15 +106,6 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             }
         }
     })
-    .state('tabs.vocabbackcard', {
-        url: '/vocabbackcard',
-        views: {
-            'learn-tab': {
-                templateUrl: "templates/learn/vocabulary/vocabbackcard.html",
-                controller: 'VocabCardCtrl'
-            }
-        }
-    })
     .state('tabs.review', {
         url: '/review?idsubtopic?numberWordViewed',
         views: {
@@ -130,6 +121,15 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
             'learn-tab': {
                 templateUrl: "templates/learn/vocabulary/test.html",
                 controller: 'TestCtrl'
+            }
+        }
+    })
+    .state('tabs.dailyword', {
+        url: '/dailyword',
+        views: {
+            'learn-tab': {
+                templateUrl: "templates/learn/vocabulary/dailyword.html",
+                controller: 'DailyWordCtrl'
             }
         }
     })

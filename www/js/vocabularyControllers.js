@@ -601,5 +601,8 @@ app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, Level
         // }
         $scope.createQuestion();
     });   
+});
+
+app.controller('DailyWordCtrl', function($scope, DatabaseService){
     
 });
