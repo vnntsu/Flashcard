@@ -135,5 +135,57 @@ div button.card{
 }
 
 .daily-header {
-	
+	height: 50%;
+	padding: 20px;
+	background: #C8E6C9;
+}
+
+p.today{
+	font-size: 20px;
+}
+
+p.second-line{
+	margin-left: 20px;
+	font-size: 25px;
+	float: left;
+	text-align: center;
+}
+
+p.number{
+	margin-right: 60px;
+	font-size: 40px;
+	float: right;
+	text-align: right;
+}
+
+p.third-line{
+	font-size: 20px;
+	float: right;
+}
+
+div.button-content{
+	margin-top: -25px;
+	text-align: center;
+}
+
+button.button-view{
+	width: 40%;
+}
+
+button.button-review{
+	width: 40%;
+}
+
+ul.list-ul{
+	margin-top: 5px;
+	width: 100%;
+}
+
+li.item-li{
+	padding: 10px;
+	text-align: center;
+}
+
+div.ul{
+	margin-bottom: 64px;
 }

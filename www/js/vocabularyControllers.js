@@ -66,7 +66,7 @@ app.controller('SubTopicCtrl', function($scope, DatabaseService, $stateParams, $
                         $scope.subtopics[i].isReview = true;
                 }
                 if(array==false){
-                    
+                    // do something
                 }else{
                     for (var j = 0; j < array.length; j++) {
                         for(var i = 0; i < $scope.subtopics.length; i++){
@@ -385,24 +385,46 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
     //     $scope.showButton = true;
     // };
     
-
-    var query="select newtable1.idvocab as idvocab, * from (select newtable.idvocab as idvocab, * from (select vocabulary.idvocab as idvocab, * from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab where topicofword.idsubtopic="+$scope.idSubtopicParam+") as newtable left join typeofword on  newtable.idvocab = typeofword.idvocab) as newtable1 left join kindofword on newtable1.idkindword = kindofword.idkindword";
-	DatabaseService.get(query).then(function(result){
-		$scope.vocabularies = result;
-        if($scope.numberWordViewed<=5){
-            for (var i = 0; i < $scope.vocabularies.length; i++) {
-                if($scope.vocabularies[i].viewed==1&&$scope.vocabularies[i].remembered==0){
-                    $scope.vocabularies[i].checkTimes=0;
-                    $scope.questions.push($scope.vocabularies[i]);
+    if($scope.idSubtopicParam>=0){
+        var query="select newtable1.idvocab as idvocab, * from (select newtable.idvocab as idvocab, * from (select vocabulary.idvocab as idvocab, * from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab where topicofword.idsubtopic="+$scope.idSubtopicParam+") as newtable left join typeofword on  newtable.idvocab = typeofword.idvocab) as newtable1 left join kindofword on newtable1.idkindword = kindofword.idkindword";
+        DatabaseService.get(query).then(function(result){
+            $scope.vocabularies = result;
+            if($scope.numberWordViewed<=5){
+                for (var i = 0; i < $scope.vocabularies.length; i++) {
+                    if($scope.vocabularies[i].viewed==1&&$scope.vocabularies[i].remembered==0){
+                        $scope.vocabularies[i].checkTimes=0;
+                        $scope.questions.push($scope.vocabularies[i]);
+                    }
+                }
+            }else{
+                for (var i = 0; i < 5; i++) {
+                    if($scope.vocabularies[i].viewed==1&&$scope.vocabularies[i].remembered==0){
+                        $scope.vocabularies[i].checkTimes=0;
+                        $scope.questions.push($scope.vocabularies[i]);
+                    }
                 }
             }
-        }
-		$scope.createQuestion();
-        // $scope.showButton=false;
-        // $scope.showProgressBar = true;
-        // $scope.loadProgressBar();
-        // $timeout(function() {$scope.loadButton();}, 1000 * 11);
-	});    
+            $scope.createQuestion();
+            // $scope.showButton=false;
+            // $scope.showProgressBar = true;
+            // $scope.loadProgressBar();
+            // $timeout(function() {$scope.loadButton();}, 1000 * 11);
+        });
+    }else{
+        query = "select * from daily where remembered=0";
+        DatabaseService.get(query).then(function(result){
+            $scope.questions=result;
+            for (var i = 0; i < $scope.questions.length; i++) {
+                $scope.questions[i].checkTimes=0;
+            }
+            query = "select newtable1.idvocab as idvocab, * from (select newtable.idvocab as idvocab, * from (select vocabulary.idvocab as idvocab, * from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab) as newtable left join typeofword on  newtable.idvocab = typeofword.idvocab) as newtable1 left join kindofword on newtable1.idkindword = kindofword.idkindword limit 30";
+            DatabaseService.get(query).then(function(result){
+                $scope.vocabularies = result;
+                $scope.createQuestion();
+            });
+        });
+    }
+    
 });
 
 app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, LevelServ, $stateParams, $cordovaProgress, $cordovaMedia, $ionicLoading, RandomSrve, $timeout, $state,ProgressBarServ){
@@ -603,6 +625,115 @@ app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, Level
     });   
 });
 
-app.controller('DailyWordCtrl', function($scope, DatabaseService){
-    
+app.controller('DailyWordCtrl', function($scope, DatabaseService, $filter, $timeout, $state){
+    $scope.view=false;
+    $scope.review=false;
+    $scope.menu=true;
+    $scope.words=[];
+    $scope.currentVocab = 0;
+    var query = "select wordperday from profile";
+    DatabaseService.get(query).then(function(result){
+        $scope.numberWord=result[0].wordperday;
+        query = "select idvocab from daily where remembered=0";
+        DatabaseService.get(query).then(function(result){
+            if(result){
+                $scope.words=result;
+            }
+            if($scope.words.length<$scope.numberWord){
+                console.log($scope.numberWord-$scope.words.length + " asdkfjaskldf");
+                query = "select idvocab from vocabulary where idvocab not in (select idvocab from daily limit "+($scope.numberWord-$scope.words.length)+")";
+                DatabaseService.get(query).then(function(result){
+                    for (var i = 0; i < result.length; i++) {
+                        query = "insert into daily(idvocab, learnday,viewtimes,viewed,reviewtimes,remembered) values("+result[i].idvocab+","+$filter('date')(new Date(), 'yyyy-MM-dd')+",0,0,0,0)"
+                        DatabaseService.update(query);
+                        $scope.words.push(result[i]);
+                    }
+
+                });
+            }
+            $timeout(function() {
+                $scope.vocabs = [];
+                for (var i = 0; i < $scope.numberWord; i++) {
+                    query = "select * from vocabulary, typeofword where vocabulary.idvocab="+$scope.words[i].idvocab;
+                    DatabaseService.get(query).then(function(result){
+                        $scope.vocabs.push(result[0]);
+                    });
+                }
+                $timeout(function() {
+                    console.log("$scope.vocabs.length = "+$scope.vocabs.length)
+                    for (var i = 0; i < $scope.vocabs.length; i++) {
+                        console.log($scope.vocabs[i].text);
+                    }
+                }, 10);
+            }, 10);
+        });
+    });
+
+    var showCard = function(vocab){
+        // here here
+        $scope.text = vocab.text;
+        $scope.pronounce = vocab.pronounce;
+        $scope.sound = vocab.sound;
+        $scope.image = vocab.image;
+        $scope.example = vocab.example;
+        $scope.meaning = vocab.meaning;
+        $scope.vnmean = vocab.vnmean;
+        $scope.topicName = vocab.name;
+        $scope.topicVNname = vocab.vnname;
+        $scope.isRemember = vocab.isremember;
+        $scope.rememberDay = vocab.rememberday;
+        $scope.isCustom = vocab.isCustom;
+    };
+
+    $scope.viewFunc = function(){
+        $scope.view=true;
+        $scope.review = false;
+        $scope.menu = false;
+        showCard($scope.vocabs[0]);
+        $scope.isFront=true;
+        $scope.isBack=false;
+    };
+
+    $scope.reviewFunc = function(){
+        $scope.view=false;
+        $scope.review = true;
+        $scope.menu = false;
+
+        $state.go('tabs.review',{idsubtopic: -1, numberWordViewed: $scope.vocabs.length});
+
+    };
+
+    $scope.nextCard = function(){
+        $scope.isFront = true;
+        $scope.isBack = !$scope.isFront;
+        $scope.currentVocab++;
+        if($scope.currentVocab<=$scope.vocabs.length - 1){
+            showCard($scope.vocabs[$scope.currentVocab]);
+        }else{
+            $scope.currentVocab = 0;
+            showCard($scope.vocabs[$scope.currentVocab]);
+        }
+    };
+
+    $scope.previousCard = function(){
+        $scope.isFront = true;
+        $scope.isBack = !$scope.isFront;
+        $scope.currentVocab--;
+        if($scope.currentVocab<0){
+            $scope.currentVocab = $scope.vocabs.length - 1;
+            showCard($scope.vocabs[$scope.currentVocab]);
+        }else{
+            showCard($scope.vocabs[$scope.currentVocab]);
+        }
+    };
+
+    $scope.turnPage = function(id){
+        if(id==1){
+            $scope.isFront = false;
+            $scope.isBack = !$scope.isFront;
+        }else{
+            $scope.isBack = false;
+            $scope.isFront = !$scope.isBack;
+        };
+    };
 });

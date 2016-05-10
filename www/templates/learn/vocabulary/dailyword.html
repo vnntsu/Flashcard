@@ -1,7 +1,89 @@
-<ion-view title="Daily word">
+<ion-view title="Daily word" ng-if="menu">
+	<ion-content class="box-sizing">
+		<ion-scroll direction="y" style="height: 100%;">
+			<div class="daily-header">
+				<p class="today">Today,</p>
+				<div style="display: inline-block; width: 100%;">
+					<p class="second-line">You have</p> 
+					<p class="number">{{numberWord}}</p>
+				</div> 
+				<p class="third-line">new words</p>
+			</div>
+			<div class="button-content">
+				<button ng-click="viewFunc()" class="button button-calm button-view">Let's start</button>
+				<button ng-click="reviewFunc()" class="button button-balanced button-review">Review {{numberReview}}</button>
+			</div>
+			<div class="ul">
+				<ul class="list list-ul" ng-repeat="x in vocabs">
+				    <li class="item item-li">
+				    	{{x.text}}
+				    </li>
+				</ul>
+			</div>
+		</ion-scroll>
+	</ion-content>
+</ion-view>
+
+<ion-view title="{{title}}" ng-if="view">
+	<ion-content class="box-sizing" on-swipe-right="nextCard()"
+                   on-swipe-left="previousCard()">
+	    <nav ng-if="isFront">
+	    	<h5 style="text-align: center; width: 80%; margin: auto;">Front card</h5>
+		    <ul>
+		    	<li class="vocabcard">
+		    		<p class="text">{{text}}</p>
+		    		<p class="pronounce">{{pronounce}}</p>
+		    		<div class="icon ion-ios-volume-high" ng-click="playSound(sound)"></div>
+		    	</li>
+		    </ul>
+		    <ul ng-click="turnPage(1)">
+		    	<li>
+		    		<img class="" ng-src="{{image}}" alt="">
+		    	</li>
+		    	<li>
+		    		<p>Meaning:</p>
+		    		<p style="font-size: 15px; width: 100%;">{{meaning}}</p>
+		    	</li>
+		    </ul>
+		</nav>
+
+	    <nav ng-if="isBack">
+	    	<h5 style="text-align: center; width: 80%; margin: auto;">Back card</h5>
+		    <ul>
+		    	<li class="vocabcard">
+		    		<p class="text">{{text}}</p>
+		    		<p class="pronounce">{{pronounce}}</p>
+			    	<p style="font-size: 20px; text-align: center;">{{vnmean}}</p>
+		    		<div class="icon ion-ios-volume-high" style="bottom: 50%;" ng-click="playSound({{sound}})"></div>
+		    	</li>
+		    </ul>
+		    <ul ng-click="turnPage(0)">
+		    	<li>
+		    		<img class="" ng-src="{{image}}" alt="">
+		    	</li>
+		    	<li>
+		    		<p>Example:</p>
+		    		<p style="font-size: 15px; width: 100%;">{{example}}</p>
+		    	</li>
+		    </ul>
+	  	</nav>
+	</ion-content>
+</ion-view>
+
+<ion-view ng-if="review">
 	<ion-content>
-		<div class="daily-header">you have 10 new words</div>
-		<button ng-click="">Let's start</button>
-		<button ng-click="">Review</button>
+		<ion-scroll direction="y" style="height: 100%;">
+			<div class="question-test"><h2 style="color: blue;">{{theQuestion.question}}</h2></div>
+			<div class="button-next">
+				<h4 style="line-height: 60px;">{{theQuestion.typeWord}}</h4>
+				<!-- <div id="container" class="container"></div>
+				<img src="img/play.png" class="container1" ng-if="showButton"> -->
+			</div>
+			<div class="div-button">
+				<h1 style="text-align: center;" ng-if="rightAnswerShow">Right</h1>
+				<h1 style="text-align: center;" ng-if="wrongAnswerShow">Wrong</h1>
+				<button ng-repeat="a in theQuestion.answers" class="card button button-block button-tran" ng-click="checkAnswer(a.isAnswer,a.content)" ng-disabled="clicked" ng-class="{'button-assertive': a.content==wrongButtonClicked, 'button-balanced': a.content==rightButtonClicked}">{{a.content}}</button>
+			</div>
+		</ion-scroll>
 	</ion-content>
 </ion-view>
