@@ -20,13 +20,53 @@
     <!-- </ion-refresher> -->
 
     <!-- <ion-list>
-      <ion-item collection-repeat="item in texts" >
-        <p>{{item}}</p>
+      <ion-item collection-repeat="item in items" >
+        <p>{{item.text}}</p>
       </ion-item>
     </ion-list> -->
     <!--???????????? put the front card code into here -->
+    <nav ng-if="isFront">
+        <h5 style="text-align: center; width: 80%; margin: auto;">Front card</h5>
+        <ul>
+            <li class="vocabcard">
+                <p class="text">{{text}}</p>
+                <p class="pronounce">{{pronounce}}</p>
+                <div class="icon ion-ios-volume-high" ng-click="playSound(sound)"></div>
+            </li>
+        </ul>
+        <ul ng-click="turnPage(1)">
+            <li>
+                <img class="" ng-src="{{image}}" alt="">
+            </li>
+            <li>
+                <p>Meaning:</p>
+                <p style="font-size: 15px; width: 100%;">{{meaning}}</p>
+            </li>
+        </ul>
+    </nav>
 
-    <div ng-if="items !== undefined && !items.length" class="no-results">
+    <nav ng-if="isBack">
+        <h5 style="text-align: center; width: 80%; margin: auto;">Back card</h5>
+        <ul>
+            <li class="vocabcard">
+                <p class="text">{{text}}</p>
+                <p class="pronounce">{{pronounce}}</p>
+                <p style="font-size: 20px; text-align: center;">{{vnmean}}</p>
+                <div class="icon ion-ios-volume-high" style="bottom: 50%;" ng-click="playSound(sound)"></div>
+            </li>
+        </ul>
+        <ul ng-click="turnPage(0)">
+            <li>
+                <img class="" ng-src="{{image}}" alt="">
+            </li>
+            <li>
+                <p>Example:</p>
+                <p style="font-size: 15px; width: 100%;">{{example}}</p>
+            </li>
+        </ul>
+    </nav>
+
+    <div ng-if="noData" class="no-results">
       <p>No Results</p>
     </div>
 

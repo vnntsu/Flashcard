@@ -211,7 +211,6 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
 	}
 
     $scope.showCard = function(vocab){
-        // here here
         $scope.text = vocab.text;
         $scope.pronounce = vocab.pronounce;
         $scope.sound = vocab.sound;
