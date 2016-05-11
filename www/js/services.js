@@ -306,4 +306,3 @@ app.factory('ProgressBarServ', function(){
 		}
 	}
 });
-

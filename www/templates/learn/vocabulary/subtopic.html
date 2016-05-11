@@ -1,7 +1,6 @@
 <ion-view title="Sub-Topic" >
-	<ion-slide>
-		<ion-content srcoll="true" class="page-conent-container padding-horizontal">
-		<ion-scroll direction="y" style="height: 100%;">
+	<ion-content srcoll="true" class="page-conent-container padding-horizontal">
+		<ion-scroll direction="y" style='position:absolute; top:0; right:0; bottom:0; left:0; overflow-y:scroll; height: 100vh'>
 			<ion-list>
 				<ion-item ng-repeat="x in subtopics" class="card card-subtopic">
 					<ion-thumbnail item-left style="float: left;">
@@ -17,6 +16,5 @@
 				</ion-item>
 			</ion-list>
 		</ion-scroll>
-		</ion-content>
-	</ion-slide>
+	</ion-content>
 </ion-view>

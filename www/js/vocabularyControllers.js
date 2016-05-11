@@ -127,14 +127,26 @@ app.controller('VocabCardCtrl',function($scope, $filter, DatabaseService, $ionic
         console.log($scope.title);
         $scope.currentVocab = 0;
     };
-    var query = "select * from (select * from (select * from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab where idsubtopic="+$scope.idSubtopicParam+") newtable1 join typeofword on typeofword.idvocab=newtable1.idvocab) newtable2 join kindofword on kindofword.idkindword=newtable2.idkindword";
-    DatabaseService.get(query).then(function(result){
-        /// please show alert to inform user know that the words haven't had yet.
-        $scope.vocabularies = result;
-        $scope.playCard($scope.vocabularies[$scope.currentVocab]);
-        $scope.isFront = true;
-        $scope.isBack = !$scope.isFront;
-    });
+    if($scope.idSubtopicParam>=0){
+        var query = "select * from (select * from (select * from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab where idsubtopic="+$scope.idSubtopicParam+") newtable1 join typeofword on typeofword.idvocab=newtable1.idvocab) newtable2 join kindofword on kindofword.idkindword=newtable2.idkindword";
+        DatabaseService.get(query).then(function(result){
+            /// please show alert to inform user know that the words haven't had yet.
+            $scope.vocabularies = result;
+            $scope.playCard($scope.vocabularies[$scope.currentVocab]);
+            $scope.isFront = true;
+            $scope.isBack = !$scope.isFront;
+        });
+    }else{
+        var query = "select * from vocabulary, typeofword where vocabulary.idvocab=typeofword.idvocab and vocabulary.idvocab in (select idvocab from daily where remembered=0)";
+        DatabaseService.get(query).then(function(result){
+            /// please show alert to inform user know that the words haven't had yet.
+            $scope.vocabularies = result;
+            $scope.playCard($scope.vocabularies[$scope.currentVocab]);
+            $scope.isFront = true;
+            $scope.isBack = !$scope.isFront;
+        });
+    }
+    
 
 
     $scope.nextCard = function(){
@@ -331,6 +343,7 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
         $scope.wrongButtonClicked = "";
         $scope.clicked = false;
         $scope.randTypeOfQuestion = RandomSrve.myRandom(4);
+        console.log("asdfkjwldsf:   " + $scope.questions.length);
         // var randTypeOfQuestion = 0;
    		if($scope.randTypeOfQuestion==0){ // Meaning questions
         	$scope.theQuestion = QuestionSrve.meaningWordQuestion($scope.vocabularies,  $scope.questions[$scope.current], 4);
@@ -411,13 +424,15 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
             // $timeout(function() {$scope.loadButton();}, 1000 * 11);
         });
     }else{
-        query = "select * from daily where remembered=0";
+        query = "select * from vocabulary a, typeofword b where a.idvocab=b.idvocab and a.idvocab in (select idvocab from daily where remembered=0)";
+        // query = "select idvocab from daily where remembered=0";
         DatabaseService.get(query).then(function(result){
-            $scope.questions=result;
+            $scope.questions = result;
             for (var i = 0; i < $scope.questions.length; i++) {
                 $scope.questions[i].checkTimes=0;
+                console.log($scope.questions[i].text);
             }
-            query = "select newtable1.idvocab as idvocab, * from (select newtable.idvocab as idvocab, * from (select vocabulary.idvocab as idvocab, * from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab) as newtable left join typeofword on  newtable.idvocab = typeofword.idvocab) as newtable1 left join kindofword on newtable1.idkindword = kindofword.idkindword limit 30";
+            query = "select * from vocabulary, typeofword where vocabulary.idvocab=typeofword.idvocab limit 30";
             DatabaseService.get(query).then(function(result){
                 $scope.vocabularies = result;
                 $scope.createQuestion();
@@ -626,9 +641,8 @@ app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, Level
 });
 
 app.controller('DailyWordCtrl', function($scope, DatabaseService, $filter, $timeout, $state){
-    $scope.view=false;
-    $scope.review=false;
-    $scope.menu=true;
+    // $scope.view=false;
+    // $scope.menu=true;
     $scope.words=[];
     $scope.currentVocab = 0;
     var query = "select wordperday from profile";
@@ -640,8 +654,8 @@ app.controller('DailyWordCtrl', function($scope, DatabaseService, $filter, $time
                 $scope.words=result;
             }
             if($scope.words.length<$scope.numberWord){
-                console.log($scope.numberWord-$scope.words.length + " asdkfjaskldf");
-                query = "select idvocab from vocabulary where idvocab not in (select idvocab from daily limit "+($scope.numberWord-$scope.words.length)+")";
+                query = "select idvocab from vocabulary where idvocab not in (select idvocab from daily where remembered=0) limit "+($scope.numberWord-$scope.words.length);
+                console.log(query);
                 DatabaseService.get(query).then(function(result){
                     for (var i = 0; i < result.length; i++) {
                         query = "insert into daily(idvocab, learnday,viewtimes,viewed,reviewtimes,remembered) values("+result[i].idvocab+","+$filter('date')(new Date(), 'yyyy-MM-dd')+",0,0,0,0)"
@@ -654,7 +668,7 @@ app.controller('DailyWordCtrl', function($scope, DatabaseService, $filter, $time
             $timeout(function() {
                 $scope.vocabs = [];
                 for (var i = 0; i < $scope.numberWord; i++) {
-                    query = "select * from vocabulary, typeofword where vocabulary.idvocab="+$scope.words[i].idvocab;
+                    query = "select * from vocabulary, typeofword where vocabulary.idvocab="+$scope.words[i].idvocab+"  and vocabulary.idvocab=typeofword.idvocab";
                     DatabaseService.get(query).then(function(result){
                         $scope.vocabs.push(result[0]);
                     });
@@ -664,41 +678,37 @@ app.controller('DailyWordCtrl', function($scope, DatabaseService, $filter, $time
                     for (var i = 0; i < $scope.vocabs.length; i++) {
                         console.log($scope.vocabs[i].text);
                     }
-                }, 10);
-            }, 10);
+                }, 1000);
+            }, 1000);
         });
     });
 
-    var showCard = function(vocab){
-        // here here
-        $scope.text = vocab.text;
-        $scope.pronounce = vocab.pronounce;
-        $scope.sound = vocab.sound;
-        $scope.image = vocab.image;
-        $scope.example = vocab.example;
-        $scope.meaning = vocab.meaning;
-        $scope.vnmean = vocab.vnmean;
-        $scope.topicName = vocab.name;
-        $scope.topicVNname = vocab.vnname;
-        $scope.isRemember = vocab.isremember;
-        $scope.rememberDay = vocab.rememberday;
-        $scope.isCustom = vocab.isCustom;
-    };
+    // var showCard = function(vocab){
+    //     // here here
+    //     $scope.text = vocab.text;
+    //     $scope.pronounce = vocab.pronounce;
+    //     $scope.sound = vocab.sound;
+    //     $scope.image = vocab.image;
+    //     $scope.example = vocab.example;
+    //     $scope.meaning = vocab.meaning;
+    //     $scope.vnmean = vocab.vnmean;
+    //     $scope.topicName = vocab.name;
+    //     $scope.topicVNname = vocab.vnname;
+    //     $scope.isRemember = vocab.isremember;
+    //     $scope.rememberDay = vocab.rememberday;
+    //     $scope.isCustom = vocab.isCustom;
+    // };
 
     $scope.viewFunc = function(){
-        $scope.view=true;
-        $scope.review = false;
-        $scope.menu = false;
-        showCard($scope.vocabs[0]);
-        $scope.isFront=true;
-        $scope.isBack=false;
+        // $scope.view=true;
+        // $scope.menu = false;
+        // showCard($scope.vocabs[0]);
+        // $scope.isFront=true;
+        // $scope.isBack=false;
+        $state.go('tabs.vocabfrontcard',{idsubtopic: -1, title: "daily word"});
     };
 
     $scope.reviewFunc = function(){
-        $scope.view=false;
-        $scope.review = true;
-        $scope.menu = false;
-
         $state.go('tabs.review',{idsubtopic: -1, numberWordViewed: $scope.vocabs.length});
 
     };
@@ -727,13 +737,13 @@ app.controller('DailyWordCtrl', function($scope, DatabaseService, $filter, $time
         }
     };
 
-    $scope.turnPage = function(id){
-        if(id==1){
-            $scope.isFront = false;
-            $scope.isBack = !$scope.isFront;
-        }else{
-            $scope.isBack = false;
-            $scope.isFront = !$scope.isBack;
-        };
-    };
+    // $scope.turnPage = function(id){
+    //     if(id==1){
+    //         $scope.isFront = false;
+    //         $scope.isBack = !$scope.isFront;
+    //     }else{
+    //         $scope.isBack = false;
+    //         $scope.isFront = !$scope.isBack;
+    //     };
+    // };
 });

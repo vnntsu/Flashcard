@@ -1,4 +1,4 @@
-<ion-view title="Daily word" ng-if="menu">
+<ion-view title="Daily word">
 	<ion-content class="box-sizing">
 		<ion-scroll direction="y" style="height: 100%;">
 			<div class="daily-header">
@@ -24,7 +24,7 @@
 	</ion-content>
 </ion-view>
 
-<ion-view title="{{title}}" ng-if="view">
+<!-- <ion-view title="{{title}}" ng-if="view">
 	<ion-content class="box-sizing" on-swipe-right="nextCard()"
                    on-swipe-left="previousCard()">
 	    <nav ng-if="isFront">
@@ -68,22 +68,4 @@
 		    </ul>
 	  	</nav>
 	</ion-content>
-</ion-view>
-
-<ion-view ng-if="review">
-	<ion-content>
-		<ion-scroll direction="y" style="height: 100%;">
-			<div class="question-test"><h2 style="color: blue;">{{theQuestion.question}}</h2></div>
-			<div class="button-next">
-				<h4 style="line-height: 60px;">{{theQuestion.typeWord}}</h4>
-				<!-- <div id="container" class="container"></div>
-				<img src="img/play.png" class="container1" ng-if="showButton"> -->
-			</div>
-			<div class="div-button">
-				<h1 style="text-align: center;" ng-if="rightAnswerShow">Right</h1>
-				<h1 style="text-align: center;" ng-if="wrongAnswerShow">Wrong</h1>
-				<button ng-repeat="a in theQuestion.answers" class="card button button-block button-tran" ng-click="checkAnswer(a.isAnswer,a.content)" ng-disabled="clicked" ng-class="{'button-assertive': a.content==wrongButtonClicked, 'button-balanced': a.content==rightButtonClicked}">{{a.content}}</button>
-			</div>
-		</ion-scroll>
-	</ion-content>
-</ion-view>
+</ion-view> -->

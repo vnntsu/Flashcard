@@ -33,6 +33,3 @@ app.controller('ProfileTabCtrl', function($scope, DatabaseService){
     });
     
 });
-
-app.controller('DictCtrl', function($scope){
-});

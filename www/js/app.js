@@ -1,33 +1,26 @@
-var app = angular.module('ionicApp', ['ionic', 'ngCordova', 'ionicApp.services', 'ionicApp.controllers','ionicApp.customControllers','ionicApp.vocabularyControllers', 'ionicApp.pronunciationControllers']);
+var app = angular.module('ionicApp', ['ionic', 'ngCordova', 'ionicApp.services', 'ionicApp.controllers','ionicApp.customControllers','ionicApp.vocabularyControllers', 'ionicApp.pronunciationControllers','ionicApp.dictControllers']);
 
 app.run(function($ionicPlatform, $cordovaSQLite, DatabaseService){
 
     $ionicPlatform.ready(function() {
-    if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
-        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-        cordova.plugins.Keyboard.disableScroll(true);
-        cordova.plugins.Keyboard.show();
+        if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+            cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+            cordova.plugins.Keyboard.disableScroll(true);
+            cordova.plugins.Keyboard.show();
 
-    }
-    if (window.StatusBar) {
-    // org.apache.cordova.statusbar required
-        StatusBar.styleDefault();
-    }
-    DatabaseService.init();
-});
-  // $rootScope.preventDefaultScroll = function(event){
-  //   event.preventDefaultScroll();
-  //   window.scroll(0,0);
-  //   return true;
-  // };
-  // window.document.addEventListener('touchmove', preventDefaultScroll, true);
-
+        }
+        if (window.StatusBar) {
+        // org.apache.cordova.statusbar required
+            StatusBar.styleDefault();
+        }
+        DatabaseService.init();
+    });
 });
 
 app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
     if(ionic.Platform.isAndroid()){
-        $ionicConfigProvider.scrolling.jsScrolling(false);
+        $ionicConfigProvider.scrolling.jsScrolling(true);
     };
 
     $ionicConfigProvider.tabs.position('bottom');
