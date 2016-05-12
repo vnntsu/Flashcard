@@ -283,7 +283,7 @@ app.factory('QuestionSrve', function(RandomSrve){
 	};
 });
 
-app.factory('ProgressBarServ', function(){
+app.factory('ProgressBarServ', function($interval){
 	return{
 		init: function(){
 	        define(['require', './bower_components/progressbar.js/dist/progressbar.js'], function (require) {
@@ -291,18 +291,49 @@ app.factory('ProgressBarServ', function(){
 	        });
 	        return ProgressBar;
 		},
-		createCircle: function(){
+		createCircle: function(duration){
 			var ProgressBar = this.init();
 			var bar = new ProgressBar.Circle(container, {
-				strokeWidth: 6,
-				easing: 'easeInOut',
-				duration: 12000,
-				color: '#F44336',
-				trailColor: '#eee',
-				trailWidth: 6,
-				svgStyle: null
-	        });
+				color: '#000',
+				// This has to be the same size as the maximum width to
+				// prevent clipping
+				strokeWidth: 10,
+				trailWidth: 10,
+				duration: duration,
+				text: {
+					autoStyleContainer: false
+				},
+				from: { color: '#4CAF50', width: 10 },
+				to: { color: '#4CAF50', width: 10 },
+				// Set default step function for all animate calls
+				step: function(state, circle) {
+					circle.path.setAttribute('stroke', state.color);
+					circle.path.setAttribute('stroke-width', state.width);
+
+					var value = Math.round(circle.value() *10);
+				    if (value === 0) {
+				      circle.setText('Over');
+				    } else {
+				      circle.setText(value);
+				    }
+				}
+			});
 	        return bar;
 		}
+	}
+});
+
+app.factory('LoadingServ', function($ionicLoading, $timeout){
+	return{
+		init: function(){
+			return $ionicLoading.show({
+		        content: 'Loading',
+		        animation: 'fade-in',
+		        showBackdrop: true,
+		        maxWidth: 200,
+		        showDelay: 0
+		    });
+		},
+
 	}
 });

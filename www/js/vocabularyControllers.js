@@ -11,72 +11,62 @@ app.controller('TopicCtrl', function($scope, $state, DatabaseService, $timeout){
     }
 });
 
-app.controller('SubTopicCtrl', function($scope, DatabaseService, $stateParams, $state){
+app.controller('SubTopicCtrl', function($scope, DatabaseService, $stateParams, $state, $timeout, $ionicLoading, LoadingServ){
     if ($stateParams.idtopic) {
         $scope.idTopicParam = $stateParams.idtopic;
-        console.log("Get idtopic successful: " + $scope.idTopicParam);
     }else{
-        console.log("Can not get data!")
+        //do something
     };
+    $ionicLoading = LoadingServ.init();
     var query = "select idsubtopic, name from subtopic where idtopic="+$scope.idTopicParam;
     DatabaseService.get(query).then(function(result){
-        $scope.subtopics = result;
-        for (var i = 0; i < $scope.subtopics.length; i++) {
-            $scope.subtopics[i].length=0;
-            $scope.subtopics[i].learned=0;
+        $scope.tmpSubtopic = result;
+        for (var i = 0; i < $scope.tmpSubtopic.length; i++) {
+            $scope.tmpSubtopic[i].length=0;
+            $scope.tmpSubtopic[i].learned=0;
         }
-
-        console.log("subtopics.length = " + $scope.subtopics.length);
         query = "select subtopic.idsubtopic as idsubtopic, remembered, count(subtopic.idsubtopic)as number from subtopic join (select vocabulary.idvocab, idsubtopic, viewed,viewday,remembered,rememberday from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab) newtable on newtable.idsubtopic=subtopic.idsubtopic where idtopic="+$scope.idTopicParam+" group by subtopic.idsubtopic, remembered";
         DatabaseService.get(query).then(function(result){
             $scope.datas = result;
-            console.log("length of datas: " +$scope.datas.length);
-            for(var i = 0; i < $scope.subtopics.length; i++){
-                $scope.subtopics[i].length = 0;
-                $scope.subtopics[i].learned = 0;
+            for(var i = 0; i < $scope.tmpSubtopic.length; i++){
+                $scope.tmpSubtopic[i].length = 0;
+                $scope.tmpSubtopic[i].learned = 0;
             }
             if($scope.datas==false){
-                console.log("false!");
             }else{
-                console.log("wwhy");
                 for(var i = 0; i < $scope.datas.length; i++){
 
-                    console.log("check "+ i + "   :::" + $scope.datas[i].idsubtopic);
-                    for (var j = 0; j < $scope.subtopics.length; j++) {
-                        console.log("loop "+ j);
-                        if($scope.datas[i].idsubtopic==$scope.subtopics[j].idsubtopic){
-                            $scope.subtopics[j].length += $scope.datas[i].number;
+                    for (var j = 0; j < $scope.tmpSubtopic.length; j++) {
+                        if($scope.datas[i].idsubtopic==$scope.tmpSubtopic[j].idsubtopic){
+                            $scope.tmpSubtopic[j].length += $scope.datas[i].number;
                             if($scope.datas[i].remembered==1){
-                                console.log("vo day");
-                                $scope.subtopics[j].learned = $scope.datas[i].number;
+                                $scope.tmpSubtopic[j].learned = $scope.datas[i].number;
                             };
                             break;
                         }
                     }
                 }
-                console.log("Total: "+$scope.subtopics[0].length + " words");
-                console.log($scope.subtopics[0].learned + " words learned");
             }
             
             query = "select idsubtopic, count(viewed)as number from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab where topicofword.idsubtopic in (select subtopic.idsubtopic from subtopic where idtopic="+$scope.idTopicParam+") and viewed=1 and remembered=0 group by idsubtopic, viewed";
             DatabaseService.get(query).then(function(result){
                 var array = result;
-                for(var i = 0; i < $scope.subtopics.length; i++){
-                        $scope.subtopics[i].numberWordViewed = 0;
-                        $scope.subtopics[i].isReview = true;
+                for(var i = 0; i < $scope.tmpSubtopic.length; i++){
+                        $scope.tmpSubtopic[i].numberWordViewed = 0;
+                        $scope.tmpSubtopic[i].isReview = true;
                 }
                 if(array==false){
                     // do something
                 }else{
                     for (var j = 0; j < array.length; j++) {
-                        for(var i = 0; i < $scope.subtopics.length; i++){
-                            if($scope.subtopics[i].idsubtopic==array[j].idsubtopic){
-                                $scope.subtopics[i].numberWordViewed = array[j].number;
-                                $scope.subtopics[i].isReview = false;
+                        for(var i = 0; i < $scope.tmpSubtopic.length; i++){
+                            if($scope.tmpSubtopic[i].idsubtopic==array[j].idsubtopic){
+                                $scope.tmpSubtopic[i].numberWordViewed = array[j].number;
+                                $scope.tmpSubtopic[i].isReview = false;
                                 break;
                             }else{
-                                $scope.subtopics[i].numberWordViewed = 0;
-                                $scope.subtopics[i].isReview = true;
+                                $scope.tmpSubtopic[i].numberWordViewed = 0;
+                                $scope.tmpSubtopic[i].isReview = true;
                             }
                         }
                     }
@@ -85,14 +75,22 @@ app.controller('SubTopicCtrl', function($scope, DatabaseService, $stateParams, $
             });
         });
     });
-
+    $timeout(function() {
+        $ionicLoading.hide();
+        $scope.subtopics=$scope.tmpSubtopic;
+    }, 2000);
    
     $scope.showCard = function(id, title){
-        console.log("IDSUBTOPIC before transfer: " + id);
-        $state.go('tabs.vocabfrontcard',{idsubtopic: id, title: title});
+        var query = "select idvocab from topicofword where idsubtopic="+id;
+        DatabaseService.get(query).then(function(result){
+            if(result){
+                $state.go('tabs.vocabfrontcard',{idsubtopic: id, title: title});
+            }else{
+                alert("The words of this sub-topic is coming!");
+            }
+        });
     }
     $scope.review = function(id,number){
-        console.log("IDSUBTOPIC before transfer: " + id);
         $state.go('tabs.review',{idsubtopic: id, numberWordViewed: number});
     }
 });
@@ -199,7 +197,7 @@ app.controller('VocabCardCtrl',function($scope, $filter, DatabaseService, $ionic
     };
 });
 
-app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, LevelServ, $stateParams, $cordovaProgress, $cordovaMedia, $ionicLoading, RandomSrve, $timeout, $state){
+app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, LevelServ, $stateParams, $cordovaProgress, $cordovaMedia, $ionicLoading, RandomSrve, $timeout, $state, LoadingServ){
 	if($stateParams.idsubtopic){
 		$scope.idSubtopicParam = $stateParams.idsubtopic;
 		$scope.numberWordViewed = $stateParams.numberWordViewed;
@@ -209,6 +207,8 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
         $scope.current = 0;
         $scope.questions = [];
 	}
+
+    $ionicLoading = LoadingServ.init();
 
     $scope.showCard = function(vocab){
         $scope.text = vocab.text;
@@ -345,15 +345,19 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
         console.log("asdfkjwldsf:   " + $scope.questions.length);
         // var randTypeOfQuestion = 0;
    		if($scope.randTypeOfQuestion==0){ // Meaning questions
-        	$scope.theQuestion = QuestionSrve.meaningWordQuestion($scope.vocabularies,  $scope.questions[$scope.current], 4);
+        	$scope.theQuestionTmp = QuestionSrve.meaningWordQuestion($scope.vocabularies,  $scope.questions[$scope.current], 4);
    		}else if($scope.randTypeOfQuestion==1){ // Word question (meaning is the answer)
-        	$scope.theQuestion = QuestionSrve.wordMeaningQuestion($scope.vocabularies,  $scope.questions[$scope.current], 4);
+        	$scope.theQuestionTmp = QuestionSrve.wordMeaningQuestion($scope.vocabularies,  $scope.questions[$scope.current], 4);
    		}else if($scope.randTypeOfQuestion==2){ // Vnmean question (vnmean is the answer)
-        	$scope.theQuestion = QuestionSrve.vnmeanWordQuestion($scope.vocabularies,   $scope.questions[$scope.current], 4);
+        	$scope.theQuestionTmp = QuestionSrve.vnmeanWordQuestion($scope.vocabularies,   $scope.questions[$scope.current], 4);
    		}else{// word vnmean question
-  		    $scope.theQuestion = QuestionSrve.wordVNMeanQuestion($scope.vocabularies,   $scope.questions[$scope.current], 4);
+  		    $scope.theQuestionTmp = QuestionSrve.wordVNMeanQuestion($scope.vocabularies,   $scope.questions[$scope.current], 4);
    		}
         $scope.current++;
+        $timeout(function() {
+            $ionicLoading.hide();
+            $scope.theQuestion = $scope.theQuestionTmp;
+        }, 1000);
     };
 
     // $scope.loadProgressBar = function(){
@@ -441,7 +445,7 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
     
 });
 
-app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, LevelServ, $stateParams, $cordovaProgress, $cordovaMedia, $ionicLoading, RandomSrve, $timeout, $state,ProgressBarServ){
+app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, LevelServ, $stateParams, $cordovaProgress, $cordovaMedia, $ionicLoading, RandomSrve, $timeout, $state,ProgressBarServ, LoadingServ,$rootScope,$ionicHistory, $ionicPopup, $document){
     $scope.questions=[];
     $scope.current=0;
     var tmp = null;
@@ -463,6 +467,34 @@ app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, Level
         $scope.rememberDay = vocab.rememberday;
         $scope.isCustom = vocab.isCustom;
     };
+
+    $rootScope.$ionicGoBack = function(backCount) { 
+        console.log(bar);
+        if(bar){
+            var value = bar.value();
+            var r = confirm("Do you want to quit this test!");
+            if (r == true) {
+                $timeout.cancel($scope.questionCountDown);
+                bar.destroy();
+                $ionicHistory.goBack(backCount);
+            }else{
+                //do something when user cancel
+                bar.destroy();
+                bar = ProgressBarServ.createCircle(value*10000);
+                bar.set(value);
+                bar.animate(0);
+            }
+        }else{
+            var r = confirm("Do you want to quit this test!");
+            if (r == true) {
+                $ionicHistory.goBack(backCount);
+            }else{
+                //do something when user cancel
+            }
+        }
+    };
+
+    $ionicLoading = LoadingServ.init();
 
     var mediaStatusCallback = function(status) {
         if(status == 1) {
@@ -504,6 +536,7 @@ app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, Level
     $scope.checkAnswer = function(isAnswer, content){
         $timeout.cancel($scope.questionCountDown);
         bar.destroy();
+        bar = null;
         $scope.showButton = true;
         $scope.clicked=true;
         $scope.questions[$scope.current-1].checkTimes++;
@@ -556,6 +589,7 @@ app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, Level
 
     $scope.timeOut = function(isAnswer, content){
         bar.destroy();
+        bar = null;
         $scope.isNext=false;
         $scope.showButton = true;
         $scope.clicked = true;
@@ -585,6 +619,8 @@ app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, Level
     };
 
     $scope.createQuestion = function(){
+        $ionicLoading = LoadingServ.init();
+        $scope.theQuestion=null;
         if($scope.questions[$scope.questions.length-1].checkTimes>=5){
             alert("Finish test!");
             $scope.callBack();
@@ -603,21 +639,27 @@ app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, Level
         $scope.randTypeOfQuestion = RandomSrve.myRandom(4);
         // var randTypeOfQuestion = 0;
         if($scope.randTypeOfQuestion==0){ // Meaning questions
-            $scope.theQuestion = QuestionSrve.meaningWordQuestion($scope.vocabularies,  $scope.questions[$scope.current], 4);
+            $scope.theQuestionTmp = QuestionSrve.meaningWordQuestion($scope.vocabularies,  $scope.questions[$scope.current], 4);
         }else if($scope.randTypeOfQuestion==1){ // Word question (meaning is the answer)
-            $scope.theQuestion = QuestionSrve.wordMeaningQuestion($scope.vocabularies,  $scope.questions[$scope.current], 4);
+            $scope.theQuestionTmp = QuestionSrve.wordMeaningQuestion($scope.vocabularies,  $scope.questions[$scope.current], 4);
         }else if($scope.randTypeOfQuestion==2){ // Vnmean question (vnmean is the answer)
-            $scope.theQuestion = QuestionSrve.vnmeanWordQuestion($scope.vocabularies,   $scope.questions[$scope.current], 4);
+            $scope.theQuestionTmp = QuestionSrve.vnmeanWordQuestion($scope.vocabularies,   $scope.questions[$scope.current], 4);
         }else{// word vnmean question
-            $scope.theQuestion = QuestionSrve.wordVNMeanQuestion($scope.vocabularies,   $scope.questions[$scope.current], 4);
+            $scope.theQuestionTmp = QuestionSrve.wordVNMeanQuestion($scope.vocabularies,   $scope.questions[$scope.current], 4);
         }
         $scope.current++;
         $scope.showButton=false;
         $scope.showProgressBar = true;
-        // bar.value(0);
-        ProgressBarServ.init();
-        bar = ProgressBarServ.createCircle();
-        bar.animate(1);
+        bar = ProgressBarServ.createCircle(10000);
+
+        $timeout(function() {
+            $ionicLoading.hide();
+            $scope.theQuestion = $scope.theQuestionTmp;
+            bar.set(1);
+            bar.animate(0);
+        }, 1000);
+
+
         $scope.questionCountDown = $timeout(function() {
             $scope.timeOut();
         }, 1000 * 11);

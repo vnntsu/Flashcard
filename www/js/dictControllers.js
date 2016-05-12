@@ -45,7 +45,6 @@ app.controller('DictCtrl', function($scope, $timeout, $ionicFilterBar, DatabaseS
 
     };
 
-
     $scope.playSound = function(src){
         console.log("LINK SOUND: " + src)
         var media = new Media(src, null, null, mediaStatusCallback);
