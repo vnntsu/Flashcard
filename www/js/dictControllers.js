@@ -27,7 +27,6 @@ app.controller('DictCtrl', function($scope, $timeout, $ionicFilterBar, DatabaseS
  //      });
  //    };
     var queryWord = function(filterText){
-	    
         var query = "select * from vocabulary a, typeofword b where a.idvocab = b.idvocab and a.text='"+filterText+"' and a.iscustom=0";
         DatabaseService.get(query).then(function(result){
         	if(result){
@@ -42,7 +41,6 @@ app.controller('DictCtrl', function($scope, $timeout, $ionicFilterBar, DatabaseS
         		$scope.isBack=false;
         	}
         });
-
     };
 
     $scope.playSound = function(src){

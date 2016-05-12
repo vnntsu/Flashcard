@@ -337,3 +337,13 @@ app.factory('LoadingServ', function($ionicLoading, $timeout){
 
 	}
 });
+
+app.factory('IonicGoBackServ', function($rootScope, $ionicHistory){
+	return{
+		default: function(){
+			$rootScope.$ionicGoBack = function(backCount) { 
+	    	    $ionicHistory.goBack(backCount);
+		    };
+		}
+	}
+});

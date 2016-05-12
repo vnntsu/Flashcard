@@ -197,7 +197,7 @@ app.controller('VocabCardCtrl',function($scope, $filter, DatabaseService, $ionic
     };
 });
 
-app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, LevelServ, $stateParams, $cordovaProgress, $cordovaMedia, $ionicLoading, RandomSrve, $timeout, $state, LoadingServ){
+app.controller('ReviewCtrl', function($scope, $rootScope, IonicGoBackServ, DatabaseService, QuestionSrve, LevelServ, $stateParams, $cordovaProgress, $cordovaMedia, $ionicLoading, RandomSrve, $timeout, $state, LoadingServ, $ionicHistory){
 	if($stateParams.idsubtopic){
 		$scope.idSubtopicParam = $stateParams.idsubtopic;
 		$scope.numberWordViewed = $stateParams.numberWordViewed;
@@ -400,6 +400,15 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
     // $scope.loadButton = function(){
     //     $scope.showButton = true;
     // };
+    $rootScope.$ionicGoBack = function(backCount) { 
+        var r = confirm("Do you want to quit this review!");
+        if (r == true) {
+            IonicGoBackServ.default();
+            $ionicHistory.goBack(backCount);
+        }else{
+            //do something when user cancel
+        }
+    };
     
     if($scope.idSubtopicParam>=0){
         var query="select newtable1.idvocab as idvocab, * from (select newtable.idvocab as idvocab, * from (select vocabulary.idvocab as idvocab, * from vocabulary join topicofword on vocabulary.idvocab=topicofword.idvocab where topicofword.idsubtopic="+$scope.idSubtopicParam+") as newtable left join typeofword on  newtable.idvocab = typeofword.idvocab) as newtable1 left join kindofword on newtable1.idkindword = kindofword.idkindword";
@@ -442,10 +451,9 @@ app.controller('ReviewCtrl', function($scope, DatabaseService, QuestionSrve, Lev
             });
         });
     }
-    
 });
 
-app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, LevelServ, $stateParams, $cordovaProgress, $cordovaMedia, $ionicLoading, RandomSrve, $timeout, $state,ProgressBarServ, LoadingServ,$rootScope,$ionicHistory, $ionicPopup, $document){
+app.controller('TestCtrl', function($scope, IonicGoBackServ, DatabaseService, QuestionSrve, LevelServ, $stateParams, $cordovaProgress, $cordovaMedia, $ionicLoading, RandomSrve, $timeout, $state,ProgressBarServ, LoadingServ,$rootScope,$ionicHistory, $ionicPopup, $document){
     $scope.questions=[];
     $scope.current=0;
     var tmp = null;
@@ -476,6 +484,7 @@ app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, Level
             if (r == true) {
                 $timeout.cancel($scope.questionCountDown);
                 bar.destroy();
+                IonicGoBackServ.default();
                 $ionicHistory.goBack(backCount);
             }else{
                 //do something when user cancel
@@ -487,6 +496,7 @@ app.controller('TestCtrl', function($scope, DatabaseService, QuestionSrve, Level
         }else{
             var r = confirm("Do you want to quit this test!");
             if (r == true) {
+                IonicGoBackServ.default();
                 $ionicHistory.goBack(backCount);
             }else{
                 //do something when user cancel
