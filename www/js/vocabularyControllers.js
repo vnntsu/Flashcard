@@ -453,7 +453,7 @@ app.controller('ReviewCtrl', function($scope, $rootScope, IonicGoBackServ, Datab
     }
 });
 
-app.controller('TestCtrl', function($scope, IonicGoBackServ, DatabaseService, QuestionSrve, LevelServ, $stateParams, $cordovaProgress, $cordovaMedia, $ionicLoading, RandomSrve, $timeout, $state,ProgressBarServ, LoadingServ,$rootScope,$ionicHistory, $ionicPopup, $document){
+app.controller('TestCtrl', function($scope, IonicGoBackServ, DatabaseService, QuestionSrve, LevelServ, $stateParams, $cordovaProgress, $cordovaMedia, $ionicLoading, RandomSrve, $timeout, $state,ProgressBarServ, LoadingServ,$rootScope,$ionicHistory, $ionicPopup, $document, $filter){
     $scope.questions=[];
     $scope.current=0;
     var tmp = null;
@@ -555,7 +555,10 @@ app.controller('TestCtrl', function($scope, IonicGoBackServ, DatabaseService, Qu
             $scope.questions[$scope.current-1].reviewtimes++;
             if($scope.questions[$scope.current-1].reviewtimes >= 5){
                 $scope.questions[$scope.current-1].remembered=1;
-                query = "update topicofword set remembered=1, reviewtimes="+$scope.questions[$scope.current-1].reviewtimes+" where idvocab="+$scope.theQuestion.idQuestion;
+                query = "update topicofword set remembered=1, rememberday="+$filter('date')(new Date(), 'yyyy-MM-dd')+" , reviewtimes="+$scope.questions[$scope.current-1].reviewtimes+" where idvocab="+$scope.theQuestion.idQuestion;
+                DatabaseService.update(query);
+            }else{
+                query = "update topicofword set reviewtimes="+$scope.questions[$scope.current-1].reviewtimes+" where idvocab="+$scope.theQuestion.idQuestion;
                 DatabaseService.update(query);
             }
             $scope.rightButtonClicked = content;

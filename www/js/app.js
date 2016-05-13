@@ -132,7 +132,8 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
         url: "/custom",
         views: {
             'custom-tab': {
-                templateUrl: "templates/custom/custom.html"
+                templateUrl: "templates/custom/custom.html",
+                controller: 'CustomCtrl'
             }
         }
     })
