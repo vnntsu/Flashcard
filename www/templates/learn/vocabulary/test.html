@@ -16,7 +16,7 @@
 	</ion-content>
 </ion-view>
 
-<ion-view title="{{title}}" ng-if="wrongCard">
+<ion-view title="Test" ng-if="wrongCard">
 	<ion-content class="box-sizing">
 		<ion-scroll direction="y" style="height: 100%;">
 	    <nav ng-if="isFront">
@@ -47,7 +47,7 @@
 		    		<p class="text">{{text}}</p>
 		    		<p class="pronounce">{{pronounce}}</p>
 			    	<p style="font-size: 20px; text-align: center;">{{vnmean}}</p>
-		    		<div class="icon ion-ios-volume-high" style="bottom: 50%;" ng-click="playSound({{sound}})"></div>
+		    		<div class="icon ion-ios-volume-high" style="bottom: 50%;" ng-click="playSound(sound)"></div>
 		    	</li>
 		    </ul>
 		    <ul ng-click="turnPage(0)">

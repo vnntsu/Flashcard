@@ -1,4 +1,4 @@
-var app = angular.module('ionicApp', ['ionic', 'ngCordova', 'ionicApp.services', 'ionicApp.controllers','ionicApp.customControllers','ionicApp.vocabularyControllers', 'ionicApp.pronunciationControllers','ionicApp.dictControllers']);
+var app = angular.module('ionicApp', ['ionic', 'chart.js', 'ngCordova', 'ionicApp.services', 'ionicApp.controllers','ionicApp.customControllers','ionicApp.vocabularyControllers', 'ionicApp.pronunciationControllers','ionicApp.dictControllers']);
 
 app.run(function($ionicPlatform, $cordovaSQLite, DatabaseService){
 

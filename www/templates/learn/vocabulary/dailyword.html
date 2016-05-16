@@ -11,7 +11,7 @@
 			</div>
 			<div class="button-content">
 				<button ng-click="viewFunc()" class="button button-calm button-view">Let's start</button>
-				<button ng-click="reviewFunc()" class="button button-balanced button-review">Review {{numberReview}}</button>
+				<button ng-click="reviewFunc()" ng-if="isReview" class="button button-balanced button-review">Review ({{numberWordViewed}})</button>
 			</div>
 			<div class="ul">
 				<ul class="list list-ul" ng-repeat="x in vocabs">
@@ -23,49 +23,3 @@
 		</ion-scroll>
 	</ion-content>
 </ion-view>
-
-<!-- <ion-view title="{{title}}" ng-if="view">
-	<ion-content class="box-sizing" on-swipe-right="nextCard()"
-                   on-swipe-left="previousCard()">
-	    <nav ng-if="isFront">
-	    	<h5 style="text-align: center; width: 80%; margin: auto;">Front card</h5>
-		    <ul>
-		    	<li class="vocabcard">
-		    		<p class="text">{{text}}</p>
-		    		<p class="pronounce">{{pronounce}}</p>
-		    		<div class="icon ion-ios-volume-high" ng-click="playSound(sound)"></div>
-		    	</li>
-		    </ul>
-		    <ul ng-click="turnPage(1)">
-		    	<li>
-		    		<img class="" ng-src="{{image}}" alt="">
-		    	</li>
-		    	<li>
-		    		<p>Meaning:</p>
-		    		<p style="font-size: 15px; width: 100%;">{{meaning}}</p>
-		    	</li>
-		    </ul>
-		</nav>
-
-	    <nav ng-if="isBack">
-	    	<h5 style="text-align: center; width: 80%; margin: auto;">Back card</h5>
-		    <ul>
-		    	<li class="vocabcard">
-		    		<p class="text">{{text}}</p>
-		    		<p class="pronounce">{{pronounce}}</p>
-			    	<p style="font-size: 20px; text-align: center;">{{vnmean}}</p>
-		    		<div class="icon ion-ios-volume-high" style="bottom: 50%;" ng-click="playSound({{sound}})"></div>
-		    	</li>
-		    </ul>
-		    <ul ng-click="turnPage(0)">
-		    	<li>
-		    		<img class="" ng-src="{{image}}" alt="">
-		    	</li>
-		    	<li>
-		    		<p>Example:</p>
-		    		<p style="font-size: 15px; width: 100%;">{{example}}</p>
-		    	</li>
-		    </ul>
-	  	</nav>
-	</ion-content>
-</ion-view> -->

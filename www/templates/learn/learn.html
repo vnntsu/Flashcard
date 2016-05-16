@@ -1,6 +1,6 @@
 <ion-view title="Learn">
-	<ion-content overflow-scroll="true">
-		<ion-list>
+	<ion-content>
+		<ion-list >
 			<ion-item class="card" ui-sref="tabs.pronunciation">
 				<ion-thumbnail item-left style="float: left;">
 					<img src="img/pronunciation.jpg" style="height: 80px; width: 80px;">
@@ -15,7 +15,7 @@
 				<h2 style="width: auto; height: auto; margin-left: 120px; padding-top: 10px; font-size: 20px;"><b>Vocabulary</b></h2>
 				<p style="margin-left: 120px;">Total: 2 Subjects</p>
 			</ion-item>
-			<ion-item class="card" ui-sref="tabs.test">
+			<ion-item class="card" ng-click="checkTest()">
 				<ion-thumbnail item-left style="float: left;">
 					<img src="img/test.png" style="height: 80px; width: 80px;">
 				</ion-thumbnail>

@@ -32,10 +32,23 @@ app.factory('DatabaseService', function($cordovaSQLite){
 	};
 });
 
-app.factory('LevelServ', function(DatabaseService){
+app.factory('VocabCtrl', function(){
+
+});
+
+app.factory('LevelServ', function(DatabaseService,$ionicPopup){
 	return {
+		showAlert: function(level, name){
+			var alertPopup = $ionicPopup.alert({
+				title: 'Congratulation!',
+				template: "Your level is "+level+" and the name is " + name
+			});
+
+			alertPopup.then(function(res) {
+				console.log('Thank you for not eating my delicious ice cream cone');
+			});
+		},
 		increase: function(){
-			console.log("Come in!");
 			var query = "select idlevel, currentexp from profile";
 			DatabaseService.get(query).then(function(result){
 				var exp = result[0];
@@ -43,12 +56,17 @@ app.factory('LevelServ', function(DatabaseService){
 				DatabaseService.get(query).then(function(result){
 					var point = result[0].point;
 					console.log("exp point: " + point);
-					exp.currentexp += 45;
+					exp.currentexp += 50;
 					if(exp.currentexp>=point){
 						exp.idlevel++;
+						query = "select nameoflevel name from level where idlevel="+(exe.idlevel+1);
+						DatabaseService.get(query).then(function(result){
+							this.showAlert(exe.idlevel+1,result[0].name);
+						});
 					}
 					query = "update profile set idlevel="+exp.idlevel+",currentexp="+ exp.currentexp;
 					DatabaseService.update(query);
+
 				});
 			});
 		}
@@ -63,7 +81,77 @@ app.factory('RandomSrve', function(){
 	};
 });
 
-app.factory('QuestionSrve', function(RandomSrve){
+app.factory('QuestionSrve', function(RandomSrve,DatabaseService,$filter,$rootScope){
+	var idWords=[];
+	var findQuestion = function(length){
+		var questions=[];
+        for (var i = 0; i < length; i++) {
+            query = "select a.idvocab idvocab, (select name from kindofword where idkindword=a.idkindword) name, meaning, vnmean, text, sound, image, pronounce from typeofword a, (select * from vocabulary where idvocab="+idWords[i]+") b where a.idvocab=b.idvocab";
+            DatabaseService.get(query).then(function(result){
+                result[0].checkTimes=0;
+                questions.push(result[0]);
+            });
+        }
+        return questions;
+	};
+    var isTestQuestion = function(rememberday){
+    	console.log("come in here!");
+        var day = $filter('date')(Date.parse(rememberday), 'dd');
+        var month = $filter('date')(Date.parse(rememberday), 'MM');
+	    var curDay = $filter('date')(Date.parse(new Date()), 'dd');
+	    var curMonth = $filter('date')(Date.parse(new Date()), 'MM');
+        if(month<curMonth || curDay-day>3){
+            return true;
+        }else{
+            return false;
+        }
+    };
+    var getMoreWordInDaily = function(){
+        var query="select idvocab, rememberday from daily a where remembered=1 and idvocab not in (select idvocab from testword where testday='"+$filter('date')(new Date(), "yyyy-MM-dd")+"') order by rememberday";
+        DatabaseService.get(query).then(function(result){
+            if(result){
+                for (var i = 0; i < result.length; i++) {
+                    if(isTestQuestion(result[i].rememberday)){
+                        return true;
+                    }
+                }
+                return getMoreWordInTopicOfWord();
+            }else{
+            	return getMoreWordInTopicOfWord();
+            }
+        });
+    };
+    var getMoreWordInTopicOfWord = function(){
+        var query="select idvocab, rememberday from topicofword a where remembered=1 and idvocab not in (select idvocab from testword where testday='"+$filter('date')(new Date(), "yyyy-MM-dd")+"') order by rememberday";
+        DatabaseService.get(query).then(function(result){
+            if(result){
+                for (var i = 0; i < result.length; i++) {
+                    if(isTestQuestion(result[i].rememberday)){
+                        return true;
+                    }
+                }
+                return false;
+            }else{
+            	return false;
+            }
+        });
+    };
+	var isOverTestTimes = function(){
+    	var query = "select * from test where testday='"+$filter('date')(new Date(), "yyyy-MM-dd")+"'";
+        return DatabaseService.get(query).then(function(result){
+            if(result==false){
+                return false;
+            }else{
+                if(result[0].testtimes<3){
+                	return false;
+                }else{
+                	console.log("ho ho");
+                	return true;
+                }
+            }
+        });
+    };
+
 	return{
 		isEqualRightAnswer: function(index,rightAnswer){
 			if(index==rightAnswer){
@@ -72,12 +160,19 @@ app.factory('QuestionSrve', function(RandomSrve){
 				return false;
 			}
 		},
-		meaningWordQuestion: function(vocabs, question, numOfQuestion){
+		createQuestion: function(vocabs, question, numOfQuestion, type){
 			var answers = [{isAnswer:false,content:""},{isAnswer:false,content:""},{isAnswer:false,content:""},{isAnswer:false,content:""}];
 			var asked = [];
 			var nextAnswer = 0;
 			var idQuestion = question.idvocab;
-	    	var question1 = question.text;
+			console.log("typeQuestion: "+ type);
+			if(type==1){
+	    		var question1 = question.meaning;
+			}else if(type==3){
+	    		var question1 = question.vnmean;
+			}else{
+	    		var question1 = question.text;
+			}
 	    	var typeWord = question.name;
 	    	console.log("The current answer: " + idQuestion);
 	    	var rightAnswer = RandomSrve.myRandom(numOfQuestion);
@@ -88,7 +183,13 @@ app.factory('QuestionSrve', function(RandomSrve){
 				console.log("create answer: " + answerIndex);
 				if(this.isEqualRightAnswer(answerIndex,rightAnswer)){
 					answers[answerIndex].isAnswer=true;
-					answers[answerIndex].content = question.meaning;
+					if(type==0){
+			    		answers[answerIndex].content = question.meaning;
+					}else if(type==2){
+			    		answers[answerIndex].content = question.vnmean;
+					}else{
+						answers[answerIndex].content = question.text;
+					}
 				}else{
 					answers[answerIndex].isAnswer=false;
 					do{
@@ -109,7 +210,13 @@ app.factory('QuestionSrve', function(RandomSrve){
 					}while(isExist);
 					if(!isExist){
 						asked.push(vocabs[nextAnswer].idvocab);
-						answers[answerIndex].content = vocabs[nextAnswer].meaning;
+						if(type==0){
+				    		answers[answerIndex].content = vocabs[nextAnswer].meaning;
+						}else if(type==2){
+				    		answers[answerIndex].content = vocabs[nextAnswer].vnmean;
+						}else{
+							answers[answerIndex].content = vocabs[nextAnswer].text;
+						}
 						nextAnswer = RandomSrve.myRandom(vocabs.length);
 					}
 				}
@@ -124,161 +231,55 @@ app.factory('QuestionSrve', function(RandomSrve){
 			}
 			return questionAndAnswer;
 		},
-		wordMeaningQuestion: function(vocabs, question, numOfQuestion){
-			var answers = [{isAnswer:false,content:""},{isAnswer:false,content:""},{isAnswer:false,content:""},{isAnswer:false,content:""}];
-			var asked = [];
-			var nextAnswer = 0;
-			var idQuestion = question.idvocab;
-	    	var question1 = question.meaning;
-	    	var typeWord = question.name;
-	    	console.log("The current answer: " + idQuestion);
-	    	var rightAnswer = RandomSrve.myRandom(numOfQuestion);
-	    	asked.push(idQuestion);
-	    	console.log("Right answer: " + rightAnswer);
-			nextAnswer = RandomSrve.myRandom(vocabs.length);
-			for (var answerIndex = 0; answerIndex < numOfQuestion; answerIndex++){
-				console.log("create answer: " + answerIndex);
-				if(this.isEqualRightAnswer(answerIndex,rightAnswer)){
-					answers[answerIndex].isAnswer=true;
-					answers[answerIndex].content = question.text;
+		isTest: function(){
+			return isOverTestTimes().then(function(result){
+				if(result){
+					return 1; // case 1: over test times
 				}else{
-					answers[answerIndex].isAnswer=false;
-					do{
-						console.log("random answer: " + nextAnswer);
-						var isExist = true;
-						console.log("asked array length: " + asked.length);
-						for (var i = 0; i < asked.length; i++) {
-							if(asked[i]==vocabs[nextAnswer].idvocab){
-								console.log("This answer had been exist");
-								isExist = true;
-								nextAnswer = RandomSrve.myRandom(vocabs.length);
-								break;
-							}else{
-								console.log("No answer exists");
-								isExist=false;
-							}
-						}
-					}while(isExist);
-					if(!isExist){
-						asked.push(vocabs[nextAnswer].idvocab);
-						answers[answerIndex].content = vocabs[nextAnswer].text;
-						nextAnswer = RandomSrve.myRandom(vocabs.length);
-					}
+					console.log("hehe");
+					var query = "select idvocab from testword where remembered=0";
+				    var idWords = [];
+				    return DatabaseService.get(query).then(function(result){
+				        if(result){
+				            return 3; // case 3: will be able to test
+				        }else{
+				            if(getMoreWordInDaily()){
+				            	return 3;
+				            }else{
+				            	return 2; // case 2: dont have any word to test
+				            }
+				        }
+				    });
 				}
-				console.log("create answer: " + answerIndex + " success");
-			}
-			var questionAndAnswer = {idQuestion: "", question: "", typeWord: "", answers: []};
-			questionAndAnswer.idQuestion = idQuestion;
-			questionAndAnswer.question = question1;
-			questionAndAnswer.typeWord = typeWord;
-			for (var i = 0; i < answers.length; i++) {
-				questionAndAnswer.answers.push(answers[i]);
-			}
-			return questionAndAnswer;
-		},
-		vnmeanWordQuestion: function(vocabs, question, numOfQuestion){
-			var answers = [{isAnswer:false,content:""},{isAnswer:false,content:""},{isAnswer:false,content:""},{isAnswer:false,content:""}];
-			var asked = [];
-			var nextAnswer = 0;
-			var idQuestion = question.idvocab;
-	    	var question1 = question.text;
-	    	var typeWord = question.name;
-	    	console.log("The current answer: " + idQuestion);
-	    	var rightAnswer = RandomSrve.myRandom(numOfQuestion);
-	    	asked.push(idQuestion);
-	    	console.log("Right answer: " + rightAnswer);
-			nextAnswer = RandomSrve.myRandom(vocabs.length);
-			for (var answerIndex = 0; answerIndex < numOfQuestion; answerIndex++){
-				console.log("create answer: " + answerIndex);
-				if(this.isEqualRightAnswer(answerIndex,rightAnswer)){
-					answers[answerIndex].isAnswer=true;
-					answers[answerIndex].content = question.vnmean;
-				}else{
-					answers[answerIndex].isAnswer=false;
-					do{
-						console.log("random answer: " + nextAnswer);
-						var isExist = true;
-						console.log("asked array length: " + asked.length);
-						for (var i = 0; i < asked.length; i++) {
-							if(asked[i]==vocabs[nextAnswer].idvocab){
-								console.log("This answer had been exist");
-								isExist = true;
-								nextAnswer = RandomSrve.myRandom(vocabs.length);
-								break;
-							}else{
-								console.log("No answer exists");
-								isExist=false;
-							}
-						}
-					}while(isExist);
-					if(!isExist){
-						asked.push(vocabs[nextAnswer].idvocab);
-						answers[answerIndex].content = vocabs[nextAnswer].vnmean;
-						nextAnswer = RandomSrve.myRandom(vocabs.length);
-					}
-				}
-				console.log("create answer: " + answerIndex + " success");
-			}
-			var questionAndAnswer = {idQuestion: "", question: "", typeWord: "", answers: []};
-			questionAndAnswer.idQuestion = idQuestion;
-			questionAndAnswer.question = question1;
-			questionAndAnswer.typeWord = typeWord;
-			for (var i = 0; i < answers.length; i++) {
-				questionAndAnswer.answers.push(answers[i]);
-			}
-			return questionAndAnswer;
-		},
-		wordVNMeanQuestion: function(vocabs, question, numOfQuestion){
-			var answers = [{isAnswer:false,content:""},{isAnswer:false,content:""},{isAnswer:false,content:""},{isAnswer:false,content:""}];
-			var asked = [];
-			var nextAnswer = 0;
-			var idQuestion = question.idvocab;
-	    	var question1 = question.vnmean;
-	    	var typeWord = question.name;
-	    	console.log("The current answer: " + idQuestion);
-	    	var rightAnswer = RandomSrve.myRandom(numOfQuestion);
-	    	asked.push(idQuestion);
-	    	console.log("Right answer: " + rightAnswer);
-			nextAnswer = RandomSrve.myRandom(vocabs.length);
-			for (var answerIndex = 0; answerIndex < numOfQuestion; answerIndex++){
-				console.log("create answer: " + answerIndex);
-				if(this.isEqualRightAnswer(answerIndex,rightAnswer)){
-					answers[answerIndex].isAnswer=true;
-					answers[answerIndex].content = question.text;
-				}else{
-					answers[answerIndex].isAnswer=false;
-					do{
-						console.log("random answer: " + nextAnswer);
-						var isExist = true;
-						console.log("asked array length: " + asked.length);
-						for (var i = 0; i < asked.length; i++) {
-							if(asked[i]==vocabs[nextAnswer].idvocab){
-								console.log("This answer had been exist");
-								isExist = true;
-								nextAnswer = RandomSrve.myRandom(vocabs.length);
-								break;
-							}else{
-								console.log("No answer exists");
-								isExist=false;
-							}
-						}
-					}while(isExist);
-					if(!isExist){
-						asked.push(vocabs[nextAnswer].idvocab);
-						answers[answerIndex].content = vocabs[nextAnswer].text;
-						nextAnswer = RandomSrve.myRandom(vocabs.length);
-					}
-				}
-				console.log("create answer: " + answerIndex + " success");
-			}
-			var questionAndAnswer = {idQuestion: "", question: "", typeWord: "", answers: []};
-			questionAndAnswer.idQuestion = idQuestion;
-			questionAndAnswer.question = question1;
-			questionAndAnswer.typeWord = typeWord;
-			for (var i = 0; i < answers.length; i++) {
-				questionAndAnswer.answers.push(answers[i]);
-			}
-			return questionAndAnswer;
+			});
+			
+			
+			// var query="select idvocab, rememberday from topicofword a where remembered=1 order by rememberday";
+		 //    var idWords = [];
+		 //    return DatabaseService.get(query).then(function(result){
+		 //        if(result){
+		 //            for (var i = 0; i < result.length; i++) {
+		 //                if(isTestQuestion(result[i].rememberday)){
+		 //                    idWords.push(result[i].idvocab);
+		 //                }
+		 //            }
+		 //        }
+		 //        query = "select idvocab, rememberday from daily where remembered=1 and idvocab not in (select idvocab from topicofword a where remembered=1) order by rememberday";
+		 //        return DatabaseService.get(query).then(function(result){
+		 //            if(result){
+		 //                for (var i = 0; i < result.length; i++) {
+		 //                    if(isTestQuestion(result[i].rememberday)){
+		 //                        idWords.push(result[i].idvocab);
+		 //                    }
+		 //                }
+		 //            }
+		 //            if(idWords.length>=1){
+		 //            	return true;
+		 //            }else{
+		 //            	return false;
+		 //            }
+		 //        });
+		 //    });
 		}
 	};
 });
