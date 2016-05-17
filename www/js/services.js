@@ -37,17 +37,13 @@ app.factory('VocabCtrl', function(){
 });
 
 app.factory('LevelServ', function(DatabaseService,$ionicPopup){
+	var showAlert = function(level, name){
+		var alertPopup = $ionicPopup.alert({
+			title: 'Congratulation!',
+			template: "Your level is "+level+" and the name is " + name
+		});
+	};
 	return {
-		showAlert: function(level, name){
-			var alertPopup = $ionicPopup.alert({
-				title: 'Congratulation!',
-				template: "Your level is "+level+" and the name is " + name
-			});
-
-			alertPopup.then(function(res) {
-				console.log('Thank you for not eating my delicious ice cream cone');
-			});
-		},
 		increase: function(){
 			var query = "select idlevel, currentexp from profile";
 			DatabaseService.get(query).then(function(result){
@@ -57,14 +53,17 @@ app.factory('LevelServ', function(DatabaseService,$ionicPopup){
 					var point = result[0].point;
 					console.log("exp point: " + point);
 					exp.currentexp += 50;
+					console.log("current exp point: " + exp.currentexp);
 					if(exp.currentexp>=point){
 						exp.idlevel++;
-						query = "select nameoflevel name from level where idlevel="+(exe.idlevel+1);
+						query = "select nameoflevel name from level where idlevel="+(exp.idlevel);
 						DatabaseService.get(query).then(function(result){
-							this.showAlert(exe.idlevel+1,result[0].name);
+							showAlert(exp.idlevel,result[0].name);
 						});
+
 					}
 					query = "update profile set idlevel="+exp.idlevel+",currentexp="+ exp.currentexp;
+					console.log(query);
 					DatabaseService.update(query);
 
 				});
@@ -108,22 +107,23 @@ app.factory('QuestionSrve', function(RandomSrve,DatabaseService,$filter,$rootSco
     };
     var getMoreWordInDaily = function(){
         var query="select idvocab, rememberday from daily a where remembered=1 and idvocab not in (select idvocab from testword where testday='"+$filter('date')(new Date(), "yyyy-MM-dd")+"') order by rememberday";
-        DatabaseService.get(query).then(function(result){
+        return DatabaseService.get(query).then(function(result){
             if(result){
                 for (var i = 0; i < result.length; i++) {
                     if(isTestQuestion(result[i].rememberday)){
+                    	console.log("have a word to test!");
                         return true;
                     }
                 }
-                return getMoreWordInTopicOfWord();
-            }else{
-            	return getMoreWordInTopicOfWord();
             }
+            return getMoreWordInTopicOfWord().then(function(result){
+            	return result;
+            });
         });
     };
     var getMoreWordInTopicOfWord = function(){
         var query="select idvocab, rememberday from topicofword a where remembered=1 and idvocab not in (select idvocab from testword where testday='"+$filter('date')(new Date(), "yyyy-MM-dd")+"') order by rememberday";
-        DatabaseService.get(query).then(function(result){
+        return DatabaseService.get(query).then(function(result){
             if(result){
                 for (var i = 0; i < result.length; i++) {
                     if(isTestQuestion(result[i].rememberday)){
@@ -243,11 +243,14 @@ app.factory('QuestionSrve', function(RandomSrve,DatabaseService,$filter,$rootSco
 				        if(result){
 				            return 3; // case 3: will be able to test
 				        }else{
-				            if(getMoreWordInDaily()){
-				            	return 3;
-				            }else{
-				            	return 2; // case 2: dont have any word to test
-				            }
+				        	return getMoreWordInDaily().then(function(result){
+				        		if(result){
+					            	console.log("OK! test");
+					            	return 3;
+				        		}else{
+				            		return 2; // case 2: dont have any word to test
+				        		}
+				        	});
 				        }
 				    });
 				}

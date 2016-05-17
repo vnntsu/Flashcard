@@ -15,11 +15,12 @@ app.controller('LearnTabCtrl', function($scope, QuestionSrve, $state, $filter, $
     // Date.parse(today1,'yyyy-MM-dd');
     $scope.checkTest = function(){
         QuestionSrve.isTest().then(function(result){
+            console.log(result+" asdfasdf");
             if(result==3){
                 $state.go('tabs.test');
             }else if(result==2){
                 alert("Now, we don't have any word to do the test!");
-            }else{
+            }else if(result==1){
                 alert("You had finished 3 tests today!");
             }
         });
