@@ -13,7 +13,7 @@ app.run(function($ionicPlatform, $cordovaSQLite, DatabaseService){
         // org.apache.cordova.statusbar required
             StatusBar.styleDefault();
         }
-        DatabaseService.init();
+        // DatabaseService.init();
     });
 });
 
