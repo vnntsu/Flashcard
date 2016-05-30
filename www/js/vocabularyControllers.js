@@ -139,7 +139,7 @@ app.controller('VocabCardCtrl',function($scope, $filter, DatabaseService, $ionic
             $scope.isBack = !$scope.isFront;
         });
     }else{
-        var query = "select * from (select * from vocabulary a, typeofword b where a.idvocab=b.idvocab) c join (select * from daily where learday='"+$filter('date')(new Date(), 'yyyy-MM-dd')+"') d on d.idvocab=c.idvocab";
+        var query = "select * from (select * from vocabulary a, typeofword b where a.idvocab=b.idvocab) c join (select * from daily where learnday='"+$filter('date')(new Date(), 'yyyy-MM-dd')+"') d on d.idvocab=c.idvocab";
         DatabaseService.get(query).then(function(result){
             /// please show alert to inform user know that the words haven't had yet.
             $scope.vocabularies = result;
@@ -201,7 +201,7 @@ app.controller('VocabCardCtrl',function($scope, $filter, DatabaseService, $ionic
     };
 });
 
-app.controller('ReviewCtrl', function($scope, $rootScope, IonicGoBackServ, DatabaseService, QuestionSrve, LevelServ, $stateParams, $cordovaProgress, $cordovaMedia, $ionicLoading, RandomSrve, $timeout, $state, LoadingServ, $ionicHistory){
+app.controller('ReviewCtrl', function($scope, $rootScope, IonicGoBackServ, DatabaseService, QuestionSrve, LevelServ, $stateParams, $cordovaProgress, $cordovaMedia, $ionicLoading, RandomSrve, $timeout, $state, LoadingServ, $ionicHistory,$filter){
 	if($stateParams.idsubtopic){
 		$scope.idSubtopicParam = $stateParams.idsubtopic;
 		$scope.numberWordViewed = $stateParams.numberWordViewed;
@@ -280,6 +280,16 @@ app.controller('ReviewCtrl', function($scope, $rootScope, IonicGoBackServ, Datab
                     console.log(query);
                 }
                 DatabaseService.update(query);
+                query="select idvocab from testword where idvocab="+$scope.theQuestion.idQuestion;
+                DatabaseService.get(query).then(function(result){
+                    if(result){
+                        console.log("da ton tai tu nay trong testword");
+                    }else{
+                        query="insert into testword values("+$scope.theQuestion.idQuestion+", '"+$filter('date')(new Date(), "yyyy-MM-dd")+"',1)";
+                        console.log(query);
+                        DatabaseService.update(query);
+                    }
+                });
             }
             $scope.rightButtonClicked = content;
             LevelServ.increase();
@@ -631,18 +641,20 @@ app.controller('TestCtrl', function($scope, IonicGoBackServ, DatabaseService, Qu
             $scope.vocabularies = result;
         });
         console.log(idWords[0] + " idWords[0]");
-        for (var i = 0; i < length; i++) {
-            query = "select * from testword where idvocab="+idWords[i];
+        for (var i = 0; i < idWords.length; i++) {
+            // query = "select * from testword where idvocab="+idWords[i];
             id = idWords[i];
-            DatabaseService.get(query).then(function(result){
-                if(result){
-                    query="update testword set testday='"+$filter('date')(new Date(), "yyyy-MM-dd")+"' where idvocab="+id;
+            // DatabaseService.get(query).then(function(result){
+            //     if(result){
+                    query="update testword set testday='"+$filter('date')(new Date(), "yyyy-MM-dd")+"', remembered=0 where idvocab="+id;
                     DatabaseService.update(query);
-                }else{
-                    query="insert into testword values("+id+",'"+$filter('date')(new Date(), "yyyy-MM-dd")+"',0)";
-                    DatabaseService.update(query);
-                }
-            });
+                    console.log(query);
+                // }
+                // else{
+                //     query="insert into testword values("+id+",'"+$filter('date')(new Date(), "yyyy-MM-dd")+"',0)";
+                //     DatabaseService.update(query);
+                // }
+            // });
             query = "select a.idvocab idvocab, (select name from kindofword where idkindword=a.idkindword) name, meaning, vnmean, text, sound, image, pronounce from typeofword a, (select * from vocabulary where idvocab="+idWords[i]+") b where a.idvocab=b.idvocab";
             DatabaseService.get(query).then(function(result){
                 result[0].checktimes=0;
@@ -661,7 +673,7 @@ app.controller('TestCtrl', function($scope, IonicGoBackServ, DatabaseService, Qu
     var isTestQuestion = function(rememberday){
         var day = $filter('date')(Date.parse(rememberday), 'dd');
         var month = $filter('date')(Date.parse(rememberday), 'MM');
-        if(month<curMonth || curDay-day>3){
+        if(month<curMonth || curDay-day>=3){
             return true;
         }else{
             return false;
@@ -672,8 +684,9 @@ app.controller('TestCtrl', function($scope, IonicGoBackServ, DatabaseService, Qu
         var query="select idvocab, rememberday from daily a where remembered=1 and idvocab not in (select idvocab from testword where testday='"+$filter('date')(new Date(), "yyyy-MM-dd")+"') order by rememberday";
         return DatabaseService.get(query).then(function(result){
             if(result){
-                if(result.length>(5-idWords.length)){
-                    for (var i = 0; i < 5-idWords.length; i++) {
+                var lenthTmp = idWords.length;
+                if(result.length>(5-lenthTmp)){
+                    for (var i = 0; i < 5-lenthTmp; i++) {
                         if(isTestQuestion(result[i].rememberday)){
                             console.log(idWords.length + " idWords.length 22222222222222");
                             idWords.push(result[i].idvocab);
@@ -701,8 +714,11 @@ app.controller('TestCtrl', function($scope, IonicGoBackServ, DatabaseService, Qu
         var query="select idvocab, rememberday from topicofword a where remembered=1 and idvocab not in (select idvocab from testword where testday='"+$filter('date')(new Date(), "yyyy-MM-dd")+"') order by rememberday";
         return DatabaseService.get(query).then(function(result){
             if(result){
-                if(result.length>(5-idWords.length)){
-                    for (var i = 0; i < 5-idWords.length; i++) {
+                var lenthTmp = idWords.length;
+                if(result.length>(5-lenthTmp)){
+                    console.log("Lay duoc 5 tu roi` + " +(5-lenthTmp));
+                    for (var i = 0; i < 5-lenthTmp; i++) {
+                    console.log("lap lap lap");
                         if(isTestQuestion(result[i].rememberday)){
                             idWords.push(result[i].idvocab);
                         }
@@ -732,8 +748,26 @@ app.controller('TestCtrl', function($scope, IonicGoBackServ, DatabaseService, Qu
         }
         if(idWords.length<5){
             console.log(idWords.length + " idWords.length 11111111111111");
-            getMoreWordInDaily().then(function(result){
+            // getMoreWordInDaily().then(function(result){
 
+            // });
+            query="select * from testword";
+            DatabaseService.get(query).then(function(result){
+                var index=0;
+                for (var i = 0; i < result.length; i++) {
+                    if(index>5){
+                        break;
+                    }else{
+                        console.log("ok test");
+                        console.log(result[i].testday);
+                        if(isTestQuestion(result[i].testday)){
+                            console.log("ok push");
+                            idWords.push(result[i].idvocab);
+                            index++;
+                        }
+                    }
+                }
+                findQuestion(5);
             });
         }else{
             findQuestion(5);
@@ -835,19 +869,22 @@ app.controller('DailyWordCtrl', function($scope, DatabaseService, $filter, $time
                 DatabaseService.get(query).then(function(result){
                     if(result){
                         for (var i = 0; i < result.length; i++) {
+                            console.log("idvocab = " + result[i].idvocab);
                             query = "update daily set learnday='"+$filter('date')(new Date(), 'yyyy-MM-dd')+"' where idvocab="+result[i].idvocab;
-                            $scope.words.push(result[i].idvocab);
+                            $scope.words.push(result[i]);
                         }
                     }
                     if($scope.words.length>=5){
+                        // console.log($scope.words[0].idvocab + " 333333333");
                         startGetWord();
                     }else{
+                console.log("333333333333");
                         query="select idvocab from vocabulary where idvocab not in (select idvocab from daily) limit "+($scope.numberWord-$scope.words.length);
                         DatabaseService.get(query).then(function(result){
                             if(result){
-                                console.log(result.length+" askldjfaksldjflk;asdf");
+                                // console.log(result.length+" askldjfaksldjflk;asdf");
                                 for (var i = 0; i < result.length; i++) {
-                                console.log(i+" insert");
+                            console.log("idvocab = " + result[i].idvocab);
                                     query = "insert into daily(idvocab, learnday,viewed,remembered) values("+result[i].idvocab+",'"+$filter('date')(new Date(), 'yyyy-MM-dd')+"',0,0)"
                                     DatabaseService.update(query);
                                     $scope.words.push(result[i]);

@@ -18,6 +18,11 @@ app.controller('PronunCardCtrl', function($scope, $ionicSideMenuDelegate, Databa
     };
 
     if($stateParams.type){
+        if($stateParams.type==1){
+            $scope.typeTitle='Vowel';
+        }else{
+            $scope.typeTitle='Consonant';
+        }
         $scope.pronuns = [];
         var current=0;
         get($stateParams.type);

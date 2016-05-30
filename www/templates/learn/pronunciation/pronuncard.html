@@ -4,7 +4,7 @@
             <button class="button button-icon button-clear ion-navicon" ng-click="toggleLeft()">
             </button>
           </ion-nav-buttons> -->
-		<ion-view title="Card">
+		<ion-view title="{{typeTitle}}">
 			<ion-content class="box-sizing" scroll="false" on-swipe-left="nextCard()" on-swipe-right="previousCard()" >
 				<div class="pronun-text">
 					<button class="first" ng-click="playSound(pronun.sound)">

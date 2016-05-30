@@ -4,6 +4,11 @@ app.factory('DatabaseService', function($cordovaSQLite){
 	var database = null;
 	return {
 		init: function(){
+			// if (window.cordova){
+			// 	database = window.sqlitePlugin.openDatabase({ name: "flashcard.db", location: 1 }); //device
+			// }else{
+			// 	database = window.openDatabase("flashcard.db", '1', 'auto', 1024 * 1024 * 100); // browser
+			// }
 			window.plugins.sqlDB.copy("flashcard.db");
     		database = $cordovaSQLite.openDB("flashcard.db");
     		console.log("Open DB successful!");
@@ -39,7 +44,7 @@ app.factory('VocabCtrl', function(){
 app.factory('LevelServ', function(DatabaseService,$ionicPopup){
 	var showAlert = function(level, name){
 		var alertPopup = $ionicPopup.alert({
-			title: 'Congratulation!',
+			title: 'Level Up, Congratulation!',
 			template: "Your level is "+level+" and the name is " + name
 		});
 	};
@@ -232,10 +237,10 @@ app.factory('QuestionSrve', function(RandomSrve,DatabaseService,$filter,$rootSco
 			return questionAndAnswer;
 		},
 		isTest: function(){
-			return isOverTestTimes().then(function(result){
-				if(result){
-					return 1; // case 1: over test times
-				}else{
+			// return isOverTestTimes().then(function(result){
+			// 	if(result){
+			// 		return 1; // case 1: over test times
+			// 	}else{
 					console.log("hehe");
 					var query = "select idvocab from testword where remembered=0";
 				    var idWords = [];
@@ -253,8 +258,8 @@ app.factory('QuestionSrve', function(RandomSrve,DatabaseService,$filter,$rootSco
 				        	});
 				        }
 				    });
-				}
-			});
+			// 	}
+			// });
 			
 			
 			// var query="select idvocab, rememberday from topicofword a where remembered=1 order by rememberday";
