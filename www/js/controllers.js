@@ -28,7 +28,7 @@ app.controller('LearnTabCtrl', function($scope, QuestionSrve, $state, $filter, $
     
 }); 
 
-app.controller('ProfileTabCtrl', function($scope, DatabaseService, $cordovaImagePicker, $ionicActionSheet,$timeout){
+app.controller('ProfileTabCtrl', function($scope, DatabaseService, $cordovaImagePicker, $ionicActionSheet,$timeout, $state){
     // var query = "select * from profile, level where profile.idlevel=level.idlevel";
     // DatabaseService.get(query).then(function(result){
     //     $scope.profile = result[0];
@@ -54,7 +54,6 @@ app.controller('ProfileTabCtrl', function($scope, DatabaseService, $cordovaImage
     //     [28, 48, 40, 19, 86, 27, 90]
     // ];
 
-    $scope.getImage = function(){
         // var options = {
         //     maximumImagesCount: 10,
         //     width: 800,
@@ -90,35 +89,59 @@ app.controller('ProfileTabCtrl', function($scope, DatabaseService, $cordovaImage
             }
         );
     };
-    };
     
     $scope.edit = function(){
-        var hideSheet = $ionicActionSheet.show({
-            buttons: [
-                { text: 'From your gallery' },
-                { text: 'Take a photo' }
-            ],
-            // destructiveText: 'Cancel',
-            titleText: 'Pick the image',
-            cancelText: 'Cancel',
-            cancel: function() {
-            // add cancel code..
-            },
-            buttonClicked: function(index) {
-                if(index==0){
-                    // navigator.camera.getPicture(UploadPicture, function(message) {
-                    //     alert('get picture failed');
-                    // }, {
-                    //     quality: 50,
-                    //     destinationType: navigator.camera.DestinationType.FILE_URI,
-                    //     sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY
-                    //     }
-                    // );
-                    $scope.getImage();
-                }else if(index==1){
-
-                };
-            }
-        });
+        $state.go('tabs.editprofile');
     }
+});
+
+app.controller('EditProfileTabCtrl', function($scope, DatabaseService, $cordovaImagePicker, $ionicActionSheet,$timeout, $state){
+    $scope.image = "img/avatar.png";
+
+    alert("Pick image");
+    $scope.selectImage = function () {
+        $cordovaImagePicker.getPictures(
+            
+    alert("Pick image");
+            function (result) {
+                alert("length: "+result.length);
+                for (var i = 0; i < results.length; i++) {
+                    console.log('Image URI: ' + result[i]);
+                    alert("324234 + "+i+" " + result[i]);
+                    $scope.image=result[i];
+                }
+
+                if (!$scope.$$phase) {
+                    $scope.$apply();
+                }
+            },
+            function (error) {
+    alert("Pick image Error");
+                console.log('Error: ' + error);
+            }
+        );
+    };
+
+
+
+
+        // var hideSheet = $ionicActionSheet.show({
+        //     buttons: [
+        //         { text: 'From your gallery' },
+        //         { text: 'Take a photo' }
+        //     ],
+        //     // destructiveText: 'Cancel',
+        //     titleText: 'Pick the image',
+        //     cancelText: 'Cancel',
+        //     cancel: function() {
+        //     // add cancel code..
+        //     },
+        //     buttonClicked: function(index) {
+        //         if(index==0){
+        //             $scope.selectImages();
+        //         }else if(index==1){
+
+        //         };
+        //     }
+        // });
 });

@@ -1,0 +1,25 @@
+<ion-view title="Profile">
+	<ion-nav-buttons side="right">
+		<button class="button" ng-click="edit()">
+			Done
+		</button>
+    </ion-nav-buttons>
+  	<ion-content>
+		<div style="text-align: center; margin: 20px 0px;">
+			<img ng-src="{{image}}" alt="" style="border-radius: 50%;" ng-click="selectImage()">
+		</div>
+
+  		<label class="item item-input">
+			<span class="input-label">First name:</span>
+			<input type="text" value="Nguyen">
+		</label>
+		<label class="item item-input">
+			<span class="input-label">Last name:</span>
+			<input type="text">
+		</label>
+		<label class="item item-input">
+			<span class="input-label">Number word per day:</span>
+			<input type="tel">
+		</label>
+ 	</ion-content>
+</ion-view>

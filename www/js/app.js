@@ -176,6 +176,16 @@ app.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
                 controller: 'ProfileTabCtrl'
             }
         }
+    })
+    
+    .state('tabs.editprofile', {
+        url: "/editprofile",
+        views: {
+            'profile-tab': {
+                templateUrl: "templates/profile/editprofile.html",
+                controller: 'EditProfileTabCtrl'
+            }
+        }
     });
     $urlRouterProvider.otherwise("/tab/learn");
 });
